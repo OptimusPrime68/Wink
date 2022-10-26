@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "tinder-clone-d8051",
+  "private_key_id": "e8f375d1e054fe083ba08bf8626c7942a986b0ae",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCaSJU57eS2V9ru\nh6VtMkNMU7+WUg5JBlX3OA79h+fQbJdGk9cvgkBVTumPE1d7qQCi19mTOrQ3Nj7K\nKye77BthelY4DfXzP7U844H1uimZ3QzxFuE35enDIztLgYQhGRR2exotdjIqe9Z6\nx+N9mcId6DB8tuPWeSfUqiE13rduAj2x0PDT+yOG6Coz4Azm6h/LM7hBJ3Vax2a2\naHuG/rIeZumD83TMs+U5k8KpWM+XU9Tsz359UEubNF0WDkVfKCSf6T7zGM1kgIne\nATawU+zlgCy35BTyjkS5515F8jGNuEj3X8Fvsz7qQnsRpiR4vg6QF9vALkO+QTvv\nwnxOuJC7AgMBAAECggEAD+V3nqrgvFrr/1SxmkEqBvTAEjxtJWAGPn0jqkK1A1gU\n9BwqeUYp28BQN0IuatrcamrkC5PqWp/3szvkEaw/m/kPZiImG8SOJ3JngwqF28kX\nWsXZObmyLr10EBENrJ1ZauW/Kjz56T+uNyNeUKQliJBSYp8zdXcxP+uxlUvXyXk/\nnqKgFKcCAGwlg+sxG90PXIBF0egLY93ApLcsmbf6d3aOo/vzDfgfexZm5xan3b3D\nbhXZGZXrImhDEMKwQOObhMA3b7NIlCjJqkrZi9DG5nepnNugTkw3D5M57el3I/Yf\n4vqh1sYDdSv2Z5mF1VcS9FjnFhgSclG3UGBypbxhtQKBgQDSHb5hzjru9fnxc0Dg\nQW6keGRU/TsHC48P2BF1Aco+yh+/sGr2ECrDHFFKXJXGd4Yyg4L2BZTmKCUI6FIC\nnyqd1pHAOBO+Gzo0uXFa1bwrGpWmE4nS8Nvl6jm/F62nTNBmJVlXvTLLpzDMmXa8\nHYusi7P7MCHyU5lHb9E2N6UedwKBgQC7+ZdbF3PJwIX3Y849r4qjUXWLGprQd3oi\nkf4Ix7fiTKz9o3BElS0pMiJ0JhvFJvHaTJbQe90cThmHNQryQpVFt1Mgyb19jhvb\n5ceAKGAwX1He5myGcMJCw6/qURzc/76CzfyZwRDFozKa55Kzj0W07vTV92irev1s\nIJCxPbnc3QKBgQDIMYK1WXMZPs/X10IW6QDsP7EIsQXOnpq+M9XeL8hsrtQ1JXej\n3p9/qrlhKnmh0TvRYTAkDAlkiRdQN1n8GX7XSBsyk7trxDFfDtkL/Nz+DKRMygzl\nKIu7scE3au4PmsZsrGVFjYSaOT/rkMRqU5RC4BCp4aBWbIR8ZfNlvvrZ3QKBgALk\nI9/SzIUd4PGdJ17rhEZeymAJWLg8HjTJ6g5YhAuHAmIkUWW8paUskDsZGvQ9VRr2\ncptiTFRTHzFlL3XqcEFSQIUQlUmJFgSb1CW0eUZFMQ0snh6zPUmpmNsRxE/h3xxD\n7s6umYNwryaSyT7ZxUizJDDmTUXV7m/rUE5plKJBAoGBAI9+c9tnRQ0r5zDZEJ56\n+s+QeIHKKgAim1IIYzGz3GAqfvW7srPZHXjc8kxLSD1Lt6braVpTr8IURn5AVN7Y\nT1eQFHmwSpq4csBUkEpoUg+J+JO2YV4QMZucqN+FYjN8Bu+spOEAOXpYi0W4ESlK\nqHWEuF0dVIsUIA28jTS8Ds4q\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-w127p@tinder-clone-d8051.iam.gserviceaccount.com",
+  "client_id": "115940458394937023678",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-w127p%40tinder-clone-d8051.iam.gserviceaccount.com"
+}
