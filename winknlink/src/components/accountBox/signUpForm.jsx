@@ -11,14 +11,19 @@ import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
 import {toast} from 'react-toastify';
 import { auth } from "../../firebase";
+import { useState } from "react";
 
 export function SignupForm(props) {
   const { switchToSignin } = useContext(AccountContext);
   const { switchToForget } = useContext(AccountContext);
 
+  const [fname,setFname] = useState(""); 
+  const [lname,setLname] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+
   const signup= async (e)=>{
   e.preventDefault();
-  var email = "piyushjaiswal956@gmail.com"
   
 
   const actionCodeSettings = {
@@ -28,7 +33,10 @@ export function SignupForm(props) {
   
   await auth.sendSignInLinkToEmail(email,actionCodeSettings).then((e) => {
   
-    window.localStorage.setItem('emailForSignIn', email);
+    window.localStorage.setItem('email', email);
+    window.localStorage.setItem('fname', fname);
+    window.localStorage.setItem('lname', lname);
+    window.localStorage.setItem('password', password);
     toast.success("Successfully send");
   })
   .catch((error) => {
@@ -44,9 +52,10 @@ export function SignupForm(props) {
     <BoxContainer>
       
       <FormContainer>
-        <Input type="text" placeholder="Full Name" />
-        <Input type="email" placeholder="Email" />
-        <Input type="password" placeholder="Password" />
+        <Input type="text" placeholder="First Name" onChange={(e) => setFname(e.target.value)} />
+        <Input type="text" placeholder="Last Name" onChange={(e) => setLname(e.target.value)} />
+        <Input type="email" placeholder="Email"  onChange={(e) => setEmail(e.target.value)}/>
+        <Input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <Input type="password" placeholder="Confirm Password" />
       </FormContainer>
       <Marginer direction="vertical" margin={10} />
