@@ -2,11 +2,16 @@ const admin = require("../firebase");
 
 
 exports.authCheck = (req,res,next) =>{
+
+    console.log(req.body);
+
+    
+
    try{
         
     
-    const email =  req.headers.email;
-    const password =     req.headers.password;
+    const email =  req.body.email;
+    const password =     req.body.password;
     // AUTH CHECK PASSWORD BCRYPT
     req.credential = {
         email,password

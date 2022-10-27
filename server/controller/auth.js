@@ -24,13 +24,16 @@ exports.login=(req,res)=>{
 
 exports.signup=(req,res)=>{
     
-    const {email,password} = req.credential;
+   const {email,password} = req.credential;
+
+   console.log(email + password);
 
 
 
 
     User.countDocuments({email}, function (err, count){ 
         if(count>0){
+                User.findOneAndUpdate({email},{password});
                 res.status(200).json({err: "Please Login"}); 
         }
         else{

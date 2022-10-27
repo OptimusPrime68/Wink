@@ -6,6 +6,7 @@ import RegisterComplete from "./components/Pages/RegisterComplete";
 import Home from "./components/Pages/home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { auth } from "./firebase";
+import Photo from "./components/Pages/Photo";
 import  {useDispatch} from 'react-redux';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
           <Route exact path="/register-complete" element={<RegisterComplete />}></Route>
+          <Route exact path="/photo-upload" element={<Photo />}></Route>
         </Routes>
       </div>
     </Router>

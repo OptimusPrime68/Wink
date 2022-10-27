@@ -3,6 +3,7 @@ import { Container, Nav, Navbar, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios'
 import "../styles/landingPage.css";
 
 
@@ -12,6 +13,12 @@ const RegisterComplete = ({history}) => {
 
   const signUp =  async (e) =>{
       e.preventDefault();
+
+
+     
+
+
+
       try{
       const email = window.localStorage.getItem('email');
       const password = window.localStorage.getItem('password');
@@ -26,15 +33,26 @@ const RegisterComplete = ({history}) => {
           let user = auth.currentUser;
           await user.updatePassword(password);
           const idTokenResult = await user.getIdTokenResult();
+
+
+
+          axios.post('http://localhost:4000/api/signup', {
+            email,password
+          })
+          .then(function (response) {
+
           toast.success("User Saved");
+          })
+          .catch(function (error) {
+            toast.error(error.message);
+          });
+
+
+
+
           navigate('/');
 
       }
-
-
-      
-
-
       }
       catch(err)
       {
