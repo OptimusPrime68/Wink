@@ -41,6 +41,7 @@ export default function Date(props) {
           type: "LOGOUT",
           payload: null,
         });
+        navigate("/");
       })
       .catch((error) => {
         toast.error(error);

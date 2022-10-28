@@ -28,7 +28,7 @@ exports.authCheck = (req,res,next) =>{
 exports.profileCheck = (req,res,next) =>{
     try{
          
-     
+   
      // AUTH CHECK PASSWORD BCRYPT
      
      next();

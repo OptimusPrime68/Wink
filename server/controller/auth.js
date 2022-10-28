@@ -62,16 +62,24 @@ exports.signup=(req,res)=>{
 
 exports.updateProfile=(req,res)=>{
     
+    console.log(req.body);
 
     var update = {};
-    const headerObject = req.headers;
-    const email = req.headers.email;
+    const headerObject = req.body;
+    const email = req.body.email;
     
     for(const key in headerObject){
     var field = `${key}`;
     var value =  `${headerObject[key]}`;   
-    if(field != "email" && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length')
+    if(field != "email" && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
     update[field] = value;
+    else if(field == 'hobbies')
+    {
+        update[field] = [];
+        headerObject.hobbies.forEach(function(item) {
+           update[field].push(item);
+          });
+    }
     }
 
     Profile.findOneAndUpdate(
@@ -79,9 +87,30 @@ exports.updateProfile=(req,res)=>{
         {$set:update},{upsert:true,new:true},
         function (err,success) {
 
-            console.log(err);
-            console.log(success);
+            
             if(err) return res.status(400).json({err});
+            return res.status(201).json(success);
+        }
+    )
+
+
+
+}
+
+
+exports.fetchProfile=(req,res)=>{
+    
+    console.log(req.body);
+
+    const email = req.body.email;
+
+    Profile.findOne(
+        {email},
+        function (err,success) {
+
+            
+            if(err) return res.status(400).json({id : "No Profile Found"});
+            console.log(success);
             return res.status(201).json(success);
         }
     )

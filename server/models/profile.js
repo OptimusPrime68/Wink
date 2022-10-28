@@ -8,26 +8,24 @@ const profileSchema = new mongoose.Schema({
         index:true,
         unique:true,
     },
-    first_name:{
+    name:{
         type:String,
         require:true,
-    }
-    ,last_name:{
+    },
+    phone:{
         type:String,
-        require:true,
-    }
-    ,image_url:{
-        type:[String],
+    },
+    gender:{
+        type:String,
     },
     dob:{
         type:Date,
-        require:true,
-    },
-    hobbies:{
-        type:[String],
     },
     address:{
         type:String,
+    },
+    hobbies:{
+        type:[String],
     },
     location: {
         type: { type: String },
