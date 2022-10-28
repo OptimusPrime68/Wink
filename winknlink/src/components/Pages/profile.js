@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/profile.css";
 import Form from "react-bootstrap/Form";
 import Multiselect from "multiselect-react-dropdown";
+<<<<<<< HEAD
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import { toast } from "react-toastify";
@@ -200,6 +201,10 @@ console.log("Hello");
 
   }
 
+=======
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+>>>>>>> da7f1e1feb4dcbb49b8e69d0452bab73e5498f98
 
   const options = [
     { name: "Playing", id: 1 },
@@ -344,27 +349,27 @@ console.log("Hello");
                 onSelect={onSelect} 
                 onRemove={onRemove}
               />
+<<<<<<< HEAD
               <button type="button" style={{ marginTop: "20px" }} onClick={update}>
+=======
+              <button
+                className="SettingButton"
+                type="button"
+                style={{ marginTop: "20px" }}
+              >
+>>>>>>> da7f1e1feb4dcbb49b8e69d0452bab73e5498f98
                 Update profile
               </button>
             </div>
           </article>
         </section>
-
         <section id="section2">
-          <input
-            style={{ visibility: "hidden" }}
-            className="t"
-            type="radio"
-            name="sections"
-            id="option2"
-          />
+          <input className="t" type="radio" name="sections" id="option2" />
           <label for="option2" className="trr">
-            {" "}
             Upload
           </label>
-          <article>
-            <div className="tr wwq">
+          <article style={{ textAlign: "center" }}>
+            <div className="tr wwq" style={{ justifyContent: "center" }}>
               <div className="row mb-3">
                 <div className="col-md-6 mb-3">
                   <label className="label" for="photo">
@@ -387,10 +392,68 @@ console.log("Hello");
                   <input type="file" multiple id="video" />
                 </div>
               </div>
+<<<<<<< HEAD
               <br></br>
               <button type="button" style={{ marginTop: "20px" }} onClick={upload}  >
                 Upload
               </button>
+=======
+            </div>
+            <button className="SettingButton" type="button">
+              Upload
+            </button>
+          </article>
+        </section>
+        <section id="section3">
+          <input className="t" type="radio" name="sections" id="option3" />
+          <label for="option3" className="trr">
+            Photos
+          </label>
+          <article>
+            <div className="tr wwq">
+              <div className="row photoArea">
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+>>>>>>> da7f1e1feb4dcbb49b8e69d0452bab73e5498f98
             </div>
             {imageList &&  imageList.map((url)=>{
                   return <img src={url} />
