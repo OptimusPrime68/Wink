@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Profile = require('../models/profile');
+const { findOne } = require('../models/user');
 
 exports.login=(req,res)=>{
     
@@ -10,11 +11,20 @@ exports.login=(req,res)=>{
 
     User.countDocuments({email,password}, function (err, count){ 
         if(count>0){
-                res.status(200).json({err: "Login Successfully"});
+                
+           User.findOne({email,password}, function(err, userFromDB) {
+                if(userFromDB){
+
+                       res.status(200).json({id:userFromDB._id});
+                } else {
+                    res.status(400).json({id : ""});
+                }
+            });
+           
        
         }
         else{
-            res.status(401).json({err: "Wrong Credentials"});
+            res.status(400).json({id : ""});
         }
     });
 
@@ -24,21 +34,24 @@ exports.login=(req,res)=>{
 
 exports.signup=(req,res)=>{
     
-    const {email,password} = req.credential;
+   const {email,password} = req.credential;
+
+   console.log(email + password);
 
 
 
 
     User.countDocuments({email}, function (err, count){ 
         if(count>0){
-                res.status(200).json({err: "Please Login"}); 
+                res.status(400).json({err: "Please Login"}); 
         }
         else{
           const user = new User({
               email,password
           });
           user.save(function(err,result){
-            res.status(200).json({result});
+            console.log(result);  
+            res.status(200).json({id : result._id});
           });
         }
     });

@@ -17,6 +17,8 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export function LoginForm(props) {
@@ -28,8 +30,45 @@ export function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  let dispatch = useDispatch();
+
   const signIn = async (e) => {
     e.preventDefault();
+    console.log(email + " " + password);
+
+    await auth
+      .signInWithEmailAndPassword(email, password)
+      .then((e) => {
+        axios
+          .post("http://localhost:4000/api/login", {
+            email,
+            password,
+          })
+          .then(function (response) {
+            var id = response.data.id;
+
+            const idTokenResult = e.user._delegate.accessToken;
+
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                email: email,
+                token: idTokenResult,
+                id: id,
+              },
+            });
+
+            toast.success("Logged In");
+          })
+          .catch(function (error) {
+            toast.error(error.message);
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        toast.error(error);
+        console.log("me");
+      });
 
     await auth
       .signInWithEmailAndPassword(email, password)

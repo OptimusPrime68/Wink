@@ -5,7 +5,7 @@ const {login,signup,updateProfile} = require("../controller/auth");
 
 
 
-router.get("/login",authCheck,login);
+router.post("/login",authCheck,login);
 
 router.post("/signup",authCheck,signup);
 
