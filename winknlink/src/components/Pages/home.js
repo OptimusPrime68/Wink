@@ -72,6 +72,11 @@ export default function Home() {
                   <Nav.Link href="#contact">
                     <span className="navLink">{t("Contact")}</span>
                   </Nav.Link>
+                  <Nav.Link href="#">
+                    <span className="navLink">
+                      <Language />
+                    </span>
+                  </Nav.Link>
                 </Nav>
                 <Nav>
               { !user  &&  <Nav.Link href="#" className="LogCen">
@@ -90,7 +95,6 @@ export default function Home() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
-          <Language />
           <div className="textHome">
             <h1>{t("Go on your first date")}</h1>
             <p>{t("Connect with people you haven't met yet")}</p>

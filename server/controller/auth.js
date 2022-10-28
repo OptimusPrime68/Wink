@@ -24,7 +24,7 @@ exports.login=(req,res)=>{
        
         }
         else{
-            res.status(400).json({id : ""});
+            res.status(400).json({Error:"No User Exist"});
         }
     });
 
@@ -43,7 +43,7 @@ exports.signup=(req,res)=>{
 
     User.countDocuments({email}, function (err, count){ 
         if(count>0){
-                res.status(400).json({err: "Please Login"}); 
+                res.status(400).json({Error: "Please Login"}); 
         }
         else{
           const user = new User({
