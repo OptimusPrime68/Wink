@@ -20,10 +20,9 @@ export default function Home() {
   const [fullscreen, setFullscreen] = useState(true);
   const [show, setShow] = useState(false);
 
-
   const handleClose = () => setShow(false);
-  
-  let {user} = useSelector((state)=>({...state}));
+
+  let { user } = useSelector((state) => ({ ...state }));
   let dispatch = useDispatch();
 
   console.log(user);
@@ -32,20 +31,19 @@ export default function Home() {
     setShow(true);
   }
 
-
-  const logOut=()=>{
+  const logOut = () => {
     const auth = getAuth();
-    signOut(auth).then(() => {
-      dispatch({
-        type:"LOGOUT",
-        payload:null,
+    signOut(auth)
+      .then(() => {
+        dispatch({
+          type: "LOGOUT",
+          payload: null,
+        });
       })
-    }).catch((error) => {
-      // An error happened.
-    });
-      
-
-  }
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   return (
     <>
@@ -79,26 +77,24 @@ export default function Home() {
                   </Nav.Link>
                 </Nav>
                 <Nav>
-              { !user  &&  <Nav.Link href="#" className="LogCen">
-                    <button
-                      className="LoginBut"
-                      onClick={() => handleShow("sm-down")}
-                    >
-                      <b>Login</b>
-                    </button>
-                  </Nav.Link>}
+                  {!user && (
+                    <Nav.Link href="#" className="LogCen">
+                      <button
+                        className="LoginBut"
+                        onClick={() => handleShow("sm-down")}
+                      >
+                        <b>Login</b>
+                      </button>
+                    </Nav.Link>
+                  )}
 
-
-                  {  user &&  <Nav.Link href="#" className="LogCen">
-                    <button
-                      className="LoginBut"
-                      onClick={logOut}
-                    >
-                      <b>Logout</b>
-                    </button>
-                  </Nav.Link>}
-
-
+                  {user && (
+                    <Nav.Link href="#" className="LogCen">
+                      <button className="LoginBut" onClick={logOut}>
+                        <b>Logout</b>
+                      </button>
+                    </Nav.Link>
+                  )}
                 </Nav>
               </Navbar.Collapse>
             </Container>

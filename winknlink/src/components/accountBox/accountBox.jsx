@@ -42,6 +42,7 @@ const BackDrop = styled(motion.div)`
   left: -70px;
   background-color: #fbab7e;
   background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
+  z-index: 2;
 `;
 
 const HeaderContainer = styled.div`

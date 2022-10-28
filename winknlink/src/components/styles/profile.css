@@ -1,0 +1,357 @@
+.sttngs p {
+  color: #000;
+}
+
+.sttngs {
+  max-width: 1064px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 15px;
+  height: auto;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border-radius: 20px;
+  padding-top: 30px;
+  border: 1px solid black;
+}
+
+.sttngs h2 {
+  letter-spacing: 2px;
+  margin: 20px;
+  color: #000;
+}
+
+.sttngs .tabordion {
+  color: #fff;
+  display: block;
+  margin: auto;
+  position: relative;
+  height: 670px;
+  width: 100%;
+}
+
+.sttngs .tabordion input[name="sections"] {
+  display: none;
+}
+
+.sttngs .tabordion section {
+  display: block;
+}
+
+.tabordion section label {
+  border-right: 1px solid lightgrey;
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  color: #999;
+  letter-spacing: 1px;
+  position: relative;
+  width: 130px;
+  z-index: 100;
+}
+
+.tabordion section article {
+  display: none;
+  background: red;
+  padding-left: 200px;
+  max-width: 100%;
+  position: absolute;
+  top: -50px;
+  opacity: 1;
+}
+
+.tabordion input[name="sections"]:checked + label {
+  border-right: 3px solid #81481e;
+  color: #81481e;
+  font-weight: bold;
+}
+
+.tabordion input[name="sections"]:checked ~ article {
+  display: block;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.frm .label {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.25em;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 900;
+  padding: 0;
+  color: #111;
+  letter-spacing: 1px;
+  border: none;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 10px;
+  border: 1px solid lightgray;
+  background-color: white;
+  color: #aaa;
+  letter-spacing: 0.7px;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: gray;
+}
+
+.tr {
+  padding-top: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  max-width: 600px;
+}
+
+.tr .label {
+  margin-bottom: 0.25em;
+  width: 100%;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 900;
+  padding: 0;
+  color: #111;
+  letter-spacing: 2px;
+  border: none;
+}
+
+.input,
+.checkbox-label:before,
+.radio-label:before,
+.checkbox-label:after,
+.radio-label:after,
+.select,
+.textarea,
+.checkbox-label,
+.radio-label {
+  margin-bottom: 1em;
+}
+
+.icon {
+  width: 75px;
+  height: 75px;
+
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.camera4 {
+  display: block;
+  width: 70%;
+  height: 50%;
+  position: absolute;
+  top: 30%;
+  left: 15%;
+  background-color: #000;
+  border-radius: 5px;
+}
+
+.camera4:after {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border: 7px solid #fff;
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  background-color: #000;
+  border-radius: 15px;
+}
+
+.camera4:before {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 10px;
+  position: absolute;
+  top: -16%;
+  left: 25%;
+  background-color: #000;
+  border-radius: 10px;
+}
+
+#profile-upload {
+  background-size: cover;
+  background-position: center;
+  height: 230px;
+  width: 230px;
+  border: 1px solid #bbb;
+  position: relative;
+  top: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  float: left;
+  margin-right: 30px;
+  margin-bottom: 0px;
+}
+
+#profile-upload:hover input.upload {
+  display: block;
+}
+
+#profile-upload:hover {
+  border: 1px solid gray;
+}
+
+#profile-upload:hover .hvr-profile-img {
+  opacity: 1;
+}
+
+.hvr-profile-img {
+  opacity: 0.3;
+}
+
+#profile-upload input.upload {
+  z-index: 1;
+  left: 0;
+  margin: 0;
+  bottom: 0;
+  top: 0;
+  padding: 0;
+  opacity: 0;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+
+  width: 100%;
+  display: none;
+}
+
+.frm {
+  padding: 3%;
+}
+
+.tr span {
+  display: inline-block;
+  color: grey;
+  font-size: 11px;
+  letter-spacing: 0;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.sttngs button {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 1px;
+  outline: 0;
+  background: #81481e;
+  width: 200px;
+  border: 0;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.sttngs button:hover,
+.sttngs button:active,
+.sttngs button:focus {
+  background: #9b7b4e;
+}
+
+@media (max-width: 600px) {
+  #profile-upload {
+    float: none;
+    margin: auto;
+  }
+
+  .sttngs .tabordion {
+    height: 1020px;
+  }
+
+  .sttngs {
+    padding: 0;
+    padding-top: 19px;
+  }
+
+  .sttngs h2 {
+    text-align: center;
+  }
+
+  .tabordion section article {
+    border-top: 1px solid #eee;
+  }
+}
+
+@media (min-width: 768px) {
+  .tabordion {
+    height: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  button {
+    margin-top: -40px;
+  }
+
+  .tabordion section label {
+    float: left;
+    display: inline-block;
+    width: 17%;
+    margin: auto;
+    padding: 12px;
+    font-size: 9px;
+    border-right: none;
+    text-align: center;
+  }
+
+  .tabordion input[name="sections"]:checked + label {
+    border-bottom: 3px solid #81481e;
+    border-right: none;
+  }
+
+  .tabordion section article {
+    left: 0;
+    top: 38px;
+    border-top: 1px solid #eee;
+    padding: 0;
+  }
+}
+
+#postBut button:hover,
+#postBut button:active,
+#postBut button:focus {
+  background: #9b7b4e;
+}
+
+.trnew .label {
+  margin-bottom: 0.25em;
+  width: 100%;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 900;
+  padding: 0;
+  color: #111;
+  letter-spacing: 2px;
+  border: none;
+}
