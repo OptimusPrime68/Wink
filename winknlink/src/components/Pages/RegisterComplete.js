@@ -23,7 +23,6 @@ const RegisterComplete = ({ history }) => {
       );
 
       if (result.user.emailVerified) {
-        window.localStorage.removeItem("email");
         window.localStorage.removeItem("password");
         let user = auth.currentUser;
         await user.updatePassword(password);
@@ -45,6 +44,8 @@ const RegisterComplete = ({ history }) => {
                 id: id,
               },
             });
+            window.localStorage.setItem("token",idTokenResult.token);
+            window.localStorage.setItem("id",id);
 
             toast.success("User Saved");
           })
@@ -53,16 +54,12 @@ const RegisterComplete = ({ history }) => {
             console.log(error);
           });
 
-        navigate("/");
 
-        if (result.user.emailVerified) {
-          window.localStorage.removeItem("email");
-          window.localStorage.removeItem("password");
+        if (result.user.emailVerified) {;
           let user = auth.currentUser;
           await user.updatePassword(password);
           const idTokenResult = await user.getIdTokenResult();
-          toast.success("User Saved");
-          navigate("/");
+          navigate("/wink");
         }
       }
     } catch (err) {

@@ -4,10 +4,11 @@ import "../styles/landingPage.css";
 import { AccountBox } from "../accountBox/accountBox";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { getAuth, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import Language from "../Language";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -21,11 +22,16 @@ const AppContainer = styled.div`
 export default function Home() {
   const [fullscreen, setFullscreen] = useState(true);
   const [show, setShow] = useState(false);
-  const { t } = useTranslation(["home"]);
+  const {t} = useTranslation(["home"]);
+
 
   const handleClose = () => setShow(false);
+  
+  let {user} = useSelector((state)=>({...state}));
+  const navigate = useNavigate();
 
-  let { user } = useSelector((state) => ({ ...state }));
+  if(user) navigate("/wink");
+
   let dispatch = useDispatch();
 
   console.log(user);
@@ -34,20 +40,8 @@ export default function Home() {
     setShow(true);
   }
 
-  const logOut = () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        dispatch({
-          type: "LOGOUT",
-          payload: null,
-        });
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
 
+ 
   return (
     <>
       <div className="fluid">
@@ -85,32 +79,18 @@ export default function Home() {
                   </Nav.Link>
                 </Nav>
                 <Nav>
-                  {!user && (
-                    <Nav.Link href="#" className="LogCen">
-                      <button
-                        className="LoginBut"
-                        onClick={() => handleShow("sm-down")}
-                      >
-                        <b>{t("Login")}</b>
-                      </button>
-                    </Nav.Link>
-                  )}
+              { !user  &&  <Nav.Link href="#" className="LogCen">
+                    <button
+                      className="LoginBut"
+                      onClick={() => handleShow("sm-down")}
+                    >
+                      <b>{t("Login")}</b>
+                    </button>
+                  </Nav.Link>
+                  }
 
-                  {user && (
-                    <Nav.Link href="#" className="LogCen">
-                      <button className="LoginBut" onClick={logOut}>
-                        <b>Logout</b>
-                      </button>
-                    </Nav.Link>
-                  )}
 
-                  {user && (
-                    <Nav.Link href="#" className="LogCen">
-                      <button className="LoginBut" onClick={logOut}>
-                        <b>Logout</b>
-                      </button>
-                    </Nav.Link>
-                  )}
+                
                 </Nav>
               </Navbar.Collapse>
             </Container>

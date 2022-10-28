@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import "../styles/date.css";
 import Profile from "./profile";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function Date(props) {
   const [activeTab, setActiveTab] = useState("Wink");
@@ -11,6 +16,44 @@ export default function Date(props) {
   const switchToMacthes = () => setActiveTab("Matches");
   const switchToChat = () => setActiveTab("Chat");
   const switchToSetting = () => setActiveTab("Setting");
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  let {user} = useSelector((state)=>({...state}));
+
+  
+
+
+  useEffect(()=>{
+    console.log(user);
+    if(user == null) navigate("/");
+  })
+
+
+  const logOut=()=>{
+   
+    const auth = getAuth();
+    signOut(auth).then(() => {
+
+      window.localStorage.removeItem("email");
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("id");
+
+      console.log("hello");
+      dispatch({
+        type:"LOGOUT",
+        payload:null,
+      })
+
+     
+    }).catch((error) => {
+      toast.error(error);
+    });
+      
+
+  }
+
 
   return (
     <>
@@ -52,7 +95,7 @@ export default function Date(props) {
               >
                 Settings
               </Button>
-              <Button variant="outline-danger">Logout</Button>
+              <Button variant="outline-danger" onClick={logOut} >Logout</Button>
               <hr></hr>
               <Button variant="danger">Delete Account</Button>
             </Stack>

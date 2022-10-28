@@ -57,9 +57,12 @@ export function LoginForm(props) {
                 id: id,
               },
             });
+            window.localStorage.setItem("email",email);
+            window.localStorage.setItem("token",idTokenResult);
+            window.localStorage.setItem("id",id);
 
             toast.success("Logged In");
-            navigate("/Wink");
+            navigate("/wink");
           })
           .catch(function (error) {
             toast.error(error.message);
@@ -71,17 +74,7 @@ export function LoginForm(props) {
         console.log("me");
       });
 
-    await auth
-      .signInWithEmailAndPassword(email, password)
-      .then((e) => {
-        toast.success("Login Successful");
-        navigate("/Wink");
-        console.log(e);
-      })
-      .catch((error) => {
-        toast.error(error);
-        console.log("me");
-      });
+    
   };
 
   return (
