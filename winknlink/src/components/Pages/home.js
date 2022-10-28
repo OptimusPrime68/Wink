@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { getAuth, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
+import {useTranslation} from "react-i18next";
+import Language from "../Language";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -19,6 +21,7 @@ const AppContainer = styled.div`
 export default function Home() {
   const [fullscreen, setFullscreen] = useState(true);
   const [show, setShow] = useState(false);
+  const {t} = useTranslation(["home"]);
 
 
   const handleClose = () => setShow(false);
@@ -66,16 +69,16 @@ export default function Home() {
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto navbar">
                   <Nav.Link href="#home">
-                    <span className="navLink">Home</span>
+                    <span className="navLink">{t("Home")}</span>
                   </Nav.Link>
                   <Nav.Link href="#about">
-                    <span className="navLink">About</span>
+                    <span className="navLink">{t("About")}</span>
                   </Nav.Link>
                   <Nav.Link href="#features">
-                    <span className="navLink">Features</span>
+                    <span className="navLink">{t("Features")}</span>
                   </Nav.Link>
                   <Nav.Link href="#contact">
-                    <span className="navLink">Contact</span>
+                    <span className="navLink">{t("Contact")}</span>
                   </Nav.Link>
                 </Nav>
                 <Nav>
@@ -84,7 +87,7 @@ export default function Home() {
                       className="LoginBut"
                       onClick={() => handleShow("sm-down")}
                     >
-                      <b>Login</b>
+                      <b>{t("Login")}</b>
                     </button>
                   </Nav.Link>}
 
@@ -103,14 +106,15 @@ export default function Home() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
+          <Language />
           <div className="textHome">
-            <h1>Go on your first date.</h1>
-            <p>Connect with people you haven't met yet.</p>
+            <h1>{t("Go on your first date")}</h1>
+            <p>{t("Connect with people you haven't met yet")}</p>
           </div>
         </div>
-        <div id="about">About</div>
-        <div id="features">Features</div>
-        <div id="contact">Contact</div>
+        <div id="about">{t("About")}</div>
+        <div id="features">{t("Features")}</div>
+        <div id="contact">{t("Contact")}</div>
       </div>
       <Modal
         className="LoginModal"

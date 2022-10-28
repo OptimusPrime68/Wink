@@ -1,15 +1,22 @@
-import React, { useState } from "react";
-import { Container, Nav, Navbar, Modal } from "react-bootstrap";
+import React from "react";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 import "../styles/landingPage.css";
+import  {useDispatch} from 'react-redux';
+
 
 
 const RegisterComplete = ({history}) => {
 
   const navigate = useNavigate();
+
+  let dispatch = useDispatch();
+
+
+
+
 
   const signUp =  async (e) =>{
       e.preventDefault();
@@ -22,8 +29,6 @@ const RegisterComplete = ({history}) => {
       try{
       const email = window.localStorage.getItem('email');
       const password = window.localStorage.getItem('password');
-      const fname = window.localStorage.getItem('fname');
-      const lname = window.localStorage.getItem('lname');
       const result = await auth.signInWithEmailLink(email,window.location.href);
 
       if(result.user.emailVerified)
@@ -33,6 +38,7 @@ const RegisterComplete = ({history}) => {
           let user = auth.currentUser;
           await user.updatePassword(password);
           const idTokenResult = await user.getIdTokenResult();
+          
 
 
 
@@ -40,15 +46,23 @@ const RegisterComplete = ({history}) => {
             email,password
           })
           .then(function (response) {
+          var id = response.data.id;
+
+          dispatch({
+            type:"LOGGED_IN_USER",
+            payload:{
+              email:email,
+              token:idTokenResult.token,
+              id:id
+            }
+          })
 
           toast.success("User Saved");
           })
           .catch(function (error) {
             toast.error(error.message);
+            console.log(error);
           });
-
-
-
 
           navigate('/');
 
@@ -64,10 +78,7 @@ const RegisterComplete = ({history}) => {
   return (
     
      <>
-
               <button type="submit" onClick={signUp}>Sign Up</button>
-         
-
          </>
   );
 }

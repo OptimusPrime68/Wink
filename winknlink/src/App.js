@@ -1,42 +1,19 @@
 import React from "react";
-import { useEffect } from "react";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterComplete from "./components/Pages/RegisterComplete";
 import Home from "./components/Pages/home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { auth } from "./firebase";
 import Photo from "./components/Pages/Photo";
-import  {useDispatch} from 'react-redux';
+import {Suspense} from 'react';
 
 function App() {
 
-  const dispatch = useDispatch();
 
-  useEffect(()=>{
-   const unsubscribe = auth.onAuthStateChanged(async (user)=>{
-
-    if(user)
-    {
-      const idTokenResult = await user.getIdTokenResult();
-      
-      dispatch({
-        type:'LOGGED_IN_USER',
-        payload:{
-          email:user.email,
-          token:idTokenResult
-        }
-      })
-
-
-    }
-
-   })
-   return ()=> unsubscribe();
-  },[])
 
   return (
     <>
+    <Suspense fallback={null}>
     <ToastContainer />
     <Router>
       <div className="App">
@@ -47,6 +24,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </Suspense>
     </>
   );
 }
