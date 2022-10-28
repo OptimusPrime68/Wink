@@ -22,8 +22,8 @@ const profileSchema = new mongoose.Schema({
     dob:{
         type:Date,
         require:true,
-    }
-    ,hobbies:{
+    },
+    hobbies:{
         type:[String],
     },
     address:{
