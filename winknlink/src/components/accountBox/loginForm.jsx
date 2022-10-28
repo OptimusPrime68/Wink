@@ -59,6 +59,7 @@ export function LoginForm(props) {
             });
 
             toast.success("Logged In");
+            navigate("/Wink");
           })
           .catch(function (error) {
             toast.error(error.message);
