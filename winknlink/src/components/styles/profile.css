@@ -328,7 +328,7 @@ textarea {
   letter-spacing: 0;
 }
 
-.sttngs button {
+.SettingButton {
   text-transform: uppercase;
   font-weight: 800;
   letter-spacing: 1px;
@@ -345,9 +345,9 @@ textarea {
   border-radius: 3px;
 }
 
-.sttngs button:hover,
-.sttngs button:active,
-.sttngs button:focus {
+.SettingButton:hover,
+.SettingButton:active,
+.SettingButton:focus {
   background: #9b7b4e;
 }
 
@@ -524,4 +524,20 @@ textarea {
     max-height: 660px;
     overflow-x: hidden;
   }
+}
+
+.photoArea {
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.PhotoDiv {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#photoDel {
+  background: white;
+  border: 1px solid red;
 }

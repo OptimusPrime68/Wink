@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/profile.css";
 import Form from "react-bootstrap/Form";
 import Multiselect from "multiselect-react-dropdown";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 export default function profile() {
   const options = [
@@ -128,27 +130,23 @@ export default function profile() {
                 displayValue="name"
                 style={style}
               />
-              <button type="button" style={{ marginTop: "20px" }}>
+              <button
+                className="SettingButton"
+                type="button"
+                style={{ marginTop: "20px" }}
+              >
                 Update profile
               </button>
             </div>
           </article>
         </section>
-
         <section id="section2">
-          <input
-            style={{ visibility: "hidden" }}
-            className="t"
-            type="radio"
-            name="sections"
-            id="option2"
-          />
+          <input className="t" type="radio" name="sections" id="option2" />
           <label for="option2" className="trr">
-            {" "}
             Upload
           </label>
-          <article>
-            <div className="tr wwq">
+          <article style={{ textAlign: "center" }}>
+            <div className="tr wwq" style={{ justifyContent: "center" }}>
               <div className="row mb-3">
                 <div className="col-md-6 mb-3">
                   <label className="label" for="photo">
@@ -169,10 +167,61 @@ export default function profile() {
                   <input type="file" multiple id="video" />
                 </div>
               </div>
-              <br></br>
-              <button type="button" style={{ marginTop: "20px" }}>
-                Upload
-              </button>
+            </div>
+            <button className="SettingButton" type="button">
+              Upload
+            </button>
+          </article>
+        </section>
+        <section id="section3">
+          <input className="t" type="radio" name="sections" id="option3" />
+          <label for="option3" className="trr">
+            Photos
+          </label>
+          <article>
+            <div className="tr wwq">
+              <div className="row photoArea">
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+                <div className="col-auto mb-3 PhotoDiv">
+                  <Card style={{ width: "18rem" }}>
+                    <Card.Img variant="top" src="/person.svg" />
+                    <Card.Body style={{ textAlign: "center" }}>
+                      <Button variant="outline-danger">Delete</Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
             </div>
           </article>
         </section>
