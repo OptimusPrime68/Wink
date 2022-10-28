@@ -1,0 +1,195 @@
+.settings {
+  max-width: 1064px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 15px;
+  height: auto;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border-radius: 20px;
+  border: 1px solid black;
+}
+
+.settings h2 {
+  letter-spacing: 2px;
+  margin: 20px;
+  color: #000;
+}
+
+.settings .tabSettings {
+  color: #fff;
+  display: block;
+  margin: auto;
+  position: relative;
+  height: 670px;
+  width: 100%;
+}
+
+.settings .tabSettings input[name="sections"] {
+  display: none;
+}
+
+.settings .tabSettings section {
+  display: block;
+}
+
+.tabSettings section label {
+  border-right: 1px solid lightgrey;
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  color: #999;
+  letter-spacing: 1px;
+  position: relative;
+  width: 130px;
+  z-index: 100;
+}
+
+.tabSettings section article {
+  display: none;
+  padding-left: 200px;
+  max-width: 100%;
+  position: absolute;
+  top: -50px;
+  opacity: 1;
+}
+
+.tabSettings input[name="sections"]:checked + label {
+  border-right: 3px solid #81481e;
+  color: #81481e;
+  font-weight: bold;
+}
+
+.tabSettings input[name="sections"]:checked ~ article {
+  display: block;
+}
+
+:root {
+  background-color: #fcfefd;
+  font-family: helvetica, arial, sans-serif;
+  font-size: 15px;
+}
+
+.frmPage .label {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.25em;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 900;
+  padding: 0;
+  color: #111;
+  letter-spacing: 1px;
+  border: none;
+}
+
+.frmPage {
+  padding: 3%;
+}
+
+@media (max-width: 600px) {
+  .settings .tabSettings {
+    height: 1020px;
+  }
+
+  .settings {
+    padding: 0;
+    padding-top: 19px;
+  }
+
+  .settings h2 {
+    text-align: center;
+  }
+
+  .tabSettings section article {
+    border-top: 1px solid #eee;
+  }
+}
+
+@media (min-width: 768px) {
+  .tabSettings {
+    height: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tabSettings section label {
+    float: left;
+    display: inline-block;
+    width: 17%;
+    margin: auto;
+    padding: 12px;
+    font-size: 9px;
+    border-right: none;
+    text-align: center;
+  }
+
+  .tabSettings input[name="sections"]:checked + label {
+    border-bottom: 3px solid #81481e;
+    border-right: none;
+  }
+
+  .tabSettings section article {
+    left: 0;
+    top: 38px;
+    border-top: 1px solid #eee;
+    padding: 0;
+  }
+}
+
+:root {
+  --background-gradient: linear-gradient(30deg, #f39c12 30%, #f1c40f);
+  --gray: #34495e;
+  --darkgray: #2c3e50;
+}
+
+select {
+  appearance: none;
+  outline: 0;
+  border: 0;
+  box-shadow: none;
+  flex: 1;
+  padding: 0 1em;
+  color: #fff;
+  background-color: var(--darkgray);
+  background-image: none;
+  cursor: pointer;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  border-radius: 0.25em;
+  overflow: hidden;
+}
+
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  background-color: #34495e;
+  transition: 0.25s all ease;
+  pointer-events: none;
+}
+
+.select:hover::after {
+  color: #f39c12;
+}
+
+.Language {
+  color: black;
+}
+
+.tabSettings {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

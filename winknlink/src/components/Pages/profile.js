@@ -4,8 +4,9 @@ import Form from "react-bootstrap/Form";
 import Multiselect from "multiselect-react-dropdown";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { Stack } from "react-bootstrap";
 
-export default function profile() {
+export default function Profile() {
   const options = [
     { name: "Option 1", id: 1 },
     { name: "Option 2", id: 2 },
@@ -27,6 +28,19 @@ export default function profile() {
     },
   };
 
+  function readURL() {
+    var file = document.getElementById("getval").files[0];
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      document.getElementById("profile-upload").style.backgroundImage =
+        "url(" + reader.result + ")";
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+    }
+  }
+
   return (
     <div className="sttngs">
       <h2>Profile</h2>
@@ -46,25 +60,34 @@ export default function profile() {
           </label>
           <article>
             <div className="frm">
-              <div
-                id="profile-upload"
-                style={{ backgroundImage: "/person.svg" }}
-              >
-                <div className="hvr-profile-img">
-                  <input
-                    type="file"
-                    name="logo"
-                    id="getval"
-                    accept="image/png, image/jpeg"
-                    className="upload"
-                  />
-                  <div className="icon">
-                    <div className="camera4">
-                      <span></span>
+              <div className="row mb-5 pt-3">
+                <div
+                  className="m-auto"
+                  id="profile-upload"
+                  style={{ backgroundImage: "/person.svg" }}
+                >
+                  <div className="hvr-profile-img">
+                    <input
+                      type="file"
+                      name="logo"
+                      id="getval"
+                      accept="image/png, image/jpeg"
+                      className="upload"
+                      onChange={readURL}
+                    />
+                    <div className="icon">
+                      <div className="camera4">
+                        <span></span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div className="row">
+                <Button variant="outline-success">Upload</Button>
+              </div>
+
               <div className="tr">
                 <label className="label" for="input">
                   NAME
