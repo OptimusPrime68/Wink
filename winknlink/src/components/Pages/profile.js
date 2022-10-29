@@ -43,11 +43,23 @@ export default function Profile() {
   const upload = async (e) => {
     e.preventDefault();
     if (imageUpload) {
+      console.log(imageUpload)
       let r = (Math.random() + 1).toString(36).substring(7);
       const imageRef = ref(storage, `${email}/${r}`);
       uploadBytes(imageRef, imageUpload)
         .then(() => {
           toast.success("Image Uploaded");
+
+          setImageList([]);
+          listAll(imageListRef).then((response) => {
+            response.items.forEach((item) => {
+              getDownloadURL(item).then((url) => {
+                setImageList((prev) => [...prev, url]);
+              });
+            });
+          }).catch((error)=>console.log(error));
+
+
         })
         .catch((err) => {
           toast.error(err.message);
@@ -57,7 +69,8 @@ export default function Profile() {
 
   const uploadProfile = async (e) => {
     e.preventDefault();
-    if (imageUpload) {
+    console.log(imageUpload);
+      if (imageUpload) {
       const imageRef = ref(storage, `${email}/profile`);
       uploadBytes(imageRef, imageUpload)
         .then(() => {
@@ -71,7 +84,7 @@ export default function Profile() {
                   setprofileImageList((prev) => [...prev, url]);
               });
             });
-          });
+          }).catch((er) => console.log(er));
         })
         .catch((err) => {
           toast.error(err.message);
@@ -133,7 +146,7 @@ export default function Profile() {
           setImageList((prev) => [...prev, url]);
         });
       });
-    });
+    }).catch((error)=>console.log(error));
     setImageList([]);
 
     listAll(imageListRef).then((response) => {
@@ -143,9 +156,10 @@ export default function Profile() {
             setprofileImageList((prev) => [...prev, url]);
         });
       });
-    });
+    }).catch((error)=>console.log(error));
 
-    console.log("Hello");
+   
+    
   }, []);
 
   const update = (e) => {
@@ -199,7 +213,9 @@ export default function Profile() {
     },
   };
 
-  function readURL() {
+  function readURL(e) {
+  
+    setImageUpload(e.target.files[0]);
     var file = document.getElementById("getval").files[0];
     var reader = new FileReader();
     reader.onloadend = function () {
@@ -209,8 +225,12 @@ export default function Profile() {
     if (file) {
       reader.readAsDataURL(file);
     } else {
+      reader.readAsDataURL(profileImageList[0]);
     }
   }
+
+  console.log(imageList);
+
 
   return (
     <div className="sttngs">
@@ -235,14 +255,13 @@ export default function Profile() {
                 <div
                   className="m-auto"
                   id="profile-upload"
-                  style={{ backgroundImage: "/person.svg" }}
+                  style={{ backgroundImage: `url(${profileImageList[0]})` }}
                 >
                   <div className="hvr-profile-img">
                     <input
                       type="file"
                       name="logo"
                       id="getval"
-                      accept="image/png, image/jpeg"
                       className="upload"
                       onChange={readURL}
                     />
@@ -254,18 +273,10 @@ export default function Profile() {
                   </div>
                 </div>
               </div>
-<<<<<<< HEAD
-              {/* <button className="SettingButton" type="button" style={{ marginTop: "20px" }} onClick={uploadProfile}  >
-                Upload
-              </button> */}
-              {/* {profileImageList &&  
-                  <img src={profileImageList[0]} />} */}
-=======
 
               <div className="row">
-                <Button variant="outline-success">Upload</Button>
+                <Button variant="outline-success" onClick={uploadProfile}>Upload</Button>
               </div>
->>>>>>> 32791bb7e28d6d1bfb7edf4e06a5734304cdf671
 
               <div className="tr">
                 <label className="label" for="input">
@@ -410,7 +421,7 @@ export default function Profile() {
                   </label>
                 </div>
                 <div className="col-md-6 mb-3">
-                  <input type="file" multiple id="photo" />
+                  <input type="file" multiple id="photo" onChange={(e)=>setImageUpload(e.target.files[0])} />
                 </div>
               </div>
               <div className="row mb-3">
@@ -424,12 +435,7 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-<<<<<<< HEAD
-            {/* {imageList &&  imageList.map((url)=>{
-                  return <img src={url} />
-              })} */}
-=======
-            <button className="SettingButton" type="button">
+            <button className="SettingButton" type="button" onClick={upload}>
               Upload
             </button>
           </article>
@@ -441,50 +447,25 @@ export default function Profile() {
           </label>
           <article>
             <div className="tr wwq">
-              <div className="row photoArea">
-                <div className="col-auto mb-3 m-auto PhotoDiv">
-                  <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src="/person.svg" />
-                    <Card.Body style={{ textAlign: "center" }}>
-                      <Button variant="outline-danger">Delete</Button>
-                    </Card.Body>
-                  </Card>
+
+            {imageList &&  imageList.map((url)=>{
+                  return      <div className="row photoArea">
+                  <div className="col-auto mb-3 m-auto PhotoDiv">
+                    <Card style={{ width: "18rem" }}>
+                      <Card.Img variant="top" src={url} />
+                      <Card.Body style={{ textAlign: "center" }}>
+                        <Button variant="outline-danger">Delete</Button>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                
+             
                 </div>
-                <div className="col-auto mb-3 m-auto PhotoDiv">
-                  <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src="/person.svg" />
-                    <Card.Body style={{ textAlign: "center" }}>
-                      <Button variant="outline-danger">Delete</Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-                <div className="col-auto mb-3 m-auto PhotoDiv">
-                  <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src="/person.svg" />
-                    <Card.Body style={{ textAlign: "center" }}>
-                      <Button variant="outline-danger">Delete</Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-                <div className="col-auto mb-3 m-auto PhotoDiv">
-                  <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src="/person.svg" />
-                    <Card.Body style={{ textAlign: "center" }}>
-                      <Button variant="outline-danger">Delete</Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-                <div className="col-auto mb-3 m-auto PhotoDiv">
-                  <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src="/person.svg" />
-                    <Card.Body style={{ textAlign: "center" }}>
-                      <Button variant="outline-danger">Delete</Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-              </div>
+              })}
+
+           
+
             </div>
->>>>>>> 32791bb7e28d6d1bfb7edf4e06a5734304cdf671
           </article>
         </section>
       </div>
