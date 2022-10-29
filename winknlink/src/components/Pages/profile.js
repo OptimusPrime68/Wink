@@ -265,11 +265,11 @@ console.log("Hello");
                 </div>
                
               </div>
-              <button className="SettingButton" type="button" style={{ marginTop: "20px" }} onClick={uploadProfile}  >
+              {/* <button className="SettingButton" type="button" style={{ marginTop: "20px" }} onClick={uploadProfile}  >
                 Upload
-              </button>
-              {profileImageList &&  
-                  <img src={profileImageList[0]} />}
+              </button> */}
+              {/* {profileImageList &&  
+                  <img src={profileImageList[0]} />} */}
 
               <div className="tr">
                 <label className="label" for="input">
@@ -384,9 +384,9 @@ console.log("Hello");
                 Upload
               </button>
             </div>
-            {imageList &&  imageList.map((url)=>{
+            {/* {imageList &&  imageList.map((url)=>{
                   return <img src={url} />
-              })}
+              })} */}
           </article>
         </section>
       </div>
