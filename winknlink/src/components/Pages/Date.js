@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import Setting from "./settings";
 import Wink from "./Wink";
 import BottomDrawer from "./BottomDrawer";
+import Matches from "./Matches";
 
 export default function Date(props) {
   const [activeTab, setActiveTab] = useState("Wink");
@@ -101,9 +102,7 @@ export default function Date(props) {
         <div id="dateDiv">
           {activeTab === "Wink" && <Wink />}
           {activeTab === "Profile" && <Profile />}
-          {activeTab === "Matches" && (
-            <div>Page where matches will be displayed</div>
-          )}
+          {activeTab === "Matches" && <Matches />}
           {activeTab === "Chat" && <div>chat page</div>}
           {activeTab === "Setting" && <Setting />}
         </div>
