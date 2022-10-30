@@ -1,0 +1,25 @@
+.BottomDrawerButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.BottomDrawerButtons .MuiIconButton-root {
+  background-color: white;
+  box-shadow: 0px 10px 53px 0px rgba(0, 0, 0, 0.3) !important;
+}
+
+.settingsIconColor {
+  color: #808080;
+}
+
+.newsFeedIconColor {
+  color: #1da1f2;
+}
+
+.matchIconColor {
+  color: #f4c2c2;
+}

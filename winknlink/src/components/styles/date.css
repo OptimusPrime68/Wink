@@ -14,7 +14,7 @@
   height: 100vh;
   width: 75%;
   padding: 5px;
-  background-color: #d3d3d3;
+  background-color: #fff;
 }
 
 #bottomDrawer {
@@ -68,9 +68,9 @@
     display: flex;
     bottom: 0;
     position: absolute;
-    background-color: blue;
     width: 100%;
     height: 10vh;
+    border-top: 1px solid #f9f9f9;
   }
 
   #sideDrawer {
