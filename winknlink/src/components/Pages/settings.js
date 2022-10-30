@@ -19,7 +19,7 @@ export default function Settings() {
   };
 
   const handleChangeAge = (eventAge, newValueAge) => {
-    setValue(newValueAge);
+    setValueAge(newValueAge);
   };
 
   return (

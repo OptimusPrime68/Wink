@@ -8,6 +8,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Setting from "./settings";
+import Wink from "./Wink";
+import BottomDrawer from "./BottomDrawer";
 
 export default function Date(props) {
   const [activeTab, setActiveTab] = useState("Wink");
@@ -97,9 +99,7 @@ export default function Date(props) {
           </div>
         </div>
         <div id="dateDiv">
-          {activeTab === "Wink" && (
-            <div>Page where profile of other users will be displayed</div>
-          )}
+          {activeTab === "Wink" && <Wink />}
           {activeTab === "Profile" && <Profile />}
           {activeTab === "Matches" && (
             <div>Page where matches will be displayed</div>
@@ -108,7 +108,9 @@ export default function Date(props) {
           {activeTab === "Setting" && <Setting />}
         </div>
       </div>
-      <div id="bottomDrawer">Bottom Drawer</div>
+      <div id="bottomDrawer">
+        <BottomDrawer />
+      </div>
     </>
   );
 }

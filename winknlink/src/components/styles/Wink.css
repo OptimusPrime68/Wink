@@ -1,0 +1,47 @@
+.Winkcard {
+  position: relative;
+  width: 600px;
+  padding: 20px;
+  max-width: 85vw;
+  height: 50vh;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 18px 33px 0px rgba(0, 0, 0, 0.3);
+}
+
+.Winkcard > h3 {
+  position: absolute;
+  bottom: 10px;
+  color: white;
+}
+
+.ProfieCards {
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+  padding-top: 20px;
+}
+
+.swipe {
+  position: absolute;
+}
+
+.HeaderWink {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f9f9f9;
+  align-items: center;
+}
+
+.headerLogo {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+}
+
+@media only screen and (min-width: 895px) {
+  .HeaderWink {
+    display: none;
+  }
+}
