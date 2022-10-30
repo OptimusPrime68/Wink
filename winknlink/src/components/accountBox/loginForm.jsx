@@ -34,11 +34,14 @@ export function LoginForm(props) {
 
   const signIn = async (e) => {
     e.preventDefault();
-    console.log(email + " " + password);
+    
+
+    console.log(email + password);
 
     await auth
       .signInWithEmailAndPassword(email, password)
       .then((e) => {
+        console.log("j");
         axios
           .post("http://localhost:4000/api/login", {
             email,
@@ -70,8 +73,9 @@ export function LoginForm(props) {
           });
       })
       .catch((error) => {
-        toast.error(error);
-        console.log("me");
+        toast.error("Log IN ",error);
+        console.log(error);
+
       });
 
     
@@ -125,9 +129,9 @@ export function LoginForm(props) {
         Forget your password?
       </MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
-      <SubmitButton type="submit" onClick={signIn}>
+      <div type="submit" onClick={signIn}>
         Signin
-      </SubmitButton>
+      </div>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Don't have an account?{" "}

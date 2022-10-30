@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import {storage,} from '../../firebase'
 import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
 import "../styles/landingPage.css";
-import { resolveMotionValue } from "framer-motion";
 
 
 
