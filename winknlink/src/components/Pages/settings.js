@@ -2,6 +2,9 @@ import React from "react";
 import "../styles/settings.css";
 import Slider from "@mui/material/Slider";
 import Language from "../Language";
+import axios from "axios";
+import {toast} from 'react-toastify'
+import { useSelector } from "react-redux";
 
 function valuetext(value) {
   return value;
@@ -23,6 +26,26 @@ export default function Settings() {
     setValueAge(newValueAge);
   };
 
+  let {user} = useSelector((state) => ({ ...state }));
+
+  const handlePreference = async (e) =>{
+    console.log(user.email);
+    axios
+    .post("http://localhost:4000/api/update-profile", {
+      preference:e,
+      email:user.email
+    })
+    .then(function (response) {
+      toast.success("Updated");
+      console.log(response);
+    })
+    .catch(function (error) {
+      toast.error("Some Error Occured");
+      console.log(error);
+    });
+};
+  
+
   return (
     <div className="settings">
       <h2>Settings</h2>
@@ -42,10 +65,10 @@ export default function Settings() {
               <h4 className="Language">Preference</h4>
             </div>
             <div className="select col-md-6 mb-3">
-              <select>
+              <select onChange={(e)=>handlePreference(e.target.value)}>
                 <option value="1">Select Gender</option>
-                <option value="2">Male</option>
-                <option value="3">Female</option>
+                <option value="male">male</option>
+                <option value="female">female</option>
               </select>
             </div>
           </div>

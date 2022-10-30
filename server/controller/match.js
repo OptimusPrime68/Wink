@@ -39,11 +39,6 @@ exports.getMatch= async (req,res)=>{
         finalEmail.push(localEmail[i].matchTo);
         }
    }
-
     res.status(201).json(finalEmail);
-
-
-
-    
 
 }
