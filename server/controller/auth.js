@@ -67,6 +67,7 @@ exports.updateProfile=(req,res)=>{
     var update = {};
     const headerObject = req.body;
     const email = req.body.email;
+    console.log(email);
     
     for(const key in headerObject){
     var field = `${key}`;

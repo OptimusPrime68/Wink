@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, Modal } from "react-bootstrap";
-import { toast } from "react-toastify";
+import axios from "axios";
 import {storage,} from '../../firebase'
 import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
 import "../styles/landingPage.css";
@@ -11,45 +10,86 @@ const Photo = ({history}) => {
 
   const [imageUpload,setImageUpload] = useState(null);
   const [imageList,setImageList] = useState([]);
-  const imageListRef = ref(storage,"");
-  const upload =  async (e) =>{
-      e.preventDefault();
-      if(imageUpload){
+  const [user,setUser] = useState([]);
+  const [list,setList] = useState([]);
+  
 
-        const imageRef = ref(storage,"name");
-        uploadBytes(imageRef,imageUpload).then(()=>{
-            alert("Image Uploaded");
-        }).catch((err)=>{
-            console.log(err);
-        })
-      }
-     
-  }
 
   useEffect(() =>{
 
-    listAll(imageListRef).then((response)=>{
-        response.items.forEach((item)=>{
-            getDownloadURL(item).then((url)=>{
-                setImageList((prev)=>[...prev,url]);
-            })
-        })
-    })
 
-  },[])
+   
+    //  axios
+    //       .post("http://localhost:4000/api/all-profile",{email:"piyushjaiswal380@gmail.com"})
+    //       .then(function (response) {
+    //         response.data.forEach(function (x) {
+
+    //             var imageListRef = ref(storage,`${x.email}`);
+              
+    //             listAll(imageListRef).then((response)=>{
+    //             response.items.forEach((item)=>{
+    //                 getDownloadURL(item).then((url)=>{
+    //                     if(url.includes("profile")){
+
+    //                         var local = {
+    //                             name:x.name,
+    //                             gender:x.gender,
+    //                             hobbies:x.hobbies,
+    //                             dob:x.dob,
+    //                             email:x.email,
+    //                             image:url
+    //                         }
+    //                         setList((prev)=>[...prev,local]);
+                           
+    //                     }
+    //                 })
+    //             })
+    //           })
+                
+    //         });
+      
+
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
+
+
+
+  //   axios
+  //         .post("http://localhost:4000/api/make-match",{fromemail:"piyushjaiswal380@gmail.com",toemail:"piyushjaiswal@gmail.com"})
+  //         .then(function (response) {
+  //          console.log(response);
+  //         })
+  //         .catch(function (error) {
+  //           console.log(error);
+  //         });
+
+      axios
+          .post("http://localhost:4000/api/all-match",{email:"piyushjaiswal380@gmail.com"})
+          .then(function (response) {
+           console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+   },[])
+
+
+  console.log(list);
+
 
 
   return (
     
      <>
 
-              <input type="file" onChange={(e) => {
-                  setImageUpload(e.target.files[0])
-              }}/>
-              <button type="submit" onClick={upload}>Upload</button>
+             
+              
 
-              {imageList &&  imageList.map((url)=>{
-                  return <img src={url} />
+              {list &&  list.map((url)=>{
+                  return <img src={url.image} />
               })}
          
 

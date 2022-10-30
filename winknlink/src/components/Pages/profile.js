@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { storage } from "../../firebase";
+import { useTranslation } from "react-i18next";
 import {
   ref,
   uploadBytes,
@@ -31,6 +32,7 @@ export default function Profile() {
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
   const navigate = useNavigate();
+  const {t} = useTranslation(["home"]);
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -181,6 +183,7 @@ export default function Profile() {
         dob,
         address,
         hobbies,
+        preference:"male"
       })
       .then(function (response) {
         toast.success("Updated");
@@ -234,7 +237,7 @@ export default function Profile() {
 
   return (
     <div className="sttngs">
-      <h2>Profile</h2>
+      <h2>{t("Profile")}</h2>
       <div className="tabordion">
         <section id="section1">
           <input

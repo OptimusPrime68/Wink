@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/settings.css";
 import Slider from "@mui/material/Slider";
+import Language from "../Language";
 
 function valuetext(value) {
   return value;
@@ -32,12 +33,8 @@ export default function Settings() {
               <h4 className="Language">Language preference</h4>
             </div>
             <div className="select col-md-6 mb-3">
-              <select>
-                <option value="1">Select Language</option>
-                <option value="2">English</option>
-                <option value="3">Spanish</option>
-                <option value="4">French</option>
-              </select>
+
+              <Language />
             </div>
           </div>
           <div className="row p-5">

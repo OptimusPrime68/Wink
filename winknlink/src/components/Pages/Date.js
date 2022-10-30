@@ -11,7 +11,7 @@ import Setting from "./settings";
 
 export default function Date(props) {
   const [activeTab, setActiveTab] = useState("Wink");
-
+  
   const switchToWink = () => setActiveTab("Wink");
   const switchToProfile = () => setActiveTab("Profile");
   const switchToMacthes = () => setActiveTab("Matches");

@@ -27,6 +27,9 @@ const profileSchema = new mongoose.Schema({
     hobbies:{
         type:[String],
     },
+    preference:{
+        type:String
+    },
     location: {
         type: { type: String },
         coordinates: []
