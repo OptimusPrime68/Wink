@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Profile = require('../models/profile');
 const { findOne } = require('../models/user');
+const Subscription = require('../models/subscription');
 
 exports.login=(req,res)=>{
     
@@ -118,4 +119,34 @@ exports.fetchProfile=(req,res)=>{
 
 
 
+}
+
+
+function datediff(first, second) {        
+    return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
+
+exports.getUserType= async (req,res)=>{
+
+
+
+
+    const email = req.body.email;
+
+    const data = await Subscription.findOne({email});
+
+    if(data){    
+    const diff = (datediff(data.date_of_joining,new Date()));
+
+    if(diff > data.tenure*30){
+    await Subscription.remove({email});
+    res.status(200).json({user:"free"});
+    await Subscription.remove({email});
+    }
+    else
+    res.status(200).json({user:"premium"});
+    }
+    else
+    res.status(200).json({user:"free"});
 }

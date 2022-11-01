@@ -42,6 +42,7 @@ const RegisterComplete = ({ history }) => {
                 email: email,
                 token: idTokenResult.token,
                 id: id,
+                user:"free",
               },
             });
             window.localStorage.setItem("token",idTokenResult.token);

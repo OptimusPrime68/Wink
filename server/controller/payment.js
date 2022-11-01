@@ -14,9 +14,6 @@ exports.makeOrder= async (req,res)=>{
 		const options = {
 			amount: req.body.amount * 100,
 			currency: "INR",
-            notes:{
-                 email:"piyushjaiswal@gmail.com"
-            },
 			receipt: crypto.randomBytes(10).toString("hex"),
 		};
 
@@ -68,7 +65,6 @@ exports.makePayment=async (req,res)=>{
 		return res.status(200).json({ message: "Payment verified successfully" });
         else
         return res.status(400).json({ message: "Payment Success but saving Failed | Refund Will be initiated soon" });
-
 		} else 
 			return res.status(400).json({ message: "Invalid signature sent!" });
 		

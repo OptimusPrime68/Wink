@@ -41,7 +41,13 @@ export function LoginForm(props) {
     await auth
       .signInWithEmailAndPassword(email, password)
       .then((e) => {
-        console.log("j");
+
+        let userType = "free";
+        axios.post("http://localhost:4000/api/is-premium",{email}).then(function(res){
+                
+        userType = res.data.user;
+        });
+
         axios
           .post("http://localhost:4000/api/login", {
             email,
@@ -52,12 +58,16 @@ export function LoginForm(props) {
 
             const idTokenResult = e.user._delegate.accessToken;
 
+
+            
+
             dispatch({
               type: "LOGGED_IN_USER",
               payload: {
                 email: email,
                 token: idTokenResult,
                 id: id,
+                user:userType,
               },
             });
             window.localStorage.setItem("email",email);

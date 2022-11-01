@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const {authCheck,profileCheck}  = require("../middlewares/auth");
-const {login,signup,updateProfile,fetchProfile} = require("../controller/auth");
+const {login,signup,updateProfile,fetchProfile,getUserType} = require("../controller/auth");
 
 
 
 router.post("/login",authCheck,login);
 
 router.post("/signup",authCheck,signup);
+
+router.post("/is-premium",authCheck,getUserType);
 
 
 router.post("/update-profile",profileCheck,updateProfile);
