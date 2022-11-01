@@ -1,100 +1,67 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {storage,} from '../../firebase'
-import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
 import "../styles/landingPage.css";
 
 
+const Photo = () => {
 
-const Photo = ({history}) => {
+	const [book, setBook] = useState({
+		name: "The Fault In Our Stars",
+		author: "John Green",
+		img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
+		price: 250,
+	});
 
-  const [imageUpload,setImageUpload] = useState(null);
-  const [imageList,setImageList] = useState([]);
-  const [user,setUser] = useState([]);
-  const [list,setList] = useState([]);
+	const initPayment = (data) => {
+		const options = {
+			key: "rzp_test_yWZnCopCzsa76e",
+			amount: data.amount,
+			currency: data.currency,
+			name: book.name,
+			description: "Test Transaction",
+			image: book.img,
+			order_id: data.id,
+			handler: async (response) => {
+				try {
+					const verifyUrl = "http://localhost:4000/api/verify";
+					const { data } = await axios.post(verifyUrl, response);
+					console.log(data);
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			theme: {
+				color: "#3399cc",
+			},
+		};
+		const rzp1 = new window.Razorpay(options);
+		rzp1.open();
+	};
+
+	const handlePayment = async () => {
+		try {
+			const orderUrl = "http://localhost:4000/api/order";
+			const { data } = await axios.post(orderUrl, { amount: book.price });
+			console.log(data);
+			initPayment(data.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
   
 
 
-  useEffect(() =>{
 
+  
 
-   
-    //  axios
-    //       .post("http://localhost:4000/api/all-profile",{email:"piyushjaiswal380@gmail.com"})
-    //       .then(function (response) {
-    //         response.data.forEach(function (x) {
+return(
+  <>
+  <p>{book.price}</p>
+  <button onClick={handlePayment}>Buy Now</button>
 
-    //             var imageListRef = ref(storage,`${x.email}`);
-              
-    //             listAll(imageListRef).then((response)=>{
-    //             response.items.forEach((item)=>{
-    //                 getDownloadURL(item).then((url)=>{
-    //                     if(url.includes("profile")){
+  </>
+)
 
-    //                         var local = {
-    //                             name:x.name,
-    //                             gender:x.gender,
-    //                             hobbies:x.hobbies,
-    //                             dob:x.dob,
-    //                             email:x.email,
-    //                             image:url
-    //                         }
-    //                         setList((prev)=>[...prev,local]);
-                           
-    //                     }
-    //                 })
-    //             })
-    //           })
-                
-    //         });
-      
-
-    //       })
-    //       .catch(function (error) {
-    //         console.log(error);
-    //       });
-
-
-
-  //   axios
-  //         .post("http://localhost:4000/api/make-match",{fromemail:"piyushjaiswal380@gmail.com",toemail:"piyushjaiswal@gmail.com"})
-  //         .then(function (response) {
-  //          console.log(response);
-  //         })
-  //         .catch(function (error) {
-  //           console.log(error);
-  //         });
-
-      axios
-          .post("http://localhost:4000/api/all-match",{email:"piyushjaiswal380@gmail.com"})
-          .then(function (response) {
-           console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-
-   },[])
-
-
-  console.log(list);
-
-
-
-  return (
-    
-     <>
-
-             
-              
-
-              {list &&  list.map((url)=>{
-                  return <img src={url.image} />
-              })}
-         
-
-         </>
-  );
 }
 
 

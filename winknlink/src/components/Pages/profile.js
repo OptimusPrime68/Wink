@@ -18,6 +18,7 @@ import {
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
+import { useGeolocated } from "react-geolocated";
 
 export default function Profile() {
   var email = "";
@@ -174,6 +175,10 @@ export default function Profile() {
     console.log(address);
     console.log(hobbies);
 
+    var location = {};
+    if(coords)
+    location = {type:"Point",coordinates:[coords.longitude,coords.latitude]};
+
     axios
       .post("http://localhost:4000/api/update-profile", {
         email,
@@ -183,7 +188,7 @@ export default function Profile() {
         dob,
         address,
         hobbies,
-        preference:"male"
+        location,
       })
       .then(function (response) {
         toast.success("Updated");
@@ -232,7 +237,14 @@ export default function Profile() {
     }
   }
 
-  console.log(imageList);
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+  useGeolocated({
+      positionOptions: {
+          enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+  });
+
 
 
   return (
@@ -372,6 +384,19 @@ export default function Profile() {
                 onChange={(e) => setAddress(e.target.value)}
               />
               <label className="label mt-2" for="hobby">
+                Your Current Location
+              </label>
+
+
+             { isGeolocationAvailable && isGeolocationEnabled && coords && <input
+                value={coords.latitude + " " + coords.longitude}
+                className="input"
+                type="text"
+                id="phone"
+                disabled
+              />}
+
+             <label className="label mt-2" for="hobby">
                 Hobbies
               </label>
 
@@ -383,6 +408,21 @@ export default function Profile() {
                 disabled
               />
 
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <Multiselect
                 id="hobby"
                 options={options}
@@ -391,6 +431,11 @@ export default function Profile() {
                 onSelect={onSelect}
                 onRemove={onRemove}
               />
+
+
+         
+
+
               <button
                 className="SettingButton"
                 type="button"
