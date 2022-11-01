@@ -18,6 +18,7 @@ import {
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
+import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import CircleLoader from "react-spinners/CircleLoader"
 
@@ -35,7 +36,7 @@ export default function Profile() {
   const [profileImageList, setprofileImageList] = useState([]);
   const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
-  const {t} = useTranslation(["home"]);
+  const { t } = useTranslation(["home"]);
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -55,15 +56,15 @@ export default function Profile() {
           toast.success("Image Uploaded");
 
           setImageList([]);
-          listAll(imageListRef).then((response) => {
-            response.items.forEach((item) => {
-              getDownloadURL(item).then((url) => {
-                setImageList((prev) => [...prev, url]);
+          listAll(imageListRef)
+            .then((response) => {
+              response.items.forEach((item) => {
+                getDownloadURL(item).then((url) => {
+                  setImageList((prev) => [...prev, url]);
+                });
               });
-            });
-          }).catch((error)=>console.log(error));
-
-
+            })
+            .catch((error) => console.log(error));
         })
         .catch((err) => {
           toast.error(err.message);
@@ -80,14 +81,16 @@ export default function Profile() {
           toast.success("Image Uploaded");
 
           setprofileImageList([]);
-          listAll(imageListRef).then((response) => {
-            response.items.forEach((item) => {
-              getDownloadURL(item).then((url) => {
-                if (url.includes("profile"))
-                  setprofileImageList((prev) => [...prev, url]);
+          listAll(imageListRef)
+            .then((response) => {
+              response.items.forEach((item) => {
+                getDownloadURL(item).then((url) => {
+                  if (url.includes("profile"))
+                    setprofileImageList((prev) => [...prev, url]);
+                });
               });
-            });
-          }).catch((er) => console.log(er));
+            })
+            .catch((er) => console.log(er));
         })
         .catch((err) => {
           toast.error(err.message);
@@ -151,23 +154,26 @@ export default function Profile() {
       });
 
     setImageList([]);
-    listAll(imageListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          setImageList((prev) => [...prev, url]);
+    listAll(imageListRef)
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            setImageList((prev) => [...prev, url]);
+          });
         });
-      });
-    }).catch((error)=>console.log(error));
+      })
+      .catch((error) => console.log(error));
     setImageList([]);
 
-    listAll(imageListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          if (url.includes("profile"))
-            setprofileImageList((prev) => [...prev, url]);
+    listAll(imageListRef)
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            if (url.includes("profile"))
+              setprofileImageList((prev) => [...prev, url]);
+          });
         });
-      });
-    }).catch((error)=>console.log(error));
+      }).catch((error)=>console.log(error));
 
 
     setLoading(false);
@@ -186,8 +192,11 @@ export default function Profile() {
     console.log(hobbies);
 
     var location = {};
-    if(coords)
-    location = {type:"Point",coordinates:[coords.longitude,coords.latitude]};
+    if (coords)
+      location = {
+        type: "Point",
+        coordinates: [coords.longitude, coords.latitude],
+      };
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -199,6 +208,7 @@ export default function Profile() {
         address,
         hobbies,
         location,
+        preference: "male",
       })
       .then(function (response) {
         toast.success("Updated");
@@ -238,7 +248,6 @@ export default function Profile() {
   };
 
   function readURL(e) {
-  
     setImageUpload(e.target.files[0]);
     var file = document.getElementById("getval").files[0];
     var reader = new FileReader();
@@ -254,9 +263,9 @@ export default function Profile() {
   }
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
-  useGeolocated({
+    useGeolocated({
       positionOptions: {
-          enableHighAccuracy: false,
+        enableHighAccuracy: false,
       },
       userDecisionTimeout: 5000,
   });
@@ -270,50 +279,54 @@ export default function Profile() {
 
 
   return (
-    <div className="sttngs">
-      <h2>{t("Profile")}</h2>
-      <div className="tabordion">
-        <section id="section1">
-          <input
-            style={{ visibility: "hidden" }}
-            className="t"
-            type="radio"
-            name="sections"
-            id="option1"
-            defaultChecked
-          />
-          <label for="option1" className="trr">
-            {" "}
-            Account
-          </label>
-          <article>
-            <div className="frm">
-              <div className="row mb-5 pt-3">
-                <div
-                  className="m-auto"
-                  id="profile-upload"
-                  style={{ backgroundImage: `url(${profileImageList[0]})` }}
-                >
-                  <div className="hvr-profile-img">
-                    <input
-                      type="file"
-                      name="logo"
-                      id="getval"
-                      className="upload"
-                      onChange={readURL}
-                    />
-                    <div className="icon">
-                      <div className="camera4">
-                        <span></span>
+    <div>
+      <Header />
+      <div className="sttngs">
+        <h2>{t("Profile")}</h2>
+        <div className="tabordion">
+          <section id="section1">
+            <input
+              style={{ visibility: "hidden" }}
+              className="t"
+              type="radio"
+              name="sections"
+              id="option1"
+              defaultChecked
+            />
+            <label for="option1" className="trr">
+              {" "}
+              Account
+            </label>
+            <article>
+              <div className="frm">
+                <div className="row mb-5 pt-3">
+                  <div
+                    className="m-auto"
+                    id="profile-upload"
+                    style={{ backgroundImage: `url(${profileImageList[0]})` }}
+                  >
+                    <div className="hvr-profile-img">
+                      <input
+                        type="file"
+                        name="logo"
+                        id="getval"
+                        className="upload"
+                        onChange={readURL}
+                      />
+                      <div className="icon">
+                        <div className="camera4">
+                          <span></span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="row">
-                <Button variant="outline-success" onClick={uploadProfile}>Upload</Button>
-              </div>
+                <div className="row">
+                  <Button variant="outline-success" onClick={uploadProfile}>
+                    Upload
+                  </Button>
+                </div>
 
               <div className="tr">
                 {loading &&  <CircleLoader color="#f70177" />}
@@ -321,28 +334,65 @@ export default function Profile() {
                   NAME
                 </label>
                 <input
-                  value={name}
+                  value={phone}
                   className="input"
                   type="text"
-                  id="input"
-                  onChange={(e) => setName(e.target.value)}
+                  id="phone"
+                  onChange={(e) => setPhone(e.target.value)}
                 />
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <label className="label" for="gender">
+                      Gender
+                    </label>
+                  </div>
+                  <div className="col-md-6">
+                    <select
+                      value={gender}
+                      id="gender"
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <option value="gender">Select gender:</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                </div>
 
                 <label
                   className="label"
-                  for="dob"
-                  style={{ marginTop: "30px" }}
+                  for="address"
+                  style={{ paddingTop: "10px" }}
                 >
                  
                   Date Of Birth
                 </label>
+
                 <input
-                  value={dob}
+                  value={hobbies}
                   className="input"
                   type="date"
                   id="input"
                   onChange={handleDOB}
                 />
+
+                <Multiselect
+                  id="hobby"
+                  options={options}
+                  displayValue="name"
+                  style={style}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                />
+                <button
+                  className="SettingButton"
+                  type="button"
+                  style={{ marginTop: "20px" }}
+                  onClick={update}
+                >
+                  Update profile
+                </button>
               </div>
               <br />
               <label className="label" for="age">
@@ -380,166 +430,95 @@ export default function Profile() {
                     Gender
                   </label>
                 </div>
-                <div className="col-md-6">
-                  <select
-                    value={gender}
-                    id="gender"
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <option value="gender">Select gender:</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-              </div>
-
-              <label
-                className="label"
-                for="address"
-                style={{ paddingTop: "10px" }}
-              >
-                Address
-              </label>
-              <Form.Control
-                as="textarea"
-                value={address}
-                rows={3}
-                id="address"
-                onChange={(e) => setAddress(e.target.value)}
-              />
-              <label className="label mt-2" for="hobby">
-                Your Current Location
-              </label>
-
-
-             { isGeolocationAvailable && isGeolocationEnabled && coords && <input
-                value={coords.latitude + " " + coords.longitude}
-                className="input"
-                type="text"
-                id="phone"
-                disabled
-              />}
-
-             <label className="label mt-2" for="hobby">
-                Hobbies
-              </label>
-
-              <input
-                value={hobbies}
-                className="input"
-                type="text"
-                id="phone"
-                disabled
-              />
-
-              
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              <Multiselect
-                id="hobby"
-                options={options}
-                displayValue="name"
-                style={style}
-                onSelect={onSelect}
-                onRemove={onRemove}
-              />
-
-
-         
-
-
-              <button
-                className="SettingButton"
-                type="button"
-                style={{ marginTop: "20px" }}
-                onClick={update}
-              >
-                Update profile
-              </button>
-            </div>
-          </article>
-        </section>
-        <section id="section2">
-          <input
-            style={{ visibility: "hidden" }}
-            className="t"
-            type="radio"
-            name="sections"
-            id="option2"
-          />
-          <input className="t" type="radio" name="sections" id="option2" />
-          <label for="option2" className="trr">
-            {" "}
-            Upload
-          </label>
-          <article style={{ textAlign: "center" }}>
-            <div className="tr wwq" style={{ justifyContent: "center" }}>
-              <div className="row mb-3">
-                <div className="col-md-6 mb-3">
-                  <label className="label" for="photo">
-                    Add photos
-                  </label>
-                </div>
-                <div className="col-md-6 mb-3">
-                  <input type="file" multiple id="photo" onChange={(e)=>setImageUpload(e.target.files[0])} />
-                </div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-md-6 mb-3">
-                  <label className="label" for="video">
-                    Add Video
-                  </label>
-                </div>
-                <div className="col-md-6 mb-3">
-                  <input type="file" multiple id="video" />
-                </div>
-              </div>
-            </div>
-            <button className="SettingButton" type="button" onClick={upload}>
-              Upload
-            </button>
-          </article>
-        </section>
-        <section id="section3">
-          <input className="t" type="radio" name="sections" id="option3" />
-          <label for="option3" className="trr">
-            Photos
-          </label>
-          <article>
-            <div className="tr wwq">
-
-            {imageList &&  imageList.map((url)=>{
-                  return      <div className="row photoArea">
-                  <div className="col-auto mb-3 m-auto PhotoDiv">
-                    <Card style={{ width: "18rem" }}>
-                      <Card.Img variant="top" src={url} />
-                      <Card.Body style={{ textAlign: "center" }}>
-                        <Button variant="outline-danger">Delete</Button>
-                      </Card.Body>
-                    </Card>
+                <div className="row mb-3">
+                  <div className="col-md-6 mb-3">
+                    <label className="label" for="video">
+                      Add Video
+                    </label>
                   </div>
-                
-             
+                  <div className="col-md-6 mb-3">
+                    <input type="file" multiple id="video" />
+                  </div>
                 </div>
-              })}
-
-           
-
-            </div>
-          </article>
-        </section>
+              </div>
+              <button className="SettingButton" type="button" onClick={upload}>
+                Upload
+              </button>
+              </div>
+            </article>
+          </section>
+          <section id="section2">
+            <input
+              style={{ visibility: "hidden" }}
+              className="t"
+              type="radio"
+              name="sections"
+              id="option2"
+            />
+            <input className="t" type="radio" name="sections" id="option2" />
+            <label for="option2" className="trr">
+              {" "}
+              Upload
+            </label>
+            <article style={{ textAlign: "center" }}>
+              <div className="tr wwq" style={{ justifyContent: "center" }}>
+                <div className="row mb-3">
+                  <div className="col-md-6 mb-3">
+                    <label className="label" for="photo">
+                      Add photos
+                    </label>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="file"
+                      multiple
+                      id="photo"
+                      onChange={(e) => setImageUpload(e.target.files[0])}
+                    />
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-6 mb-3">
+                    <label className="label" for="video">
+                      Add Video
+                    </label>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <input type="file" multiple id="video" />
+                  </div>
+                </div>
+              </div>
+              <button className="SettingButton" type="button" onClick={upload}>
+                Upload
+              </button>
+            </article>
+          </section>
+          <section id="section3">
+            <input className="t" type="radio" name="sections" id="option3" />
+            <label for="option3" className="trr">
+              Photos
+            </label>
+            <article>
+              <div className="tr wwq">
+                {imageList &&
+                  imageList.map((url) => {
+                    return (
+                      <div className="row photoArea">
+                        <div className="col-auto mb-3 m-auto PhotoDiv">
+                          <Card style={{ width: "18rem" }}>
+                            <Card.Img variant="top" src={url} />
+                            <Card.Body style={{ textAlign: "center" }}>
+                              <Button variant="outline-danger">Delete</Button>
+                            </Card.Body>
+                          </Card>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </article>
+          </section>
+        </div>
       </div>
     </div>
   );

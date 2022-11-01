@@ -6,18 +6,25 @@ import PersonIcon from "@mui/icons-material/Person";
 import ChatIcon from "@mui/icons-material/Forum";
 import { IconButton } from "@mui/material";
 import axios from "axios";
-import {storage,} from '../../firebase'
-import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
+import { storage } from "../../firebase";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+} from "firebase/storage";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CircleLoader from 'react-spinners/CircleLoader'
+import Header from "./Header";
 
 function Matches() {
   const [people, setPeople] = useState([]);
   const [loading,setLoading] = useState(false);
 
-  var email="";
+  var email = "";
 
   const navigate = useNavigate();
 
@@ -60,9 +67,6 @@ function Matches() {
                 })
               })
             });
-          })
-          .catch(function (error) {
-            console.log(error);
           });
 
 
@@ -74,29 +78,23 @@ function Matches() {
 
   const swiped = (direction,name,toemail) => {
     console.log(toemail);
-    if(direction == "up")
-    {
-              toast.success(name + " Removed");
+    if (direction == "up") {
+      toast.success(name + " Removed");
+    } else {
+      toast.success("Open Chat Box");
     }
-    else
-    {
-             toast.success("Open Chat Box");
-    }
-  }
-  
+  };
 
   return (
     <div className="DateMainDiv">
-      
-     
+      <Header />
       <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
             className="swipe"
             key={person.email}
             preventSwipe={["left", "right"]}
-            onSwipe={(dir)=>swiped(dir,person.name,person.email)} 
-          
+            onSwipe={(dir) => swiped(dir, person.name, person.email)}
           >
             <div
               style={{ backgroundImage: `url(${person.image})` }}
@@ -105,7 +103,6 @@ function Matches() {
               <h3>{person.email}</h3>
             </div>
           </TinderCard>
-          
         ))}
       </div>
       {loading &&  <CircleLoader color="#f70177" />}

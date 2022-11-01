@@ -92,9 +92,8 @@ export function LoginForm(props) {
           });
       })
       .catch((error) => {
-        toast.error("Log IN ",error);
+        toast.error("Log IN ", error);
         console.log(error);
-
       });
 
       setLoading(false);
