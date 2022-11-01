@@ -19,6 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
+import { useGeolocated } from "react-geolocated";
 
 export default function Profile() {
   var email = "";
@@ -178,6 +179,13 @@ export default function Profile() {
     console.log(address);
     console.log(hobbies);
 
+    var location = {};
+    if (coords)
+      location = {
+        type: "Point",
+        coordinates: [coords.longitude, coords.latitude],
+      };
+
     axios
       .post("http://localhost:4000/api/update-profile", {
         email,
@@ -187,6 +195,7 @@ export default function Profile() {
         dob,
         address,
         hobbies,
+        location,
         preference: "male",
       })
       .then(function (response) {
@@ -235,7 +244,13 @@ export default function Profile() {
     }
   }
 
-  console.log(imageList);
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
 
   return (
     <div>

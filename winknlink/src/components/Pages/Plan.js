@@ -1,32 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/landingPage.css";
+import { useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 
-const Photo = () => {
+const Plan = () => {
 
-	const [book, setBook] = useState({
-		name: "The Fault In Our Stars",
-		author: "John Green",
-		img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-		price: 250,
-	});
 
+    let { user } = useSelector((state) => ({ ...state }));
+    const navigate = useNavigate();
+    if (!user) navigate("/");
+
+    let email,tenure = 3;
+  
+    if (user) email = user.email;
+
+	
 	const initPayment = (data) => {
 		const options = {
 			key: "rzp_test_yWZnCopCzsa76e",
 			amount: data.amount,
-      email:"piyushjaiswal380@gmail.com",
 			currency: data.currency,
-			name: book.name,
 			description: "Test Transaction",
-			image: book.img,
 			order_id: data.id,
 			handler: async (response) => {
 
-        response['email'] = "piyushjaiswal380@gmail.com";
+        response['email'] = email;
         response['amount'] = data.amount;
-        response['tenure'] = 3;
+        response['tenure'] = tenure;
 
 				try {
 					const verifyUrl = "http://localhost:4000/api/verify";
@@ -46,7 +49,7 @@ const Photo = () => {
 	const handlePayment = async () => {
 		try {
 			const orderUrl = "http://localhost:4000/api/order";
-			const { data } = await axios.post(orderUrl, { amount: book.price});
+			const { data } = await axios.post(orderUrl, { amount: 200});
 			console.log(data);
 			initPayment(data.data);
 		} catch (error) {
@@ -61,7 +64,7 @@ const Photo = () => {
 
 return(
   <>
-  <p>{book.price}</p>
+  
   <button onClick={handlePayment}>Buy Now</button>
 
   </>
@@ -70,4 +73,4 @@ return(
 }
 
 
-export default Photo;
+export default Plan;
