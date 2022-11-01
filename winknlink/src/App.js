@@ -9,6 +9,7 @@ import { Suspense ,useEffect} from "react";
 import Date from "./components/Pages/Date";
 import { useDispatch } from "react-redux";
 import {useSelector} from "react-redux";
+import Plan from "./components/Pages/Plan";
 
 function App() {
   
@@ -47,7 +48,9 @@ function App() {
                 element={<RegisterComplete />}
               ></Route>
               <Route path="/Wink" element={<Date />}></Route>
+              <Route path="/buy-plan" element={<Plan />}></Route>
               <Route path="/photo-upload" element={<Photo />}></Route>
+
             </Routes>
           </div>
         </Router>

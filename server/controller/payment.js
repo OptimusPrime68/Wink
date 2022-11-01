@@ -1,13 +1,9 @@
 const router = require("express").Router();
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-
+const Subscription = require("../models/subscription");
 
 exports.makeOrder= async (req,res)=>{
-
-    console.log(req.body);
-
-
 
     try {
 		const instance = new Razorpay({
@@ -18,6 +14,9 @@ exports.makeOrder= async (req,res)=>{
 		const options = {
 			amount: req.body.amount * 100,
 			currency: "INR",
+            notes:{
+                 email:"piyushjaiswal@gmail.com"
+            },
 			receipt: crypto.randomBytes(10).toString("hex"),
 		};
 
@@ -38,9 +37,15 @@ exports.makeOrder= async (req,res)=>{
 
 exports.makePayment=async (req,res)=>{
 
+    console.log(req.body);
+    console.log(req.headers);
     try {
 		const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
 			req.body;
+        const email = req.body.email;
+        const payment = req.body.payment;
+        const tenure =req.body.tenure;
+
 		const sign = razorpay_order_id + "|" + razorpay_payment_id;
 		const expectedSign = crypto
 			.createHmac("sha256", "bOSh6ZnB20VKAmgXpPWbhvXG")
@@ -48,13 +53,28 @@ exports.makePayment=async (req,res)=>{
 			.digest("hex");
 
 		if (razorpay_signature === expectedSign) {
-			return res.status(200).json({ message: "Payment verified successfully" });
-		} else {
+
+
+            const subs = new Subscription({
+                email,charge:payment,date_of_joining:new Date(),tenure,order_id:razorpay_order_id,
+            });
+            const data = await Subscription.create(subs);
+
+            console.log(data);
+
+            
+
+        if(data)    
+		return res.status(200).json({ message: "Payment verified successfully" });
+        else
+        return res.status(400).json({ message: "Payment Success but saving Failed | Refund Will be initiated soon" });
+
+		} else 
 			return res.status(400).json({ message: "Invalid signature sent!" });
-		}
+		
 	} catch (error) {
-        console.log(error);
-		res.status(500).json({ message: "Internal Server Error!" });
+        console.log(error.message);
+		res.status(500).json({ id: error.message });
 		
 	}
 }
