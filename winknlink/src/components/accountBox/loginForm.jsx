@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CircleLoader from 'react-spinners/CircleLoader'
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
@@ -29,11 +30,14 @@ export function LoginForm(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading,setLoading] = useState(false);
 
   let dispatch = useDispatch();
 
   const signIn = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
     
 
     console.log(email + password);
@@ -47,6 +51,7 @@ export function LoginForm(props) {
                 
         userType = res.data.user;
         });
+        
 
         axios
           .post("http://localhost:4000/api/login", {
@@ -54,12 +59,14 @@ export function LoginForm(props) {
             password,
           })
           .then(function (response) {
+         
+           
+
+
+
             var id = response.data.id;
 
             const idTokenResult = e.user._delegate.accessToken;
-
-
-            
 
             dispatch({
               type: "LOGGED_IN_USER",
@@ -73,8 +80,10 @@ export function LoginForm(props) {
             window.localStorage.setItem("email",email);
             window.localStorage.setItem("token",idTokenResult);
             window.localStorage.setItem("id",id);
+            window.localStorage.setItem("user",userType);
 
-            toast.success("Logged In");
+            
+            toast.success("Welcome");
             navigate("/wink");
           })
           .catch(function (error) {
@@ -87,6 +96,8 @@ export function LoginForm(props) {
         console.log(error);
 
       });
+
+      setLoading(false);
 
     
   };
@@ -139,9 +150,10 @@ export function LoginForm(props) {
         Forget your password?
       </MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
-      <div type="submit" onClick={signIn}>
+      {loading && <CircleLoader color="#f70177" />}
+      <SubmitButton type="submit" onClick={signIn}>
         Signin
-      </div>
+      </SubmitButton>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Don't have an account?{" "}

@@ -47,24 +47,22 @@ const RegisterComplete = ({ history }) => {
             });
             window.localStorage.setItem("token",idTokenResult.token);
             window.localStorage.setItem("id",id);
-
             toast.success("User Saved");
+            if (result.user.emailVerified) {;
+              let user = auth.currentUser;
+              user.updatePassword(password);
+              navigate("/wink");
+            }
           })
           .catch(function (error) {
-            toast.error(error.message);
-            console.log(error);
+            toast.error(error.response.data.Error);
+            console.log(error.response.data.Error);
+            navigate("/");
           });
-
-
-        if (result.user.emailVerified) {;
-          let user = auth.currentUser;
-          await user.updatePassword(password);
-          const idTokenResult = await user.getIdTokenResult();
-          navigate("/wink");
-        }
       }
     } catch (err) {
-      toast.error(err.message);
+      console.log(err);
+      toast.error(err.response);
     }
   };
 

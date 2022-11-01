@@ -13,7 +13,7 @@ import BottomDrawer from "./BottomDrawer";
 import Matches from "./Matches";
 
 export default function Date(props) {
-  const [activeTab, setActiveTab] = useState("Wink");
+  const [activeTab, setActiveTab] = useState("Profile");
   
   const switchToWink = () => setActiveTab("Wink");
   const switchToProfile = () => setActiveTab("Profile");
@@ -26,10 +26,15 @@ export default function Date(props) {
 
   let { user } = useSelector((state) => ({ ...state }));
 
+
+
+
   useEffect(() => {
-    console.log(user);
-    if (user == null) navigate("/");
-  });
+     console.log(user);
+     if (user == null) navigate("/");
+     
+    
+     },[]);
 
   const logOut = () => {
     const auth = getAuth();
@@ -58,7 +63,7 @@ export default function Date(props) {
           <div id="headerDrawer" onClick={switchToWink}>
             <div id="userInf">
               <img id="userPic" src="/user.svg" alt="user" />
-              <p id="userName">Name</p>
+              <p id="userName"></p>
             </div>
           </div>
           <div className="sideBar">

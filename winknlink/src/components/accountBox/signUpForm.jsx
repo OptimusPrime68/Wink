@@ -12,6 +12,7 @@ import { AccountContext } from "./accountContext";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import { useState } from "react";
+import CircleLoader from 'react-spinners/CircleLoader'
 
 export function SignupForm(props) {
   const { switchToSignin } = useContext(AccountContext);
@@ -19,10 +20,12 @@ export function SignupForm(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading,setLoading] = useState(false);
 
   const signup = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
     const actionCodeSettings = {
       url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
       handleCodeInApp: true,
@@ -42,6 +45,7 @@ export function SignupForm(props) {
         const errorMessage = error.message;
         toast.error(errorMessage);
       });
+      setLoading(false);
   };
 
   return (
@@ -64,6 +68,7 @@ export function SignupForm(props) {
         Forget your password?
       </MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
+      {loading && <CircleLoader color="#f70177" />}
       <SubmitButton type="submit" onClick={signup}>
         SignUp
       </SubmitButton>

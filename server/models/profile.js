@@ -33,6 +33,10 @@ const profileSchema = new mongoose.Schema({
     location: {
         type: { type: String },
         coordinates: []
+    },
+    profileScore:{
+        type:Number,
+        default:0
     }
    },
     {timestamps:true}

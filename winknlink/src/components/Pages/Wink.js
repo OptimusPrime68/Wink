@@ -11,13 +11,17 @@ import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CircleLoader from 'react-spinners/CircleLoader'
 
 function Wink() {
   const [people, setPeople] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   var email="";
 
   const navigate = useNavigate();
+
+
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -26,7 +30,19 @@ function Wink() {
   if (user) email = user.email;
 
 
+
+
+
   useEffect(()=>{
+
+
+ 
+
+
+       setLoading(true);
+   
+  
+      
 
          axios
           .post("http://localhost:4000/api/all-profile",{email})
@@ -60,6 +76,8 @@ function Wink() {
           .catch(function (error) {
             console.log(error);
           });
+
+          setLoading(false);
 
   },[])
 
@@ -102,6 +120,7 @@ function Wink() {
           <ChatIcon fontSize="large" />
         </IconButton>
       </div>
+     
       <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
@@ -119,7 +138,10 @@ function Wink() {
             </div>
           </TinderCard>
         ))}
+         
+         
         <SwipeButtons />
+        {loading && <CircleLoader color="#f70177" />}
       </div>
     </div>
   );

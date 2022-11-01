@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar, Modal } from "react-bootstrap";
 import "../styles/landingPage.css";
 import { AccountBox } from "../accountBox/accountBox";
@@ -33,6 +33,8 @@ export default function Home() {
   if(user) navigate("/wink");
 
   let dispatch = useDispatch();
+
+
 
   console.log(user);
   function handleShow(breakpoint) {

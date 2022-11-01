@@ -11,9 +11,11 @@ import { ref,uploadBytes,listAll,getDownloadURL, list } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CircleLoader from 'react-spinners/CircleLoader'
 
 function Matches() {
   const [people, setPeople] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   var email="";
 
@@ -26,8 +28,13 @@ function Matches() {
   if (user) email = user.email;
 
 
+
+
   useEffect(()=>{
 
+         
+         
+         setLoading(true);
          axios
           .post("http://localhost:4000/api/all-match",{email})
           .then(function (response) {
@@ -58,6 +65,10 @@ function Matches() {
             console.log(error);
           });
 
+
+          setLoading(false);
+
+
   },[])
 
 
@@ -77,6 +88,7 @@ function Matches() {
   return (
     <div className="DateMainDiv">
       
+     
       <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
@@ -96,7 +108,7 @@ function Matches() {
           
         ))}
       </div>
-      <h3>Swipe Down to Chat</h3>
+      {loading &&  <CircleLoader color="#f70177" />}
     </div>
   );
 }

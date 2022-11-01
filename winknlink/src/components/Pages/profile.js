@@ -19,6 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import { useGeolocated } from "react-geolocated";
+import CircleLoader from "react-spinners/CircleLoader"
 
 export default function Profile() {
   var email = "";
@@ -32,6 +33,7 @@ export default function Profile() {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
   const {t} = useTranslation(["home"]);
 
@@ -46,7 +48,6 @@ export default function Profile() {
   const upload = async (e) => {
     e.preventDefault();
     if (imageUpload) {
-      console.log(imageUpload)
       let r = (Math.random() + 1).toString(36).substring(7);
       const imageRef = ref(storage, `${email}/${r}`);
       uploadBytes(imageRef, imageUpload)
@@ -72,7 +73,6 @@ export default function Profile() {
 
   const uploadProfile = async (e) => {
     e.preventDefault();
-    console.log(imageUpload);
       if (imageUpload) {
       const imageRef = ref(storage, `${email}/profile`);
       uploadBytes(imageRef, imageUpload)
@@ -96,14 +96,12 @@ export default function Profile() {
   };
 
   const onSelect = (e) => {
-    console.log(e);
     var list = [];
     for (var i = 0; i < e.length; i++) list.push(e[i].name);
     setHobby(list);
   };
 
   const onRemove = (e) => {
-    console.log(e);
     var list = [];
     for (var i = 0; i < e.length; i++) list.push(e[i].name);
     setHobby(list);
@@ -121,25 +119,35 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    setLoading(true);
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
       })
       .then(function (response) {
-        const data = response.data;
-        setName(data.name);
-        setPhone(data.phone);
-        setGender(data.gender);
-        setDob(data.dob.substr(0, 10));
-        setAddress(data.address);
-        setHobby(data.hobbies);
-        console.log(data);
 
+        console.log("Response",response);
+        const data = response.data;
+        
+        setName(data.name);
+
+        setPhone(data.phone);
+       
+        setGender(data.gender);
+       
+        if(data.dob != null)
+        setDob(data.dob.substr(0, 10));
+     
+        setAddress(data.address);
+        
+        setHobby(data.hobbies);
+        
+        if(data.dob)
         setAge(getAge(data.dob.substr(0, 10)));
         toast.success("Profile Loaded");
       })
       .catch(function (error) {
-        toast.error("Profile Loading Failed");
+        toast.warn("Update Your Profile");
       });
 
     setImageList([]);
@@ -161,6 +169,8 @@ export default function Profile() {
       });
     }).catch((error)=>console.log(error));
 
+
+    setLoading(false);
    
     
   }, []);
@@ -205,6 +215,12 @@ export default function Profile() {
     { name: "Gaming", id: 2 },
     { name: "Trekking", id: 3 },
     { name: "Nothing", id: 4 },
+    {name:"Blogging",id:5},
+    {name:"Reading",id:6},
+    {name:"Journaling",id:7},
+    {name:"Vacation planning",id:8},
+    {name:"Nature identification",id:9},
+    {name:"Playing an instrument",id:10},
   ];
 
   const style = {
@@ -244,6 +260,12 @@ export default function Profile() {
       },
       userDecisionTimeout: 5000,
   });
+
+
+  const handleDOB = (e)=>{
+    setDob(e.target.value);
+    setAge(getAge(e.target.value));
+  }
 
 
 
@@ -294,6 +316,7 @@ export default function Profile() {
               </div>
 
               <div className="tr">
+                {loading &&  <CircleLoader color="#f70177" />}
                 <label className="label" for="input">
                   NAME
                 </label>
@@ -310,6 +333,7 @@ export default function Profile() {
                   for="dob"
                   style={{ marginTop: "30px" }}
                 >
+                 
                   Date Of Birth
                 </label>
                 <input
@@ -317,14 +341,14 @@ export default function Profile() {
                   className="input"
                   type="date"
                   id="input"
-                  onChange={(e) => setDob(e.target.value)}
+                  onChange={handleDOB}
                 />
               </div>
               <br />
               <label className="label" for="age">
-                Age
+                Age(Calculated by your DOB)
               </label>
-              <input value={age} className="input" type="text" id="age" />
+              <input value={age} className="input" disabled type="text" id="age" />
               <label className="label" for="inputemail">
                 EMAIL
               </label>
