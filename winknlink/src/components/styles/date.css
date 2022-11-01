@@ -6,14 +6,13 @@
 
 #sideDrawer {
   height: 100vh;
-  width: 25%;
   border-right: 1px solid black;
 }
 
 #dateDiv {
   height: 100vh;
-  width: 75%;
   padding: 5px;
+  width: 100%;
   background-color: #fff;
 }
 
@@ -82,4 +81,13 @@
     height: fit-content;
     width: 100%;
   }
+}
+
+.sideDivHeader {
+  display: flex;
+  align-items: center;
+}
+
+.sideDivHeaderIcon {
+  width: 100%;
 }

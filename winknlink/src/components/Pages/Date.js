@@ -11,15 +11,52 @@ import Setting from "./settings";
 import Wink from "./Wink";
 import BottomDrawer from "./BottomDrawer";
 import Matches from "./Matches";
+import { DateContext } from "./DateContext";
+import ChatPage from "./ChatPage";
+import ChatScreen from "./ChatScreen";
+
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import { Avatar, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ForumIcon from "@mui/icons-material/Forum";
+import GroupIcon from "@mui/icons-material/Group";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function Date(props) {
+  const drawerWidth = 240;
+
   const [activeTab, setActiveTab] = useState("Wink");
-  
+
   const switchToWink = () => setActiveTab("Wink");
   const switchToProfile = () => setActiveTab("Profile");
   const switchToMacthes = () => setActiveTab("Matches");
   const switchToChat = () => setActiveTab("Chat");
   const switchToSetting = () => setActiveTab("Setting");
+  const switchToChatTab = () => setActiveTab("ChatTab");
+
+  const contextValue = {
+    switchToWink,
+    switchToProfile,
+    switchToMacthes,
+    switchToChat,
+    switchToSetting,
+    switchToChatTab,
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -55,57 +92,97 @@ export default function Date(props) {
     <>
       <div id="dateMainDiv">
         <div id="sideDrawer">
-          <div id="headerDrawer" onClick={switchToWink}>
-            <div id="userInf">
-              <img id="userPic" src="/user.svg" alt="user" />
-              <p id="userName">Name</p>
-            </div>
-          </div>
-          <div className="sideBar">
-            <Stack gap={3}>
-              <Button
-                onClick={switchToProfile}
-                variant="outline-secondary"
-                className="sideButton"
-              >
-                Profile
-              </Button>
-              <Button
-                onClick={switchToMacthes}
-                variant="outline-secondary"
-                className="sideButton"
-              >
-                Matches
-              </Button>
-              <Button
-                onClick={switchToChat}
-                variant="outline-secondary"
-                className="sideButton"
-              >
-                Chats
-              </Button>
-              <Button
-                onClick={switchToSetting}
-                variant="outline-secondary"
-                className="sideButton"
-              >
-                Settings
-              </Button>
-              <Button variant="outline-danger" onClick={logOut}>
-                Logout
-              </Button>
-              <hr></hr>
-              <Button variant="danger">Delete Account</Button>
-            </Stack>
-          </div>
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="permanent"
+            anchor="left"
+          >
+            <Toolbar>
+              <IconButton onClick={switchToWink} className="sideDivHeaderIcon">
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  className="sideDivHeader"
+                >
+                  <Avatar alt="User Profile" src="/profile.jpg" />
+                  &nbsp; Name
+                </Typography>
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List>
+              <ListItem key="Profile" disablePadding>
+                <ListItemButton onClick={switchToProfile}>
+                  <ListItemIcon>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Matches" disablePadding>
+                <ListItemButton onClick={switchToMacthes}>
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Matches" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Chats" disablePadding>
+                <ListItemButton onClick={switchToChat}>
+                  <ListItemIcon>
+                    <ForumIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Chats" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Setting" disablePadding>
+                <ListItemButton onClick={switchToSetting}>
+                  <ListItemIcon>
+                    <SettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Logout" disablePadding>
+                <ListItemButton onClick={logOut}>
+                  <ListItemIcon>
+                    <PowerSettingsNewIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItem key="Delete" disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <DeleteIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Delete Account" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Drawer>
         </div>
-        <div id="dateDiv">
-          {activeTab === "Wink" && <Wink />}
-          {activeTab === "Profile" && <Profile />}
-          {activeTab === "Matches" && <Matches />}
-          {activeTab === "Chat" && <div>chat page</div>}
-          {activeTab === "Setting" && <Setting />}
-        </div>
+        <DateContext.Provider value={contextValue}>
+          <div id="dateDiv">
+            {activeTab === "Wink" && <Wink />}
+            {activeTab === "Profile" && <Profile />}
+            {activeTab === "Matches" && <Matches />}
+            {activeTab === "Chat" && <ChatPage />}
+            {activeTab === "Setting" && <Setting />}
+            {activeTab === "ChatTab" && <ChatScreen />}
+          </div>
+        </DateContext.Provider>
       </div>
       <div id="bottomDrawer">
         <BottomDrawer />

@@ -34,7 +34,6 @@ export function LoginForm(props) {
 
   const signIn = async (e) => {
     e.preventDefault();
-    
 
     console.log(email + password);
 
@@ -60,9 +59,9 @@ export function LoginForm(props) {
                 id: id,
               },
             });
-            window.localStorage.setItem("email",email);
-            window.localStorage.setItem("token",idTokenResult);
-            window.localStorage.setItem("id",id);
+            window.localStorage.setItem("email", email);
+            window.localStorage.setItem("token", idTokenResult);
+            window.localStorage.setItem("id", id);
 
             toast.success("Logged In");
             navigate("/wink");
@@ -73,12 +72,9 @@ export function LoginForm(props) {
           });
       })
       .catch((error) => {
-        toast.error("Log IN ",error);
+        toast.error("Log IN ", error);
         console.log(error);
-
       });
-
-    
   };
 
   return (

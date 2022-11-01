@@ -1,7 +1,7 @@
 .swipeButtons {
   position: fixed;
   bottom: 10vh;
-  width: 100%;
+  width: 60%;
   display: flex;
   justify-content: space-evenly;
   padding-bottom: 50px;
@@ -9,7 +9,7 @@
 
 .swipeButtons .MuiIconButton-root {
   background-color: white;
-  box-shadow: 0px 10px 53px 0px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.3) !important;
 }
 
 .swipeLike {
