@@ -276,6 +276,9 @@ export default function Profile() {
     setAge(getAge(e.target.value));
   }
 
+  const handleDelete = (e) =>{
+    console.log(e);
+  }
 
 
   return (
@@ -377,22 +380,7 @@ export default function Profile() {
                   onChange={handleDOB}
                 />
 
-                <Multiselect
-                  id="hobby"
-                  options={options}
-                  displayValue="name"
-                  style={style}
-                  onSelect={onSelect}
-                  onRemove={onRemove}
-                />
-                <button
-                  className="SettingButton"
-                  type="button"
-                  style={{ marginTop: "20px" }}
-                  onClick={update}
-                >
-                  Update profile
-                </button>
+                
               </div>
               <br />
               <label className="label" for="age">
@@ -429,23 +417,28 @@ export default function Profile() {
                   <label className="label" for="gender">
                     Gender
                   </label>
+                  <Multiselect
+                  id="hobby"
+                  options={options}
+                  displayValue="name"
+                  style={style}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                />
+                <button
+                  className="SettingButton"
+                  type="button"
+                  style={{ marginTop: "20px" }}
+                  onClick={update}
+                >
+                  Update profile
+                </button>
                 </div>
-                <div className="row mb-3">
-                  <div className="col-md-6 mb-3">
-                    <label className="label" for="video">
-                      Add Video
-                    </label>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <input type="file" multiple id="video" />
-                  </div>
-                </div>
+               
               </div>
-              <button className="SettingButton" type="button" onClick={upload}>
-                Upload
-              </button>
               </div>
             </article>
+                  
           </section>
           <section id="section2">
             <input
@@ -508,7 +501,8 @@ export default function Profile() {
                           <Card style={{ width: "18rem" }}>
                             <Card.Img variant="top" src={url} />
                             <Card.Body style={{ textAlign: "center" }}>
-                              <Button variant="outline-danger">Delete</Button>
+                              <Button variant="outline-danger" onClick={handleDelete}>Delete</Button>
+
                             </Card.Body>
                           </Card>
                         </div>
