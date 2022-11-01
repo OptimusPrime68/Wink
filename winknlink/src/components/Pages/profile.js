@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
 import { useTranslation } from "react-i18next";
 import {
   ref,
@@ -277,6 +278,22 @@ export default function Profile() {
   }
 
   const handleDelete = (e) =>{
+
+    const storage = getStorage();
+    const desertRef = ref(storage,e);
+    console.log(imageList);
+    deleteObject(desertRef).then((s) => {
+  // File deleted successfully
+     var rem;
+     rem = imageList.slice(imageList.indexOf(e),-1);
+     console.log(rem);
+     setImageList(rem);
+     toast.success("Image Deleted");
+    }).catch((error) => {
+  // Uh-oh, an error occurred!
+  console.log(error);
+    });
+    
     console.log(e);
   }
 
@@ -501,7 +518,7 @@ export default function Profile() {
                           <Card style={{ width: "18rem" }}>
                             <Card.Img variant="top" src={url} />
                             <Card.Body style={{ textAlign: "center" }}>
-                              <Button variant="outline-danger" onClick={handleDelete}>Delete</Button>
+                              <Button variant="outline-danger" onClick={()=>{handleDelete(url)}}>Delete</Button>
 
                             </Card.Body>
                           </Card>
