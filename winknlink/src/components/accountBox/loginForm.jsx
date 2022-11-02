@@ -87,13 +87,11 @@ export function LoginForm(props) {
             navigate("/wink");
           })
           .catch(function (error) {
-            toast.error(error.message);
-            console.log(error);
+            toast.error(error.response.data.Error);
           });
       })
       .catch((error) => {
-        toast.error("Log IN ", error);
-        console.log(error);
+        toast.error(error.message.slice(10));
       });
 
       setLoading(false);

@@ -4,7 +4,7 @@ import "../styles/date.css";
 import Profile from "./profile";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Setting from "./settings";
@@ -14,7 +14,7 @@ import Matches from "./Matches";
 import { DateContext } from "./DateContext";
 import ChatPage from "./ChatPage";
 import ChatScreen from "./ChatScreen";
-
+import { getAuth, deleteUser } from "firebase/auth";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -36,6 +36,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ForumIcon from "@mui/icons-material/Forum";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
+import axios from "axios";
 
 export default function Date(props) {
   const drawerWidth = 240;
@@ -92,6 +93,39 @@ export default function Date(props) {
         toast.error(error);
       });
   };
+
+
+  const handleAccountDelete =async (e)=>{
+    
+    toast.warning("We are Deleting Your Account!")
+
+    axios.post("http://localhost:4000/api/delete-account",{email:user.email}).then((e)=>{
+
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      deleteUser(user).then(() => {
+        toast.success(e.data.message);
+      }).catch((error) => {
+        toast.error(error);
+      });
+
+
+   
+
+    dispatch({
+      type: "LOGOUT",
+      payload: null,
+    });
+    navigate("/");
+
+    }).catch((e)=>{
+
+      toast.error(e.data.message);
+    })
+    
+
+  }
 
   return (
     <>
@@ -172,7 +206,7 @@ export default function Date(props) {
                   <ListItemIcon>
                     <DeleteIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Delete Account" />
+                  <ListItemText primary="Delete Account" onClick={handleAccountDelete} />
                 </ListItemButton>
               </ListItem>
             </List>
