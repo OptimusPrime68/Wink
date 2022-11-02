@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import { useState } from "react";
 import CircleLoader from 'react-spinners/CircleLoader'
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 export function SignupForm(props) {
   const { switchToSignin } = useContext(AccountContext);
@@ -20,10 +21,37 @@ export function SignupForm(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState("");
   const [loading,setLoading] = useState(false);
+  const [score,setScore] = useState(0);
 
+  
   const signup = async (e) => {
     e.preventDefault();
+    console.log(score);
+
+    if(password != passwordMatch)
+    {
+      toast.warning("Password Does Not Match");
+      return;
+    }
+    else if(score == 0)
+    {
+      toast.warning("Password is Short")
+      return;
+    }
+    else if(score == 1)
+    {
+      toast.warning("Password is Weak")
+      return;
+    }
+    else if(score == 2)
+    {
+      toast.warning("Password is Okay but not Good")
+      return;
+    }
+
+
 
     setLoading(true);
     const actionCodeSettings = {
@@ -48,6 +76,7 @@ export function SignupForm(props) {
       setLoading(false);
   };
 
+
   return (
     <BoxContainer>
       <FormContainer>
@@ -61,7 +90,11 @@ export function SignupForm(props) {
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Input type="password" placeholder="Confirm Password" />
+        <Input type="password"
+        
+        onChange={(e)=>setPasswordMatch(e.target.value)}
+        placeholder="Confirm Password" />
+       
       </FormContainer>
       <Marginer direction="vertical" margin={10} />
       <MutedLink href="#" onClick={switchToForget}>
@@ -69,6 +102,7 @@ export function SignupForm(props) {
       </MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
       {loading && <CircleLoader color="#f70177" />}
+      <PasswordStrengthBar password={password} onChangeScore={(e)=>setScore(e)} />
       <SubmitButton type="submit" onClick={signup}>
         SignUp
       </SubmitButton>

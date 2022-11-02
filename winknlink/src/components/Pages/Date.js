@@ -106,7 +106,12 @@ export default function Date(props) {
 
       deleteUser(user).then(() => {
         toast.success(e.data.message);
+        window.localStorage.removeItem("email");
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("id");
+        window.localStorage.removeItem("user");
       }).catch((error) => {
+        console.log(error);
         toast.error(error);
       });
 
