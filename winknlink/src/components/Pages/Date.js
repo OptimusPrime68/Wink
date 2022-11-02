@@ -70,7 +70,6 @@ export default function Date(props) {
 
 
   useEffect(() => {
-     console.log(user);
      if (user == null) navigate("/");
      
     
@@ -109,7 +108,6 @@ export default function Date(props) {
     const user = auth.currentUser;
 
     deleteUser(user).then(() => {
-      toast.success(e.data.message);
       window.localStorage.removeItem("email");
       window.localStorage.removeItem("token");
       window.localStorage.removeItem("id");

@@ -34,6 +34,7 @@ export default function Profile() {
   const [address, setAddress] = useState("");
   const [hobbies, setHobby] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);
+  const [videoUpload,setVideoUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
   const [loading,setLoading] = useState(false);
@@ -89,6 +90,7 @@ export default function Profile() {
               response.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
                   if (url.includes("profile")){
+                   
                     dispatch({
                       type: "LOGGED_IN_USER",
                       payload: {
@@ -153,24 +155,19 @@ export default function Profile() {
       .then(function (response) {
 
         console.log("Response",response);
+        if(response.data){
         const data = response.data;
-        
         setName(data.name);
-
         setPhone(data.phone);
-       
         setGender(data.gender);
-       
         if(data.dob != null)
         setDob(data.dob.substr(0, 10));
-     
         setAddress(data.address);
-        
         setHobby(data.hobbies);
-        
         if(data.dob)
         setAge(getAge(data.dob.substr(0, 10)));
         toast.success("Profile Loaded");
+        }
       })
       .catch(function (error) {
         toast.warn("Update Your Profile");
@@ -194,11 +191,12 @@ export default function Profile() {
           getDownloadURL(item).then((url) => {
             if (url.includes("profile")){
               setprofileImageList((prev) => [...prev, url]);
+              console.log(user);
               dispatch({
                 type: "LOGGED_IN_USER",
                 payload: {
                   email: email,
-                  token: user.idTokenResult,
+                  token: user.token,
                   id: user.id,
                   user:user.userType,
                   name:user.name,
@@ -346,6 +344,22 @@ export default function Profile() {
   }
 
 
+  const uploadVideo = (e)=>{
+
+    e.preventDefault();
+    if (videoUpload) {
+      let r = (Math.random() + 1).toString(36).substring(7);
+      const VideoRef = ref(storage, `${email}/video/${r}`);
+      uploadBytes(VideoRef, videoUpload)
+        .then(() => {
+          toast.success("Video Uploaded");
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    }
+  }
+
   return (
     <div>
       <Header />
@@ -421,7 +435,7 @@ export default function Profile() {
                       id="gender"
                       onChange={(e) => setGender(e.target.value)}
                     >
-                      <option value="gender">Select gender:</option>
+                      <option value="gender">Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
@@ -438,7 +452,7 @@ export default function Profile() {
                 </label>
 
                 <input
-                  value={hobbies}
+                  value={dob}
                   className="input"
                   type="date"
                   id="input"
@@ -480,7 +494,7 @@ export default function Profile() {
               <div className="row">
                 <div className="col-md-6">
                   <label className="label" for="gender">
-                    Gender
+                    Hobbies
                   </label>
                   <Multiselect
                   id="hobby"
@@ -542,7 +556,7 @@ export default function Profile() {
                     </label>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <input type="file" multiple id="video" />
+                    <input type="file" multiple id="video" onChange={(e)=>setVideoUpload(e.target.files[0])} />
                   </div>
                 </div>
               </div>

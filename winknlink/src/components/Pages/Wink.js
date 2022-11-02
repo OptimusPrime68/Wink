@@ -76,7 +76,7 @@ function Wink() {
                 })
               })
             });
-          });
+          }).catch((error)=>toast.warn(error.response.data.message));
 
           setLoading(false);
 

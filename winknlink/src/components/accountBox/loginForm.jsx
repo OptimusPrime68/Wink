@@ -84,7 +84,7 @@ export function LoginForm(props) {
             const idTokenResult = e.user._delegate.accessToken;
 
 
-       
+            console.log("Token",idTokenResult)
             dispatch({
               type: "LOGGED_IN_USER",
               payload: {

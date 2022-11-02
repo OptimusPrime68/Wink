@@ -42,7 +42,7 @@ export function SignupForm(props) {
     }
     else if(score == 1 || score == 2)
     {
-      toast.warning("Use Small Case, Large Case and Specal Symbols")
+      toast.warning("Use Lower Case, Upper Case and Specal Symbols")
       return;
     }
    
