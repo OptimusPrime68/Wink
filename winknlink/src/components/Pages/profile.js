@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
 import { useTranslation } from "react-i18next";
 import {
   ref,
@@ -21,6 +22,7 @@ import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import CircleLoader from "react-spinners/CircleLoader";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   var email = "";
@@ -32,12 +34,14 @@ export default function Profile() {
   const [address, setAddress] = useState("");
   const [hobbies, setHobby] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);
+  const [videoUpload, setVideoUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation(["home"]);
 
+  const dispatch = useDispatch();
   let { user } = useSelector((state) => ({ ...state }));
 
   if (!user) navigate("/");
@@ -85,8 +89,20 @@ export default function Profile() {
             .then((response) => {
               response.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
-                  if (url.includes("profile"))
+                  if (url.includes("profile")) {
+                    dispatch({
+                      type: "LOGGED_IN_USER",
+                      payload: {
+                        email: user.email,
+                        token: user.token,
+                        id: user.id,
+                        user: user.user,
+                        name: user.name,
+                        image: url,
+                      },
+                    });
                     setprofileImageList((prev) => [...prev, url]);
+                  }
                 });
               });
             })
@@ -123,28 +139,24 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
+
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
       })
       .then(function (response) {
         console.log("Response", response);
-        const data = response.data;
-
-        setName(data.name);
-
-        setPhone(data.phone);
-
-        setGender(data.gender);
-
-        if (data.dob != null) setDob(data.dob.substr(0, 10));
-
-        setAddress(data.address);
-
-        setHobby(data.hobbies);
-
-        if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
-        toast.success("Profile Loaded");
+        if (response.data) {
+          const data = response.data;
+          setName(data.name);
+          setPhone(data.phone);
+          setGender(data.gender);
+          if (data.dob != null) setDob(data.dob.substr(0, 10));
+          setAddress(data.address);
+          setHobby(data.hobbies);
+          if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
+          toast.success("Profile Loaded");
+        }
       })
       .catch(function (error) {
         toast.warn("Update Your Profile");
@@ -166,8 +178,21 @@ export default function Profile() {
       .then((response) => {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
-            if (url.includes("profile"))
+            if (url.includes("profile")) {
               setprofileImageList((prev) => [...prev, url]);
+              console.log(user);
+              dispatch({
+                type: "LOGGED_IN_USER",
+                payload: {
+                  email: email,
+                  token: user.token,
+                  id: user.id,
+                  user: user.userType,
+                  name: user.name,
+                  image: url,
+                },
+              });
+            }
           });
         });
       })
@@ -206,6 +231,18 @@ export default function Profile() {
         preference: "male",
       })
       .then(function (response) {
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: email,
+            token: user.token,
+            id: user.id,
+            user: user.user,
+            name,
+            image: user.image,
+          },
+        });
+
         toast.success("Updated");
         console.log(response);
       })
@@ -271,7 +308,39 @@ export default function Profile() {
   };
 
   const handleDelete = (e) => {
+    const storage = getStorage();
+    const desertRef = ref(storage, e);
+    console.log(imageList);
+    deleteObject(desertRef)
+      .then((s) => {
+        // File deleted successfully
+        var rem;
+        rem = imageList.slice(imageList.indexOf(e), -1);
+        console.log(rem);
+        setImageList(rem);
+        toast.success("Image Deleted");
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log(error);
+      });
+
     console.log(e);
+  };
+
+  const uploadVideo = (e) => {
+    e.preventDefault();
+    if (videoUpload) {
+      let r = (Math.random() + 1).toString(36).substring(7);
+      const VideoRef = ref(storage, `${email}/video/${r}`);
+      uploadBytes(VideoRef, videoUpload)
+        .then(() => {
+          toast.success("Video Uploaded");
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    }
   };
 
   return (
@@ -294,7 +363,7 @@ export default function Profile() {
               Account
             </label>
             <article className="articleDiv">
-              <div className="frm">
+              <div className="frm" style={{ textAlign: "center" }}>
                 <div className="row mb-5 pt-3">
                   <div
                     className="m-auto"
@@ -341,7 +410,7 @@ export default function Profile() {
                     onChange={(e) => setPhone(e.target.value)}
                   />
 
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="col-md-6">
                       <label className="label" for="gender">
                         Gender
@@ -358,7 +427,7 @@ export default function Profile() {
                         <option value="female">Female</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
 
                   <label
                     className="label"
@@ -405,17 +474,38 @@ export default function Profile() {
                   Phone Number
                 </label>
                 <input
-                  value={phone}
+                  value={name}
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
 
                 <div className="row">
                   <div className="col-md-6">
                     <label className="label" for="gender">
                       Gender
+                    </label>
+                  </div>
+                  <div className="col-md-6">
+                    <select
+                      value={gender}
+                      id="gender"
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <option value="gender">Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <br />
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <label className="label" for="gender">
+                      Hobbies
                     </label>
                     <Multiselect
                       id="hobby"
@@ -477,7 +567,12 @@ export default function Profile() {
                     </label>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <input type="file" multiple id="video" />
+                    <input
+                      type="file"
+                      multiple
+                      id="video"
+                      onChange={(e) => setVideoUpload(e.target.files[0])}
+                    />
                   </div>
                 </div>
               </div>
@@ -503,7 +598,9 @@ export default function Profile() {
                             <Card.Body style={{ textAlign: "center" }}>
                               <Button
                                 variant="outline-danger"
-                                onClick={handleDelete}
+                                onClick={() => {
+                                  handleDelete(url);
+                                }}
                               >
                                 Delete
                               </Button>

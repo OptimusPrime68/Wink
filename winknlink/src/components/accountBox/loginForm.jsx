@@ -21,12 +21,22 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CircleLoader from 'react-spinners/CircleLoader'
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
   const { switchToForget } = useContext(AccountContext);
 
   const navigate = useNavigate();
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,11 +57,22 @@ export function LoginForm(props) {
       .then((e) => {
 
         let userType = "free";
+        let image = "";
+        let name = "";
         axios.post("http://localhost:4000/api/is-premium",{email}).then(function(res){
-                
         userType = res.data.user;
+        window.localStorage.setItem("user",userType);
         });
-        
+
+        axios.post("http://localhost:4000/api/get-user-profile",{email}).then(function(res){
+          
+            if(res.data && res.data.name)
+            name = res.data.name;
+            window.localStorage.setItem("name",name);
+        })
+
+
+       
 
         axios
           .post("http://localhost:4000/api/login", {
@@ -59,15 +80,11 @@ export function LoginForm(props) {
             password,
           })
           .then(function (response) {
-         
-           
-
-
-
             var id = response.data.id;
-
             const idTokenResult = e.user._delegate.accessToken;
 
+
+            console.log("Token",idTokenResult)
             dispatch({
               type: "LOGGED_IN_USER",
               payload: {
@@ -75,26 +92,29 @@ export function LoginForm(props) {
                 token: idTokenResult,
                 id: id,
                 user:userType,
+                name:name,
               },
             });
+
+
             window.localStorage.setItem("email",email);
             window.localStorage.setItem("token",idTokenResult);
             window.localStorage.setItem("id",id);
-            window.localStorage.setItem("user",userType);
 
-            
-            toast.success("Welcome");
             navigate("/wink");
+            toast.success("Welcome");
+            
           })
           .catch(function (error) {
-            toast.error(error.message);
-            console.log(error);
+            toast.error(error.response.data.Error);
           });
       })
       .catch((error) => {
-        toast.error("Log IN ", error);
-        console.log(error);
+        toast.error(error.message.slice(10));
       });
+
+
+     
 
       setLoading(false);
 

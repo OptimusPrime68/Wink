@@ -68,7 +68,7 @@ function Matches() {
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
     if (direction == "up") {
-      toast.success(name + " Removed");
+      toast.success("Removed");
     } else {
       toast.success("Open Chat Box");
     }

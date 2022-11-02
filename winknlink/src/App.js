@@ -22,10 +22,12 @@ function App() {
          const token = window.localStorage.getItem("token");
 
          const id = window.localStorage.getItem("id");
-         
-         const score = window.localStorage.getItem("profileScore");
 
          const user = window.localStorage.getItem("user");
+         
+         const name = window.localStorage.getItem("name");
+
+         const image = window.localStorage.getItem("image");
         
          if(email && token &&  id){
          dispatch({
@@ -34,8 +36,9 @@ function App() {
             email: email,
             token: token,
             id: id,
-            profileScore:score,
-            user
+            user,
+            name,
+            image
           },
         });
       }
@@ -53,9 +56,10 @@ function App() {
                 path="/register-complete"
                 element={<RegisterComplete />}
               ></Route>
-              <Route path="/Wink" element={<Date />}></Route>
+              {user ? <Route path="/Wink" element={<Date />}></Route> : <Route path="*" element={<Home />}></Route>}
               <Route path="/buy-plan" element={<Plan />}></Route>
               <Route path="/photo-upload" element={<Photo />}></Route>
+              
 
             </Routes>
           </div>

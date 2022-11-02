@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const Profile = require('../models/profile');
-const { findOne } = require('../models/user');
 const Subscription = require('../models/subscription');
+const Match = require("../models/match");
 
 exports.login=(req,res)=>{
     
@@ -168,4 +168,27 @@ exports.getUserType= async (req,res)=>{
     }
     else
     res.status(200).json({user:"free"});
+}
+
+
+exports.deleteAccount = async (req,res)=>{
+    const email = req.body.email;
+
+    const data =await  User.deleteOne({email});
+    const record = await Profile.deleteOne({email});
+    const matches = await Match.deleteMany({matchFrom:email});
+    const matchesto = await Match.deleteMany({matchTo:email});
+
+    console.log(data);
+    console.log(record);
+    console.log(matches);
+    console.log(matchesto);
+
+
+    if(data.acknowledged && record.acknowledged && matches.acknowledged && matchesto.acknowledged)
+    return res.status(200).json({message:"Profile Deleted Successfully"});
+    else
+    return res.status(400).json({message:"Some Error Occured"});
+
+
 }

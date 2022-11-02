@@ -76,7 +76,7 @@ function Wink() {
                 })
               })
             });
-          });
+          }).catch((error)=>toast.warn(error.response.data.message));
 
           setLoading(false);
 
@@ -86,7 +86,7 @@ function Wink() {
   const swiped = (direction,name,toemail) => {
     console.log(toemail);
     if (direction == "left") {
-      toast.success(name + "Removed");
+      toast.success(name + " Removed");
     } else {
       axios
         .post("http://localhost:4000/api/make-match", {
