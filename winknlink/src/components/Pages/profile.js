@@ -243,6 +243,7 @@ export default function Profile() {
         hobbies,
         location,
         preference: "male",
+        age
       })
       .then(function (response) {
 

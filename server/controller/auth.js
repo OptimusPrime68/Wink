@@ -73,7 +73,7 @@ exports.updateProfile=(req,res)=>{
     for(const key in headerObject){
     var field = `${key}`;
     var value =  `${headerObject[key]}`;   
-    if(field != "email" && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
+    if(field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
     update[field] = value;
     else if(field == 'hobbies')
     {
@@ -84,32 +84,17 @@ exports.updateProfile=(req,res)=>{
     }
     }
 
+    console.log(update);
+
     Profile.findOneAndUpdate(
         {email},
         {$set:update},{upsert:true,new:true},
         function (err,success) {
 
             if(err) return res.status(400).json({err});
+              
+            else return res.status(200).json(success);
 
-            for(const key in success)
-            {
-                var local = `${success[key]}`;
-                if(local  && ( key == 'email' || key == 'name' || key == 'phone' || key == 'gender' ||  key == 'dob' ||  key == 'address' || key ==  'hobbies' || key ==  'preference' ||  key == 'location'))
-                {x += 10;}
-            }
-
-            console.log(x);
-
-            Profile.findOneAndUpdate({email},{$set:{profileScore:x}},function(err,suc){
-
-                console.log(suc);
-                if(err) return res.status(400).json({err});
-                else return res.status(200).json({suc});
-
-            })
-
-
-            
         }
     )
 

@@ -21,6 +21,9 @@ const profileSchema = new mongoose.Schema({
     dob:{
         type:Date,
     },
+    age:{
+        type:Number,
+    },
     address:{
         type:String,
     },
@@ -37,6 +40,14 @@ const profileSchema = new mongoose.Schema({
     profileScore:{
         type:Number,
         default:0
+    },
+    agePreference:{
+        type:Number,
+        default:100,
+    },
+    distance:{
+        type:Number,
+        default:100000
     }
    },
     {timestamps:true}
