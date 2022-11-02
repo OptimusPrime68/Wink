@@ -63,6 +63,8 @@ export default function Date(props) {
   const dispatch = useDispatch();
 
   let { user } = useSelector((state) => ({ ...state }));
+  let image = user ? user.image:"";
+  let name = user?user.name:"";
 
 
 
@@ -81,6 +83,9 @@ export default function Date(props) {
         window.localStorage.removeItem("email");
         window.localStorage.removeItem("token");
         window.localStorage.removeItem("id");
+        window.localStorage.removeItem("name");
+        window.localStorage.removeItem("image");
+        window.localStorage.removeItem("user");
 
         console.log("hello");
         dispatch({
@@ -99,35 +104,38 @@ export default function Date(props) {
     
     toast.warning("We are Deleting Your Account!")
 
-    axios.post("http://localhost:4000/api/delete-account",{email:user.email}).then((e)=>{
 
-      const auth = getAuth();
-      const user = auth.currentUser;
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-      deleteUser(user).then(() => {
-        toast.success(e.data.message);
-        window.localStorage.removeItem("email");
-        window.localStorage.removeItem("token");
-        window.localStorage.removeItem("id");
-        window.localStorage.removeItem("user");
-      }).catch((error) => {
-        console.log(error);
-        toast.error(error);
-      });
+    deleteUser(user).then(() => {
+      toast.success(e.data.message);
+      window.localStorage.removeItem("email");
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("id");
+      window.localStorage.removeItem("user");
+      window.localStorage.removeItem("name");
+      window.localStorage.removeItem("image");
+      axios.post("http://localhost:4000/api/delete-account",{email:user.email}).then((e)=>{
 
-
-   
-
-    dispatch({
-      type: "LOGOUT",
-      payload: null,
+        dispatch({
+          type: "LOGOUT",
+          payload: null,
+        });
+        navigate("/");
+    
+        }).catch((e)=>{
+    
+          toast.error(e.data.message);
+        })
+    }).catch((error) => {
+      console.log(error);
+      toast.error(error);
     });
-    navigate("/");
 
-    }).catch((e)=>{
 
-      toast.error(e.data.message);
-    })
+
+
     
 
   }
@@ -156,8 +164,8 @@ export default function Date(props) {
                   component="div"
                   className="sideDivHeader"
                 >
-                  <Avatar alt="User Profile" src="/profile.jpg" />
-                  &nbsp; Name
+                  <Avatar alt="User Profile" src={image} />
+                  &nbsp; {name}
                 </Typography>
               </IconButton>
             </Toolbar>

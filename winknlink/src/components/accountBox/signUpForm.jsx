@@ -40,16 +40,12 @@ export function SignupForm(props) {
       toast.warning("Password is Short")
       return;
     }
-    else if(score == 1)
+    else if(score == 1 || score == 2)
     {
-      toast.warning("Password is Weak")
+      toast.warning("Use Small Case, Large Case and Specal Symbols")
       return;
     }
-    else if(score == 2)
-    {
-      toast.warning("Password is Okay but not Good")
-      return;
-    }
+   
 
 
 

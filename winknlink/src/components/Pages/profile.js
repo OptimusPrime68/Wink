@@ -22,6 +22,7 @@ import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import CircleLoader from "react-spinners/CircleLoader"
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   var email = "";
@@ -39,7 +40,8 @@ export default function Profile() {
   const navigate = useNavigate();
   const { t } = useTranslation(["home"]);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
+  let {user} = useSelector((state)=>({...state}));
 
   if (!user) navigate("/");
 
@@ -86,12 +88,27 @@ export default function Profile() {
             .then((response) => {
               response.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
-                  if (url.includes("profile"))
+                  if (url.includes("profile")){
+                    dispatch({
+                      type: "LOGGED_IN_USER",
+                      payload: {
+                        email: user.email,
+                        token: user.token,
+                        id: user.id,
+                        user:user.user,
+                        name:user.name,
+                        image:url
+                      },
+                    });
                     setprofileImageList((prev) => [...prev, url]);
+                    
+                  }
                 });
               });
             })
             .catch((er) => console.log(er));
+
+           
         })
         .catch((err) => {
           toast.error(err.message);
@@ -212,6 +229,19 @@ export default function Profile() {
         preference: "male",
       })
       .then(function (response) {
+
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: email,
+            token: user.token,
+            id: user.id,
+            user:user.user,
+            name,
+            image:user.image
+          },
+        });
+
         toast.success("Updated");
         console.log(response);
       })
@@ -354,11 +384,11 @@ export default function Profile() {
                   NAME
                 </label>
                 <input
-                  value={phone}
+                  value={name}
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
 
                 <div className="row">
