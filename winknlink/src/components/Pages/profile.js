@@ -141,6 +141,11 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
+
+
+  
+
+
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
@@ -187,8 +192,21 @@ export default function Profile() {
       .then((response) => {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
-            if (url.includes("profile"))
+            if (url.includes("profile")){
               setprofileImageList((prev) => [...prev, url]);
+              dispatch({
+                type: "LOGGED_IN_USER",
+                payload: {
+                  email: email,
+                  token: user.idTokenResult,
+                  id: user.id,
+                  user:user.userType,
+                  name:user.name,
+                  image:url,
+                },
+              });
+  
+            }
           });
         });
       }).catch((error)=>console.log(error));

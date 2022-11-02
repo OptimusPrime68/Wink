@@ -84,9 +84,7 @@ export function LoginForm(props) {
             const idTokenResult = e.user._delegate.accessToken;
 
 
-           
-
-
+       
             dispatch({
               type: "LOGGED_IN_USER",
               payload: {
@@ -95,8 +93,6 @@ export function LoginForm(props) {
                 id: id,
                 user:userType,
                 name:name,
-         
-                
               },
             });
 
