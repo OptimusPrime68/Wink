@@ -32,8 +32,7 @@ exports.updateProfile=(req,res)=>{
         function (err,success) {
 
             if(err) return res.status(400).json({err});
-              
-            else return res.status(200).json(success);
+            else { console.log(success); return res.status(200).json(success);}
         }
     )
 
@@ -83,11 +82,13 @@ exports.allProfile=(req,res)=>{
         else{
         preference = result.preference;
         age = result.agePreference;
+
+        console.log(age);
         
 
         
         Profile.find(
-            {gender:preference,agePreference:{$lt:100}},
+            {gender:preference,age:{$lt:age}},
             function (err,success) {
                 if(err) return res.status(400).json({id : "No Profile Found"});
                 console.log(success);
