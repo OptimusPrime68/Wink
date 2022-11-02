@@ -35,7 +35,7 @@ const profileSchema = new mongoose.Schema({
     },
     location: {
         type: { type: String },
-        coordinates: []
+        coordinates: [Number]
     },
     profileScore:{
         type:Number,

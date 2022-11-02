@@ -143,11 +143,6 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
-
-
-  
-
-
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
@@ -172,7 +167,6 @@ export default function Profile() {
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
-
     setImageList([]);
     listAll(imageListRef)
       .then((response) => {
@@ -184,7 +178,6 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
     setImageList([]);
-
     listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
@@ -203,16 +196,11 @@ export default function Profile() {
                   image:url,
                 },
               });
-  
             }
           });
         });
       }).catch((error)=>console.log(error));
-
-
     setLoading(false);
-   
-    
   }, []);
 
   const update = (e) => {
@@ -225,12 +213,13 @@ export default function Profile() {
     console.log(address);
     console.log(hobbies);
 
-    var location = {};
+    var coordinates = [];
     if (coords)
-      location = {
-        type: "Point",
-        coordinates: [coords.longitude, coords.latitude],
-      };
+        coordinates = [coords.longitude, coords.latitude];
+
+
+        console.log(coordinates);
+      
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -241,7 +230,7 @@ export default function Profile() {
         dob,
         address,
         hobbies,
-        location,
+        location:coordinates,
         preference: "male",
         age
       })
@@ -318,7 +307,6 @@ export default function Profile() {
       userDecisionTimeout: 5000,
   });
 
-
   const handleDOB = (e)=>{
     setDob(e.target.value);
     setAge(getAge(e.target.value));
@@ -344,9 +332,7 @@ export default function Profile() {
     console.log(e);
   }
 
-
   const uploadVideo = (e)=>{
-
     e.preventDefault();
     if (videoUpload) {
       let r = (Math.random() + 1).toString(36).substring(7);
@@ -459,9 +445,8 @@ export default function Profile() {
                   id="input"
                   onChange={handleDOB}
                 />
-
-                
               </div>
+
               <br />
               <label className="label" for="age">
                 Age(Calculated by your DOB)

@@ -3,19 +3,21 @@ const Profile = require('../models/profile')
 
 exports.updateProfile=(req,res)=>{
     
-    console.log(req.body);
 
     var update = {};
     const headerObject = req.body;
     const email = req.body.email;
     var x  = 0;
 
+    console.log(req.body);
+
     
     
     for(const key in headerObject){
     var field = `${key}`;
     var value =  `${headerObject[key]}`;   
-    if(field != 'agePreference' && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
+    console.log(value);
+    if(field != 'location' && field != 'agePreference' && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
     update[field] = value;
     else if(field == 'agePreference')
     {
@@ -32,10 +34,18 @@ exports.updateProfile=(req,res)=>{
            update[field].push(item);
           });
     }
+    else if(field == 'location')
+    {
+        update["location"] = {type:"2dpoints",coordinates:[]};
+        headerObject.location.forEach(function(item) {
+            update["location"].coordinates.push(item);
+           });
+
     }
-
+    }
+    
     console.log(update);
-
+    
 
     Profile.findOneAndUpdate(
         {email},
