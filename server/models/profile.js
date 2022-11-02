@@ -42,8 +42,8 @@ const profileSchema = new mongoose.Schema({
         default:0
     },
     agePreference:{
-        type:Number,
-        default:100,
+        type:[Number],
+        default:[18,80],
     },
     distance:{
         type:Number,

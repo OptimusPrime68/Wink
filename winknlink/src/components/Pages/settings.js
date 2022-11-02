@@ -28,7 +28,7 @@ export default function Settings() {
     console.log(valueAge);
     axios
       .post("http://localhost:4000/api/update-profile", {
-       agePreference:valueAge[1],
+       agePreference:valueAge,
        email:user.email
      })
   .then(function (response) {
