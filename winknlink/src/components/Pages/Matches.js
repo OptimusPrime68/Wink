@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
-import SwipeButtons from "./SwipeButtons";
-import PersonIcon from "@mui/icons-material/Person";
-import ChatIcon from "@mui/icons-material/Forum";
-import { IconButton } from "@mui/material";
 import axios from "axios";
 import { storage } from "../../firebase";
 import {
@@ -17,12 +13,19 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CircleLoader from 'react-spinners/CircleLoader'
+import CircleLoader from "react-spinners/CircleLoader";
 import Header from "./Header";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { CardMedia } from "@mui/material";
+import "../styles/Matches.css";
 
 function Matches() {
   const [people, setPeople] = useState([]);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   var email = "";
 
@@ -34,49 +37,35 @@ function Matches() {
 
   if (user) email = user.email;
 
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .post("http://localhost:4000/api/all-match", { email })
+      .then(function (response) {
+        response.data.forEach(function (x) {
+          var imageListRef = ref(storage, `${x}`);
 
-
-
-  useEffect(()=>{
-
-         
-         
-         setLoading(true);
-         axios
-          .post("http://localhost:4000/api/all-match",{email})
-          .then(function (response) {
-
-            
-            response.data.forEach(function (x) {
-
-                var imageListRef = ref(storage,`${x}`);
-              
-                listAll(imageListRef).then((response)=>{
-                response.items.forEach((item)=>{
-                    getDownloadURL(item).then((url)=>{
-                        if(url.includes("profile")){
-
-                            var local = {
-                                image:url,
-                                email:x
-                            }
-                            console.log(local);
-                            setPeople((prev)=>[...prev,local]);
-                        }
-                    })
-                })
-              })
+          listAll(imageListRef).then((response) => {
+            response.items.forEach((item) => {
+              getDownloadURL(item).then((url) => {
+                if (url.includes("profile")) {
+                  var local = {
+                    image: url,
+                    email: x,
+                  };
+                  console.log(local);
+                  setPeople((prev) => [...prev, local]);
+                }
+              });
             });
           });
+        });
+      });
 
+    setLoading(false);
+  }, []);
 
-          setLoading(false);
-
-
-  },[])
-
-
-  const swiped = (direction,name,toemail) => {
+  const swiped = (direction, name, toemail) => {
     console.log(toemail);
     if (direction == "up") {
       toast.success(name + " Removed");
@@ -88,7 +77,29 @@ function Matches() {
   return (
     <div className="DateMainDiv">
       <Header />
-      <div className="ProfieCards">
+      <div className="row">
+        {people.map((person) => (
+          <div className="matchDiv col mb-3">
+            <Card key={person.email} className="MatchImage">
+              <CardMedia
+                component="img"
+                image={person.image}
+                alt="Profile Image"
+                className="profileDivImage"
+              />
+              <CardContent>
+                <h6>{person.email}</h6>
+              </CardContent>
+              <CardActions>
+                <Button style={{ margin: "auto" }} size="small">
+                  Chat
+                </Button>
+              </CardActions>
+            </Card>
+          </div>
+        ))}
+      </div>
+      {/* <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
             className="swipe"
@@ -104,8 +115,8 @@ function Matches() {
             </div>
           </TinderCard>
         ))}
-      </div>
-      {loading &&  <CircleLoader color="#f70177" />}
+      </div> */}
+      {loading && <CircleLoader color="#f70177" />}
     </div>
   );
 }

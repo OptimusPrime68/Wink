@@ -5,9 +5,7 @@ import { AccountBox } from "../accountBox/accountBox";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import {useTranslation} from "react-i18next";
-import Language from "../Language";
-import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const AppContainer = styled.div`
@@ -22,19 +20,16 @@ const AppContainer = styled.div`
 export default function Home() {
   const [fullscreen, setFullscreen] = useState(true);
   const [show, setShow] = useState(false);
-  const {t} = useTranslation(["home"]);
-
+  const { t } = useTranslation(["home"]);
 
   const handleClose = () => setShow(false);
-  
-  let {user} = useSelector((state)=>({...state}));
+
+  let { user } = useSelector((state) => ({ ...state }));
   const navigate = useNavigate();
 
-  if(user) navigate("/wink");
+  if (user) navigate("/wink");
 
   let dispatch = useDispatch();
-
-
 
   console.log(user);
   function handleShow(breakpoint) {
@@ -42,8 +37,6 @@ export default function Home() {
     setShow(true);
   }
 
-
- 
   return (
     <>
       <div className="fluid">
@@ -74,25 +67,18 @@ export default function Home() {
                   <Nav.Link href="#contact">
                     <span className="navLink">{t("Contact")}</span>
                   </Nav.Link>
-                  <Nav.Link href="#">
-                    <span className="navLink">
-                      <Language />
-                    </span>
-                  </Nav.Link>
                 </Nav>
                 <Nav>
-              { !user  &&  <Nav.Link href="#" className="LogCen">
-                    <button
-                      className="LoginBut"
-                      onClick={() => handleShow("sm-down")}
-                    >
-                      <b>{t("Login")}</b>
-                    </button>
-                  </Nav.Link>
-                  }
-
-
-                
+                  {!user && (
+                    <Nav.Link href="#" className="LogCen">
+                      <button
+                        className="LoginBut"
+                        onClick={() => handleShow("sm-down")}
+                      >
+                        <b>{t("Login")}</b>
+                      </button>
+                    </Nav.Link>
+                  )}
                 </Nav>
               </Navbar.Collapse>
             </Container>

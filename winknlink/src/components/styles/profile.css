@@ -1,9 +1,9 @@
 .sttngs {
-  max-width: 1064px;
   margin: 50px auto;
+  max-width: 1064px;
   background: #fff;
   padding: 15px;
-  height: auto;
+  height: fit-content;
   font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-radius: 20px;
   border: 1px solid black;
@@ -20,7 +20,6 @@
   display: block;
   margin: auto;
   position: relative;
-  height: 670px;
   width: 100%;
 }
 
@@ -313,6 +312,11 @@ textarea {
   .tabordion {
     height: 600px;
   }
+
+  .sttngs .tabordion {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 }
 
 @media (max-width: 768px) {
@@ -354,11 +358,11 @@ textarea {
   border-radius: 10px;
 }
 
-.tabordion {
+/* .tabordion {
   overflow-y: scroll;
   max-height: 660px;
   overflow-x: hidden;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -376,26 +380,37 @@ textarea {
   background: #555;
 }
 
-@media only screen and (max-width: 895px) {
+/* @media only screen and (max-width: 895px) {
   .tabordion {
     overflow-y: scroll;
     max-height: 660px;
     overflow-x: hidden;
   }
-}
-
-/* .photoArea {
-  max-height: 600px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.PhotoDiv {
-  margin-left: auto;
-  margin-right: auto;
 } */
 
 #photoDel {
   background: white;
   border: 1px solid red;
+}
+
+.trnew {
+  padding-top: 50px;
+  display: -webkit-box;
+}
+
+.trnew .label {
+  margin-bottom: 0.25em;
+  width: 100%;
+  font-size: 10px;
+  text-align: left;
+  font-weight: 900;
+  padding: 0;
+  color: #111;
+  letter-spacing: 2px;
+  border: none;
+}
+
+.articleDiv {
+  width: 100%;
+  text-align: center;
 }

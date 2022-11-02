@@ -1,0 +1,21 @@
+.DateMainDiv {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.matchDiv {
+  padding: 10px;
+  margin: auto;
+}
+
+.MatchImage {
+  height: 400px;
+  width: 300px;
+  margin: auto;
+}
+
+.profileDivImage {
+  height: 300px;
+  width: 300px;
+  margin: auto;
+}

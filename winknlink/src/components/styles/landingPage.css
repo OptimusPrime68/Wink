@@ -70,12 +70,3 @@
     text-align: center;
   }
 }
-
-#languageSupport {
-  background: none;
-  color: white;
-  padding: 2px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  background-color: rgba(55, 55, 55, 0.322);
-}

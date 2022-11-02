@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
-import CircleLoader from "react-spinners/CircleLoader"
+import CircleLoader from "react-spinners/CircleLoader";
 
 export default function Profile() {
   var email = "";
@@ -34,7 +34,7 @@ export default function Profile() {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation(["home"]);
 
@@ -74,7 +74,7 @@ export default function Profile() {
 
   const uploadProfile = async (e) => {
     e.preventDefault();
-      if (imageUpload) {
+    if (imageUpload) {
       const imageRef = ref(storage, `${email}/profile`);
       uploadBytes(imageRef, imageUpload)
         .then(() => {
@@ -128,25 +128,22 @@ export default function Profile() {
         email,
       })
       .then(function (response) {
-
-        console.log("Response",response);
+        console.log("Response", response);
         const data = response.data;
-        
+
         setName(data.name);
 
         setPhone(data.phone);
-       
+
         setGender(data.gender);
-       
-        if(data.dob != null)
-        setDob(data.dob.substr(0, 10));
-     
+
+        if (data.dob != null) setDob(data.dob.substr(0, 10));
+
         setAddress(data.address);
-        
+
         setHobby(data.hobbies);
-        
-        if(data.dob)
-        setAge(getAge(data.dob.substr(0, 10)));
+
+        if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
         toast.success("Profile Loaded");
       })
       .catch(function (error) {
@@ -173,12 +170,10 @@ export default function Profile() {
               setprofileImageList((prev) => [...prev, url]);
           });
         });
-      }).catch((error)=>console.log(error));
-
+      })
+      .catch((error) => console.log(error));
 
     setLoading(false);
-   
-    
   }, []);
 
   const update = (e) => {
@@ -225,12 +220,12 @@ export default function Profile() {
     { name: "Gaming", id: 2 },
     { name: "Trekking", id: 3 },
     { name: "Nothing", id: 4 },
-    {name:"Blogging",id:5},
-    {name:"Reading",id:6},
-    {name:"Journaling",id:7},
-    {name:"Vacation planning",id:8},
-    {name:"Nature identification",id:9},
-    {name:"Playing an instrument",id:10},
+    { name: "Blogging", id: 5 },
+    { name: "Reading", id: 6 },
+    { name: "Journaling", id: 7 },
+    { name: "Vacation planning", id: 8 },
+    { name: "Nature identification", id: 9 },
+    { name: "Playing an instrument", id: 10 },
   ];
 
   const style = {
@@ -268,18 +263,16 @@ export default function Profile() {
         enableHighAccuracy: false,
       },
       userDecisionTimeout: 5000,
-  });
+    });
 
-
-  const handleDOB = (e)=>{
+  const handleDOB = (e) => {
     setDob(e.target.value);
     setAge(getAge(e.target.value));
-  }
+  };
 
-  const handleDelete = (e) =>{
+  const handleDelete = (e) => {
     console.log(e);
-  }
-
+  };
 
   return (
     <div>
@@ -300,7 +293,7 @@ export default function Profile() {
               {" "}
               Account
             </label>
-            <article>
+            <article className="articleDiv">
               <div className="frm">
                 <div className="row mb-5 pt-3">
                   <div
@@ -326,15 +319,90 @@ export default function Profile() {
                 </div>
 
                 <div className="row">
-                  <Button variant="outline-success" onClick={uploadProfile}>
+                  <Button
+                    style={{ width: "30%", margin: "auto" }}
+                    variant="outline-success"
+                    onClick={uploadProfile}
+                  >
                     Upload
                   </Button>
                 </div>
 
-              <div className="tr">
-                {loading &&  <CircleLoader color="#f70177" />}
-                <label className="label" for="input">
-                  NAME
+                <div className="tr">
+                  {loading && <CircleLoader color="#f70177" />}
+                  <label className="label" for="input">
+                    NAME
+                  </label>
+                  <input
+                    value={phone}
+                    className="input"
+                    type="text"
+                    id="phone"
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <label className="label" for="gender">
+                        Gender
+                      </label>
+                    </div>
+                    <div className="col-md-6">
+                      <select
+                        value={gender}
+                        id="gender"
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <option value="gender">Select gender:</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <label
+                    className="label"
+                    for="address"
+                    style={{ paddingTop: "10px" }}
+                  >
+                    Date Of Birth
+                  </label>
+
+                  <input
+                    value={hobbies}
+                    className="input"
+                    type="date"
+                    id="input"
+                    onChange={handleDOB}
+                  />
+                </div>
+                <br />
+                <label className="label" for="age">
+                  Age(Calculated by your DOB)
+                </label>
+                <input
+                  value={age}
+                  className="input"
+                  disabled
+                  type="text"
+                  id="age"
+                />
+                <label className="label" for="inputemail">
+                  EMAIL
+                </label>
+                <div className="row">
+                  <div className="col">
+                    <input
+                      value={email}
+                      className="input texte"
+                      disabled
+                      type="email"
+                      id="inputemail"
+                    />
+                  </div>
+                </div>
+                <label className="label" for="phone">
+                  Phone Number
                 </label>
                 <input
                   value={phone}
@@ -349,96 +417,28 @@ export default function Profile() {
                     <label className="label" for="gender">
                       Gender
                     </label>
-                  </div>
-                  <div className="col-md-6">
-                    <select
-                      value={gender}
-                      id="gender"
-                      onChange={(e) => setGender(e.target.value)}
-                    >
-                      <option value="gender">Select gender:</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
+                    <Multiselect
+                      id="hobby"
+                      options={options}
+                      displayValue="name"
+                      style={style}
+                      onSelect={onSelect}
+                      onRemove={onRemove}
+                    />
                   </div>
                 </div>
-
-                <label
-                  className="label"
-                  for="address"
-                  style={{ paddingTop: "10px" }}
-                >
-                 
-                  Date Of Birth
-                </label>
-
-                <input
-                  value={hobbies}
-                  className="input"
-                  type="date"
-                  id="input"
-                  onChange={handleDOB}
-                />
-
-                
-              </div>
-              <br />
-              <label className="label" for="age">
-                Age(Calculated by your DOB)
-              </label>
-              <input value={age} className="input" disabled type="text" id="age" />
-              <label className="label" for="inputemail">
-                EMAIL
-              </label>
-              <div className="row">
-                <div className="col">
-                  <input
-                    value={email}
-                    className="input texte"
-                    disabled
-                    type="email"
-                    id="inputemail"
-                  />
-                </div>
-              </div>
-              <label className="label" for="phone">
-                Phone Number
-              </label>
-              <input
-                value={phone}
-                className="input"
-                type="text"
-                id="phone"
-                onChange={(e) => setPhone(e.target.value)}
-              />
-
-              <div className="row">
-                <div className="col-md-6">
-                  <label className="label" for="gender">
-                    Gender
-                  </label>
-                  <Multiselect
-                  id="hobby"
-                  options={options}
-                  displayValue="name"
-                  style={style}
-                  onSelect={onSelect}
-                  onRemove={onRemove}
-                />
                 <button
                   className="SettingButton"
                   type="button"
-                  style={{ marginTop: "20px" }}
+                  style={{
+                    marginTop: "20px",
+                  }}
                   onClick={update}
                 >
                   Update profile
                 </button>
-                </div>
-               
-              </div>
               </div>
             </article>
-                  
           </section>
           <section id="section2">
             <input
@@ -453,7 +453,7 @@ export default function Profile() {
               {" "}
               Upload
             </label>
-            <article style={{ textAlign: "center" }}>
+            <article style={{ textAlign: "center" }} className="articleDiv">
               <div className="tr wwq" style={{ justifyContent: "center" }}>
                 <div className="row mb-3">
                   <div className="col-md-6 mb-3">
@@ -491,7 +491,7 @@ export default function Profile() {
             <label for="option3" className="trr">
               Photos
             </label>
-            <article>
+            <article className="articleDiv">
               <div className="tr wwq">
                 {imageList &&
                   imageList.map((url) => {
@@ -501,8 +501,12 @@ export default function Profile() {
                           <Card style={{ width: "18rem" }}>
                             <Card.Img variant="top" src={url} />
                             <Card.Body style={{ textAlign: "center" }}>
-                              <Button variant="outline-danger" onClick={handleDelete}>Delete</Button>
-
+                              <Button
+                                variant="outline-danger"
+                                onClick={handleDelete}
+                              >
+                                Delete
+                              </Button>
                             </Card.Body>
                           </Card>
                         </div>
