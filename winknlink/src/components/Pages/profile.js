@@ -35,6 +35,7 @@ export default function Profile() {
   const [hobbies, setHobby] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);
   const [videoUpload, setVideoUpload] = useState(null);
+  const [coordin, setCoordinates] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -139,7 +140,6 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
-
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
@@ -161,7 +161,6 @@ export default function Profile() {
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
-
     setImageList([]);
     listAll(imageListRef)
       .then((response) => {
@@ -173,7 +172,6 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
     setImageList([]);
-
     listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
@@ -197,7 +195,6 @@ export default function Profile() {
         });
       })
       .catch((error) => console.log(error));
-
     setLoading(false);
   }, []);
 
@@ -211,12 +208,11 @@ export default function Profile() {
     console.log(address);
     console.log(hobbies);
 
-    var location = {};
-    if (coords)
-      location = {
-        type: "Point",
-        coordinates: [coords.longitude, coords.latitude],
-      };
+    var coordinates = [];
+    if (coords) coordinates = [coords.longitude, coords.latitude];
+
+    console.log(coordinates);
+    setCoordinates(coordinates);
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -227,7 +223,7 @@ export default function Profile() {
         dob,
         address,
         hobbies,
-        location,
+        location: coordinates,
         preference: "male",
         age,
       })
@@ -302,6 +298,7 @@ export default function Profile() {
       },
       userDecisionTimeout: 5000,
     });
+  console.log(coords);
 
   const handleDOB = (e) => {
     setDob(e.target.value);
@@ -347,6 +344,7 @@ export default function Profile() {
   return (
     <div>
       <Header />
+
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -404,11 +402,11 @@ export default function Profile() {
                     NAME
                   </label>
                   <input
-                    value={phone}
+                    value={name}
                     className="input"
                     type="text"
-                    id="phone"
-                    onChange={(e) => setPhone(e.target.value)}
+                    id="name"
+                    onChange={(e) => setName(e.target.value)}
                   />
 
                   <label
@@ -456,11 +454,11 @@ export default function Profile() {
                   Phone Number
                 </label>
                 <input
-                  value={name}
+                  value={phone}
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
 
                 <div className="row">
@@ -483,6 +481,18 @@ export default function Profile() {
                 </div>
 
                 <br />
+
+                <label className="label" for="phone">
+                  Location coordinates
+                </label>
+                {isGeolocationAvailable && isGeolocationEnabled && coords && (
+                  <input
+                    value={coords.latitude + " " + coords.longitude}
+                    className="input"
+                    type="text"
+                    id="phone"
+                  />
+                )}
 
                 <div className="row">
                   <div className="col-md-6" style={{ textAlign: "center" }}>

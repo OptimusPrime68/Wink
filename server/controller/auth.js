@@ -28,9 +28,6 @@ exports.login=(req,res)=>{
             res.status(400).json({Error:"No User Exist"});
         }
     });
-
-
-
 }
 
 exports.signup=(req,res)=>{
@@ -38,8 +35,6 @@ exports.signup=(req,res)=>{
    const {email,password} = req.credential;
 
    console.log(email + password);
-
-
 
 
     User.countDocuments({email}, function (err, count){ 
@@ -61,69 +56,7 @@ exports.signup=(req,res)=>{
 
 }
 
-exports.updateProfile=(req,res)=>{
-    
-    console.log(req.body);
 
-    var update = {};
-    const headerObject = req.body;
-    const email = req.body.email;
-    var x  = 0;
-    
-    for(const key in headerObject){
-    var field = `${key}`;
-    var value =  `${headerObject[key]}`;   
-    if(field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
-    update[field] = value;
-    else if(field == 'hobbies')
-    {
-        update[field] = [];
-        headerObject.hobbies.forEach(function(item) {
-           update[field].push(item);
-          });
-    }
-    }
-
-    console.log(update);
-
-    Profile.findOneAndUpdate(
-        {email},
-        {$set:update},{upsert:true,new:true},
-        function (err,success) {
-
-            if(err) return res.status(400).json({err});
-              
-            else return res.status(200).json(success);
-
-        }
-    )
-
-
-
-}
-
-
-exports.fetchProfile=(req,res)=>{
-    
-    console.log(req.body);
-
-    const email = req.body.email;
-
-    Profile.findOne(
-        {email},
-        function (err,success) {
-
-            
-            if(err || success == null) return res.status(200).json({id : "Update Your Profile"});
-            
-            console.log(success);
-            return res.status(200).json(success);
-        }
-    )
-
-
-
-}
 
 
 function datediff(first, second) {        
@@ -174,6 +107,31 @@ exports.deleteAccount = async (req,res)=>{
     return res.status(200).json({message:"Profile Deleted Successfully"});
     else
     return res.status(400).json({message:"Some Error Occured"});
+}
 
 
+exports.googleLogin= async (req,res)=>{
+    
+    const {email} = req.credential;
+
+
+    const data = await User.findOne({email});
+
+    if(data)
+    {
+         res.status(200).json({data});
+         return;
+    }
+
+
+          const user = new User({
+              email,password:"AQWScdss#@$0onn$2gf4$@54"
+          });
+
+          user.save(function(err,result){
+            console.log(result);  
+            res.status(200).json({id : result._id});
+          });
+        
+    
 }

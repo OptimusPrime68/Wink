@@ -35,15 +35,15 @@ const profileSchema = new mongoose.Schema({
     },
     location: {
         type: { type: String },
-        coordinates: []
+        coordinates: [Number]
     },
     profileScore:{
         type:Number,
         default:0
     },
     agePreference:{
-        type:Number,
-        default:100,
+        type:[Number],
+        default:[18,80],
     },
     distance:{
         type:Number,
