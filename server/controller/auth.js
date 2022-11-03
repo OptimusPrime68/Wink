@@ -28,9 +28,6 @@ exports.login=(req,res)=>{
             res.status(400).json({Error:"No User Exist"});
         }
     });
-
-
-
 }
 
 exports.signup=(req,res)=>{
@@ -38,8 +35,6 @@ exports.signup=(req,res)=>{
    const {email,password} = req.credential;
 
    console.log(email + password);
-
-
 
 
     User.countDocuments({email}, function (err, count){ 
@@ -112,6 +107,31 @@ exports.deleteAccount = async (req,res)=>{
     return res.status(200).json({message:"Profile Deleted Successfully"});
     else
     return res.status(400).json({message:"Some Error Occured"});
+}
 
 
+exports.googleLogin= async (req,res)=>{
+    
+    const {email} = req.credential;
+
+
+    const data = await User.findOne({email});
+
+    if(data)
+    {
+         res.status(200).json({data});
+         return;
+    }
+
+
+          const user = new User({
+              email,password:"AQWScdss#@$0onn$2gf4$@54"
+          });
+
+          user.save(function(err,result){
+            console.log(result);  
+            res.status(200).json({id : result._id});
+          });
+        
+    
 }

@@ -35,6 +35,7 @@ export default function Profile() {
   const [hobbies, setHobby] = useState([]);
   const [imageUpload, setImageUpload] = useState(null);
   const [videoUpload,setVideoUpload] = useState(null);
+  const [coordin,setCoordinates] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [profileImageList, setprofileImageList] = useState([]);
   const [loading,setLoading] = useState(false);
@@ -219,6 +220,7 @@ export default function Profile() {
 
 
         console.log(coordinates);
+       setCoordinates(coordinates);
       
 
     axios
@@ -307,6 +309,7 @@ export default function Profile() {
       userDecisionTimeout: 5000,
   });
 
+
   const handleDOB = (e)=>{
     setDob(e.target.value);
     setAge(getAge(e.target.value));
@@ -350,6 +353,7 @@ export default function Profile() {
   return (
     <div>
       <Header />
+    
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -476,6 +480,20 @@ export default function Profile() {
                 id="phone"
                 onChange={(e) => setPhone(e.target.value)}
               />
+
+             <label className="label" for="phone">
+                Location coordinates
+              </label>
+              {isGeolocationAvailable && isGeolocationEnabled &&  coords && 
+              
+              <input
+              value={coords.latitude + " " + coords.longitude}
+              className="input"
+              type="text"
+              id="phone"
+            />
+
+              }
 
               <div className="row">
                 <div className="col-md-6">

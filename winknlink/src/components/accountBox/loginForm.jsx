@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { auth } from "../../firebase";
+import { auth,googleAuthProvider } from "../../firebase";
 import {
   BoldLink,
   BoxContainer,
@@ -49,77 +49,84 @@ export function LoginForm(props) {
 
     setLoading(true);
     
-
-    console.log(email + password);
+    
 
     await auth
       .signInWithEmailAndPassword(email, password)
       .then((e) => {
-
-        let userType = "free";
-        let image = "";
-        let name = "";
-        axios.post("http://localhost:4000/api/is-premium",{email}).then(function(res){
-        userType = res.data.user;
-        window.localStorage.setItem("user",userType);
-        });
-
-        axios.post("http://localhost:4000/api/get-user-profile",{email}).then(function(res){
-          
-            if(res.data && res.data.name)
-            name = res.data.name;
-            window.localStorage.setItem("name",name);
-        })
-
-
-       
-
-        axios
-          .post("http://localhost:4000/api/login", {
-            email,
-            password,
-          })
-          .then(function (response) {
-            var id = response.data.id;
-            const idTokenResult = e.user._delegate.accessToken;
-
-
-            console.log("Token",idTokenResult)
-            dispatch({
-              type: "LOGGED_IN_USER",
-              payload: {
-                email: email,
-                token: idTokenResult,
-                id: id,
-                user:userType,
-                name:name,
-              },
-            });
-
-
-            window.localStorage.setItem("email",email);
-            window.localStorage.setItem("token",idTokenResult);
-            window.localStorage.setItem("id",id);
-
-            navigate("/wink");
-            toast.success("Welcome");
-            
-          })
-          .catch(function (error) {
-            toast.error(error.response.data.Error);
-          });
+        login(email,password,e,"login")
       })
       .catch((error) => {
         toast.error(error.message.slice(10));
       });
-
-
-     
-
       setLoading(false);
-
-    
   };
+
+  const login = (email,password,e,login) =>{
+    let userType = "free";
+    let image = "";
+    let name = "";
+    axios.post("http://localhost:4000/api/is-premium",{email}).then(function(res){
+    userType = res.data.user;
+    window.localStorage.setItem("user",userType);
+    });
+
+    axios.post("http://localhost:4000/api/get-user-profile",{email}).then(function(res){
+      
+        if(res.data && res.data.name)
+        name = res.data.name;
+        window.localStorage.setItem("name",name);
+    })
+
+
+    axios
+      .post(`http://localhost:4000/api/${login}`, {
+        email,
+        password,
+      })
+      .then(function (response) {
+        var id = response.data.id;
+        const idTokenResult = e.user._delegate.accessToken;
+
+
+        console.log("Token",idTokenResult)
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: email,
+            token: idTokenResult,
+            id: id,
+            user:userType,
+            name:name,
+          },
+        });
+
+
+        window.localStorage.setItem("email",email);
+        window.localStorage.setItem("token",idTokenResult);
+        window.localStorage.setItem("id",id);
+
+        navigate("/wink");
+        toast.success("Welcome");
+        
+      })
+      .catch(function (error) {
+        toast.error(error.response.data.Error);
+      });
+ 
+  }
+
+
+  const handleGoogleLogin = async (e)=>{
+
+    auth.signInWithPopup(googleAuthProvider)
+    .then(async (result)=>{
+      login(result.user._delegate.email,"Xcnjbw24fdac@#2",result,"google-login");
+    })
+    .catch((error)=>console.log(error));
+
+
+  }
 
   return (
     <BoxContainer>
@@ -133,6 +140,7 @@ export function LoginForm(props) {
         <FontAwesomeIcon
           style={{ cursor: "pointer" }}
           icon={faGoogle}
+          onClick={handleGoogleLogin}
           size="2x"
         />
         <FontAwesomeIcon
