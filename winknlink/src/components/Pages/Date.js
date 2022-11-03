@@ -121,7 +121,7 @@ export default function Date(props) {
           payload: null,
         });
         navigate("/");
-    
+        
         }).catch((e)=>{
     
           toast.error(e.data.message);

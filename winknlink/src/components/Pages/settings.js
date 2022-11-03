@@ -70,6 +70,20 @@ export default function Settings() {
 
   const handleChangeAge = (eventAge, newValueAge) => {
     setValueAge(newValueAge);
+    console.log(valueAge);
+    axios
+      .post("http://localhost:4000/api/update-profile", {
+        agePreference: valueAge[1],
+        email: user.email,
+      })
+      .then(function (response) {
+        toast.success("Updated");
+        console.log(response);
+      })
+      .catch(function (error) {
+        toast.error("Some Error Occured");
+        console.log(error);
+      });
   };
 
   let { user } = useSelector((state) => ({ ...state }));

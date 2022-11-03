@@ -229,6 +229,7 @@ export default function Profile() {
         hobbies,
         location,
         preference: "male",
+        age,
       })
       .then(function (response) {
         dispatch({
@@ -267,15 +268,15 @@ export default function Profile() {
 
   const style = {
     chips: {
-      background: "red",
+      background: "#fbab7e",
     },
     searchBox: {
       border: "none",
-      "border-bottom": "1px solid blue",
+      "border-bottom": "1px solid #fbab7e",
       "border-radius": "0px",
     },
     multiselectContainer: {
-      color: "red",
+      color: "#fbab7e",
     },
   };
 
@@ -410,25 +411,6 @@ export default function Profile() {
                     onChange={(e) => setPhone(e.target.value)}
                   />
 
-                  {/* <div className="row">
-                    <div className="col-md-6">
-                      <label className="label" for="gender">
-                        Gender
-                      </label>
-                    </div>
-                    <div className="col-md-6">
-                      <select
-                        value={gender}
-                        id="gender"
-                        onChange={(e) => setGender(e.target.value)}
-                      >
-                        <option value="gender">Select gender:</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </select>
-                    </div>
-                  </div> */}
-
                   <label
                     className="label"
                     for="address"
@@ -503,10 +485,12 @@ export default function Profile() {
                 <br />
 
                 <div className="row">
-                  <div className="col-md-6">
-                    <label className="label" for="gender">
+                  <div className="col-md-6" style={{ textAlign: "center" }}>
+                    <label className="label" for="hobby">
                       Hobbies
                     </label>
+                  </div>
+                  <div className="col-md-6">
                     <Multiselect
                       id="hobby"
                       options={options}
