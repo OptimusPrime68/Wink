@@ -1,4 +1,8 @@
 const Profile = require('../models/profile')
+const getDistance = require('geolib');
+
+const geolib = require('geolib');
+const { default: dist } = require('react-datepicker');
 
 
 exports.updateProfile=(req,res)=>{
@@ -36,7 +40,7 @@ exports.updateProfile=(req,res)=>{
     }
     else if(field == 'location')
     {
-        update["location"] = {type:"2dpoints",coordinates:[]};
+        update["location"] = {type:"Point",coordinates:[]};
         headerObject.location.forEach(function(item) {
             update["location"].coordinates.push(item);
            });
@@ -92,7 +96,6 @@ exports.fetchProfile=(req,res)=>{
 exports.allProfile=(req,res)=>{
 
     console.log(req.body);
-
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
@@ -101,23 +104,42 @@ exports.allProfile=(req,res)=>{
 
     Profile.findOne({email},function(err,result){
 
-        console.log(result);
         
-        if(result == null) res.status(400).json({message:"Complete Your Profile and Select Preference"});
+        if(result == null) res.status(400).json({message:"No User Found"});
+        else if(result.name == null) res.status(400).json({message:"Please Update Your Name"});
+        else if(result.dob == null) res.status(400).json({message:"Please Update Your Date of Birth"});
+        else if(result.location == null) res.status(400).json({message:"Please upload your location"});
         else{
         preference = result.preference;
         age = result.agePreference;
+        long = result.location.coordinates[0];
+        lat = result.location.coordinates[1];
+        var dist = result.distance;
 
-        console.log(age);
+        console.log("dist",dist);
+
+        
         
 
-        
         Profile.find(
             {gender:preference,$and:[{age:{$gt:age[0]}},{age:{$lt:age[1]}}]},
             function (err,success) {
                 if(err) return res.status(400).json({id : "No Profile Found"});
-                console.log(success);
-                return res.status(201).json(success);
+
+                var arr = [];
+                for(var i = 0;i<success.length;i++){
+
+                    console.log(success[i].name,geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}))
+
+                    if(geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}) <= dist)
+                    {
+                          arr.push(success[i]);
+                    }
+                    console.log(arr);
+
+                }
+                
+                return res.status(201).json(arr);
             }
         )
         }
