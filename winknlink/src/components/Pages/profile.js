@@ -153,7 +153,8 @@ export default function Profile() {
           setName(data.name);
           setPhone(data.phone);
           setGender(data.gender);
-          if (data.dob != null) setDob(data.dob.substr(0, 10));
+          if (data.dob != null) 
+          setDob(data.dob.substr(0, 10));
           setAddress(data.address);
           setHobby(data.hobbies);
           if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
@@ -215,6 +216,13 @@ export default function Profile() {
 
     console.log(coordinates);
     setCoordinates(coordinates);
+
+    if(phone && phone.length != 10)
+    {
+      toast.error("Phone Number Incorrect");
+      return;
+    }
+
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -303,9 +311,31 @@ export default function Profile() {
   console.log(coords);
 
   const handleDOB = (e) => {
+
+
+    const max=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+(new Date().getDate()<=9?'0'+new Date().getDate():new Date().getDate())
+
+    if(e.target.value >= max)
+    {
+      toast.error("Wrong Date Selected");
+      return;
+    }
+
+    console.log(max + e.target.value);
+   
+
+    
+
     setDob(e.target.value);
     setAge(getAge(e.target.value));
   };
+
+  const handlePhone = (e) =>{
+
+    setPhone(e.target.value);
+    
+
+  }
 
   const handleDelete = (e) => {
     const storage = getStorage();
@@ -313,7 +343,6 @@ export default function Profile() {
     console.log(imageList);
     deleteObject(desertRef)
       .then((s) => {
-        // File deleted successfully
         var rem;
         rem = imageList.slice(imageList.indexOf(e), -1);
         console.log(rem);
@@ -321,7 +350,6 @@ export default function Profile() {
         toast.success("Image Deleted");
       })
       .catch((error) => {
-        // Uh-oh, an error occurred!
         console.log(error);
       });
 
@@ -431,6 +459,7 @@ export default function Profile() {
                     type="date"
                     id="input"
                     onChange={handleDOB}
+                   
                   />
                 </div>
                 <br />
@@ -466,7 +495,7 @@ export default function Profile() {
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={handlePhone}
                 />
 
                 <div className="row">

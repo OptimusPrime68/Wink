@@ -102,7 +102,6 @@ export default function Date(props) {
     deleteUser(user)
       .then(() => {
         window.localStorage.removeItem("email");
-        window.localStorage.removeItem("token");
         window.localStorage.removeItem("id");
         window.localStorage.removeItem("user");
         window.localStorage.removeItem("name");
