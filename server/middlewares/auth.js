@@ -1,21 +1,17 @@
 const admin = require("../firebase");
 
 
-exports.authCheck = (req,res,next) =>{
+exports.authCheck = async (req,res,next) =>{
 
-    console.log(req.body);
 
-    
-
-   try{
-        
-    
     const email =  req.body.email;
     const password =     req.body.password;
-    // AUTH CHECK PASSWORD BCRYPT
     req.credential = {
-        email,password
+     email,password
     }
+   try{
+   
+
     next();
    }
    catch(err)
@@ -26,12 +22,12 @@ exports.authCheck = (req,res,next) =>{
 
 
 exports.profileCheck = (req,res,next) =>{
+
+    console.log(req.body);
     try{
          
-   
-     // AUTH CHECK PASSWORD BCRYPT
-     
-     next();
+      
+        next();
     }
     catch(err)
     {

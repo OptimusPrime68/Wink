@@ -83,6 +83,7 @@ export function LoginForm(props) {
       .post(`http://localhost:4000/api/${login}`, {
         email,
         password,
+        token:e.user._delegate.accessToken
       })
       .then(function (response) {
         var id = response.data.id;

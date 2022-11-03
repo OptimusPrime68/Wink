@@ -5,7 +5,7 @@ const {allProfile,updateProfile,fetchProfile} = require("../controller/profile")
 
 
 
-router.post("/all-profile",allProfile);
+router.post("/all-profile",profileCheck,allProfile);
 
 
 router.post("/update-profile",profileCheck,updateProfile);

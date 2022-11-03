@@ -11,12 +11,12 @@ router.post("/google-login",authCheck,googleLogin);
 
 router.post("/signup",authCheck,signup);
 
-router.post("/is-premium",authCheck,getUserType);
+router.post("/is-premium",getUserType);
 
 
 
 
-router.post("/delete-account",authCheck,deleteAccount);
+router.post("/delete-account",deleteAccount);
 
 
 

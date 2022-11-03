@@ -74,6 +74,8 @@ exports.fetchProfile=(req,res)=>{
         {email},
         function (err,success) {
 
+            console.log(success);
+
             
             if(err || success == null) return res.status(200).json({id : "Update Your Profile"});
             

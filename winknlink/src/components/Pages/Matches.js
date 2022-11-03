@@ -40,7 +40,7 @@ function Matches() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/all-match", { email })
+      .post("http://localhost:4000/api/all-match", { email})
       .then(function (response) {
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
