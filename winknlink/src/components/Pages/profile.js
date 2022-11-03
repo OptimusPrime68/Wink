@@ -418,7 +418,7 @@ export default function Profile() {
                   </label>
 
                   <input
-                    value={hobbies}
+                    value={dob}
                     className="input"
                     type="date"
                     id="input"
