@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import "../styles/ChatScreen.css";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import HeaderDesktop from "./HeaderDesktop";
 
 function ChatScreen() {
@@ -45,6 +45,15 @@ function ChatScreen() {
             </div>
           )
         )}
+
+        <form className="ChatScreenInput">
+          <input
+            className="ChatScreenInputField"
+            placeholder="Type a message..."
+            type="text"
+          />
+          <Button className="ChatScreenButton">SEND</Button>
+        </form>
       </div>
     </div>
   );
