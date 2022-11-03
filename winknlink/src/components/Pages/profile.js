@@ -23,6 +23,8 @@ import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import CircleLoader from "react-spinners/CircleLoader";
 import { useDispatch } from "react-redux";
+import Dropzone from "./Dropzone";
+import ReactPlayer from "react-player";
 
 export default function Profile() {
   var email = "";
@@ -374,6 +376,12 @@ export default function Profile() {
     }
   };
 
+  const [videoSrc, seVideoSrc] = useState("");
+
+  const handleVideo = (event) => {
+    seVideoSrc(URL.createObjectURL(event.target.files[0]));
+  };
+
   return (
     <div>
       <Header />
@@ -572,40 +580,30 @@ export default function Profile() {
               Upload
             </label>
             <article style={{ textAlign: "center" }} className="articleDiv">
-              <div className="tr wwq" style={{ justifyContent: "center" }}>
-                <div className="row mb-3">
-                  <div className="col-md-6 mb-3">
-                    <label className="label" for="photo">
-                      Add photos
-                    </label>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <input
-                      type="file"
-                      multiple
-                      id="photo"
-                      onChange={(e) => setImageUpload(e.target.files[0])}
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-md-6 mb-3">
-                    <label className="label" for="video">
-                      Add Video
-                    </label>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <input
-                      type="file"
-                      multiple
-                      id="video"
-                      onChange={(e) => setVideoUpload(e.target.files[0])}
-                    />
-                  </div>
+              <div className="tr wwq">
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <Dropzone className="mainDropzone" />
                 </div>
               </div>
               <button className="SettingButton" type="button" onClick={upload}>
-                Upload
+                Upload Photo
+              </button>
+              <div className="tr wwq">
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <Form.Control
+                    size="lg"
+                    type="file"
+                    placeholder="Video Upload"
+                    onClick={handleVideo}
+                    style={{ margin: "auto", width: "90%" }}
+                  />
+                </div>
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <ReactPlayer url={videoSrc} width="100%" controls={true} />
+                </div>
+              </div>
+              <button className="SettingButton" type="button" onClick={upload}>
+                Upload Video
               </button>
             </article>
           </section>
@@ -619,10 +617,17 @@ export default function Profile() {
                 {imageList &&
                   imageList.map((url) => {
                     return (
-                      <div className="row photoArea">
+                      <div
+                        className="row photoArea"
+                        style={{ padding: "10px" }}
+                      >
                         <div className="col-auto mb-3 m-auto PhotoDiv">
-                          <Card style={{ width: "18rem" }}>
-                            <Card.Img variant="top" src={url} />
+                          <Card style={{ width: "18rem", padding: "10px" }}>
+                            <Card.Img
+                              className="PhotoPreviewSection"
+                              variant="top"
+                              src={url}
+                            />
                             <Card.Body style={{ textAlign: "center" }}>
                               <Button
                                 variant="outline-danger"

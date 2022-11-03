@@ -63,17 +63,12 @@ export default function Date(props) {
   const dispatch = useDispatch();
 
   let { user } = useSelector((state) => ({ ...state }));
-  let image = user ? user.image:"";
-  let name = user?user.name:"";
-
-
-
+  let image = user ? user.image : "";
+  let name = user ? user.name : "";
 
   useEffect(() => {
-     if (user == null) navigate("/");
-     
-    
-     },[]);
+    if (user == null) navigate("/");
+  }, []);
 
   const logOut = () => {
     const auth = getAuth();
@@ -98,44 +93,39 @@ export default function Date(props) {
       });
   };
 
-
-  const handleAccountDelete =async (e)=>{
-    
-    toast.warning("We are Deleting Your Account!")
-
+  const handleAccountDelete = async (e) => {
+    toast.warning("We are Deleting Your Account!");
 
     const auth = getAuth();
     const user = auth.currentUser;
 
-    deleteUser(user).then(() => {
-      window.localStorage.removeItem("email");
-      window.localStorage.removeItem("id");
-      window.localStorage.removeItem("user");
-      window.localStorage.removeItem("name");
-      window.localStorage.removeItem("image");
-      axios.post("http://localhost:4000/api/delete-account",{email:user.email}).then((e)=>{
-
-        dispatch({
-          type: "LOGOUT",
-          payload: null,
-        });
-        navigate("/");
-        
-        }).catch((e)=>{
-    
-          toast.error(e.data.message);
-        })
-    }).catch((error) => {
-      console.log(error);
-      toast.error(error);
-    });
-
-
-
-
-    
-
-  }
+    deleteUser(user)
+      .then(() => {
+        window.localStorage.removeItem("email");
+        window.localStorage.removeItem("id");
+        window.localStorage.removeItem("user");
+        window.localStorage.removeItem("name");
+        window.localStorage.removeItem("image");
+        axios
+          .post("http://localhost:4000/api/delete-account", {
+            email: user.email,
+          })
+          .then((e) => {
+            dispatch({
+              type: "LOGOUT",
+              payload: null,
+            });
+            navigate("/");
+          })
+          .catch((e) => {
+            toast.error(e.data.message);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error);
+      });
+  };
 
   return (
     <>
@@ -157,7 +147,6 @@ export default function Date(props) {
               <IconButton onClick={switchToWink} className="sideDivHeaderIcon">
                 <Typography
                   variant="h6"
-                  noWrap
                   component="div"
                   className="sideDivHeader"
                 >
@@ -216,7 +205,10 @@ export default function Date(props) {
                   <ListItemIcon>
                     <DeleteIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Delete Account" onClick={handleAccountDelete} />
+                  <ListItemText
+                    primary="Delete Account"
+                    onClick={handleAccountDelete}
+                  />
                 </ListItemButton>
               </ListItem>
             </List>
