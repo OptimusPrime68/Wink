@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import Header from "./Header";
+import { Button } from "react-bootstrap";
 
 function valuetext(value) {
   return value;
@@ -64,6 +65,8 @@ export default function Settings() {
 
   const [pref, setPref] = React.useState("");
 
+  const [sub, setSub] = React.useState("");
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -90,7 +93,7 @@ export default function Settings() {
 
   const handlePreference = async (e) => {
     setPref(e);
-    console.log(user.email);
+    console.log(pref);
     axios
       .post("http://localhost:4000/api/update-profile", {
         preference: e,
@@ -104,6 +107,10 @@ export default function Settings() {
         toast.error("Some Error Occured");
         console.log(error);
       });
+  };
+
+  const handleSubscription = async (e) => {
+    setSub(e);
   };
 
   return (
@@ -176,6 +183,39 @@ export default function Settings() {
                   max={500}
                 />
               </div>
+            </div>
+            <div className="row p-3">
+              <div className="col-md-6 mb-3">
+                <h4 className="Language">Subscription</h4>
+              </div>
+              <div className="col-md-6 mb-3">
+                <div className="row">
+                  <div className="col-md-6 mb-1" style={{ margin: "auto" }}>
+                    <FormControl sx={{ minWidth: 100 }} size="small">
+                      <Select
+                        labelId="demo-select-small"
+                        id="demo-select-small"
+                        value={sub}
+                        label="Subscription"
+                        onChange={(e) => handleSubscription(e.target.value)}
+                        displayEmpty
+                        disabled
+                      >
+                        <MenuItem value="">Free</MenuItem>
+                        <MenuItem value="Premium">Premium</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div className="col-md-6 mb-1" style={{ margin: "auto" }}>
+                    <Button>Buy</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="" style={{ textAlign: "center" }}>
+              <button className="SettingButton" type="button">
+                Update
+              </button>
             </div>
           </section>
         </div>

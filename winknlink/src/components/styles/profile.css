@@ -128,7 +128,7 @@ textarea {
 
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  max-width: 600px;
+  /* max-width: 600px; */
 }
 
 .tr .label {
@@ -413,4 +413,10 @@ textarea {
 .articleDiv {
   width: 100%;
   text-align: center;
+}
+
+.PhotoPreviewSection {
+  height: 300px;
+  height: 300px;
+  margin: auto;
 }
