@@ -198,7 +198,6 @@ export default function Settings() {
                   valueLabelDisplay="auto"
                   getAriaValueText={valuetext}
                   color="secondary"
-                  min={0}
                   max={500}
                 />
               </div>
