@@ -28,7 +28,6 @@ const localizer = dateFnsLocalizer({
 const events = [
   {
     title: "Big Meeting",
-    allDay: true,
     start: new Date(2021, 6, 0),
     end: new Date(2021, 6, 0),
   },
@@ -45,55 +44,10 @@ const events = [
 ];
 
 const Photo = () => {
-  const [book, setBook] = useState({
-    name: "The Fault In Our Stars",
-    author: "John Green",
-    img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-    price: 250,
-  });
 
-  const initPayment = (data) => {
-    const options = {
-      key: "rzp_test_yWZnCopCzsa76e",
-      amount: data.amount,
-      email: "piyushjaiswal380@gmail.com",
-      currency: data.currency,
-      name: book.name,
-      description: "Test Transaction",
-      image: book.img,
-      order_id: data.id,
-      handler: async (response) => {
-        response["email"] = "piyushjaiswal380@gmail.com";
-        response["amount"] = data.amount;
-        response["tenure"] = 3;
+ 
 
-        try {
-          const verifyUrl = "http://localhost:4000/api/verify";
-          const { data } = await axios.post(verifyUrl, response);
-          console.log(data);
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-    const rzp1 = new window.Razorpay(options);
-    rzp1.open();
-  };
-
-  const handlePayment = async () => {
-    try {
-      const orderUrl = "http://localhost:4000/api/order";
-      const { data } = await axios.post(orderUrl, { amount: book.price });
-      console.log(data);
-      initPayment(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
   const [allEvents, setAllEvents] = useState(events);
 
@@ -112,6 +66,20 @@ const Photo = () => {
 
     setAllEvents([...allEvents, newEvent]);
   };
+
+
+  const handleEvent = (e)=>{
+
+    console.log(e);
+
+    setAllEvents(
+      allEvents.filter(a => a !== e)
+    );
+
+  }
+
+
+
 
   return (
     <>
@@ -176,6 +144,7 @@ const Photo = () => {
           localizer={localizer}
           events={allEvents}
           startAccessor="start"
+          onSelectEvent={handleEvent}
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -7,8 +7,30 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
 import "../styles/MatchProfile.css";
+import axios from "axios";
+import {useState} from 'react'
 
-function MatchProfile() {
+function MatchProfile({id}) {
+
+
+  console.log(id);
+
+  const [data,setData] = useState();
+
+  useEffect(()=>{
+
+    axios
+    .post("http://localhost:4000/api/get-user-profile", {
+      email:id,
+    }).then((response)=>{
+      console.log(response);
+      setData(response.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  },[])
+
+
   return (
     <div>
       <div className="py-5 h-100">
@@ -31,17 +53,17 @@ function MatchProfile() {
                         marginBottom: "10px",
                       }}
                     />
-                    Name
+                    {data ? data.name:""}
                   </div>
                 </div>
                 <div className="row mb-3">
                   <h3>About</h3>
                   <p>
-                    Location
+                    {data ? data.address:""}
                     <br />
-                    Age
+                    {data ? data.age:""}
                     <br />
-                    Hobbies
+                    {data ? data.hobbies:""}
                   </p>
                 </div>
                 <div className="row">
