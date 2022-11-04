@@ -4,6 +4,8 @@ import Header from "./Header";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Dropzone from "./Dropzone";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
   position: "relative",
@@ -61,22 +63,10 @@ function Newsfeed() {
         style={{ padding: "10px" }}
       >
         <Box sx={style}>
+          <IconButton>
+            <CloseIcon />
+          </IconButton>
           <Dropzone />
-          <div
-            className="row"
-            style={{
-              textAlign: "center",
-              margin: "auto",
-              width: "max-content",
-            }}
-          >
-            <div className="col-auto">
-              <Button variant="outline-success">Post</Button>
-            </div>
-            <div className="col-auto">
-              <Button onClick={handleClose}>Close</Button>
-            </div>
-          </div>
         </Box>
       </Modal>
     </div>

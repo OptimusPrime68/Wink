@@ -25,6 +25,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
+import { useRef } from "react";
 
 export default function Profile() {
   var email = "";
@@ -43,6 +44,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation(["home"]);
+  const myRef = useRef();
+
 
   const dispatch = useDispatch();
   let { user } = useSelector((state) => ({ ...state }));
@@ -83,6 +86,7 @@ export default function Profile() {
     e.preventDefault();
     if (imageUpload) {
       const imageRef = ref(storage, `${email}/profile`);
+      console.log(imageRef);
       uploadBytes(imageRef, imageUpload)
         .then(() => {
           toast.success("Image Uploaded");
@@ -166,17 +170,9 @@ export default function Profile() {
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
-    setImageList([]);
-    listAll(imageListRef)
-      .then((response) => {
-        response.items.forEach((item) => {
-          getDownloadURL(item).then((url) => {
-            setImageList((prev) => [...prev, url]);
-          });
-        });
-      })
-      .catch((error) => console.log(error));
-    setImageList([]);
+   
+   
+  
     listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
@@ -336,16 +332,17 @@ export default function Profile() {
     setPhone(e.target.value);
   };
 
+
   const handleDelete = (e) => {
     const storage = getStorage();
     const desertRef = ref(storage, e);
-    console.log(imageList);
     deleteObject(desertRef)
       .then((s) => {
-        var rem;
-        rem = imageList.slice(imageList.indexOf(e), -1);
-        console.log(rem);
-        setImageList(rem);
+      
+        setImageList(
+          imageList.filter(a => a !== e)
+        );
+    
         toast.success("Image Deleted");
       })
       .catch((error) => {
@@ -357,9 +354,11 @@ export default function Profile() {
 
   const uploadVideo = (e) => {
     e.preventDefault();
+    console.log(videoUpload)
     if (videoUpload) {
       let r = (Math.random() + 1).toString(36).substring(7);
       const VideoRef = ref(storage, `${email}/video/${r}`);
+      console.log(VideoRef);
       uploadBytes(VideoRef, videoUpload)
         .then(() => {
           toast.success("Video Uploaded");
@@ -373,8 +372,25 @@ export default function Profile() {
   const [videoSrc, seVideoSrc] = useState("");
 
   const handleVideo = (event) => {
+    console.log(event);
+    setVideoUpload(event.target.files[0]);
     seVideoSrc(URL.createObjectURL(event.target.files[0]));
   };
+
+
+  const loadPhoto = async () =>{
+    setImageList([]);
+    listAll(imageListRef)
+    .then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setImageList((prev) => [...prev, url]);
+        });
+      });
+    })
+    .catch((error) => console.log(error));
+
+  }
 
   return (
     <div>
@@ -517,6 +533,17 @@ export default function Profile() {
 
                 <br />
 
+                <label className="label" for="gender">
+                      Address
+                    </label>
+                <input
+                  value={address}
+                  className="input"
+                  type="text"
+                  id="phone"
+                  onChange={(e)=>setAddress(e.target.value)}
+                />
+
                 <label className="label" for="phone">
                   Location coordinates
                 </label>
@@ -575,19 +602,20 @@ export default function Profile() {
             <article style={{ textAlign: "center" }} className="articleDiv">
               <div className="tr wwq">
                 <div className="row mb-3" style={{ width: "100%" }}>
-                  <Dropzone className="mainDropzone" />
+                  <Dropzone className="mainDropzone" ref = {myRef} />
                 </div>
               </div>
-              <button className="SettingButton" type="button" onClick={upload}>
+              {/* <button className="SettingButton" type="button"  >
                 Upload Photo
-              </button>
+              </button> */}
               <div className="tr wwq">
                 <div className="row mb-3" style={{ width: "100%" }}>
                   <Form.Control
                     size="lg"
                     type="file"
                     placeholder="Video Upload"
-                    onClick={handleVideo}
+                    onChange={handleVideo}
+                    accept="video/mp4,video/x-m4v,video/*"
                     style={{ margin: "auto", width: "90%" }}
                   />
                 </div>
@@ -595,14 +623,14 @@ export default function Profile() {
                   <ReactPlayer url={videoSrc} width="100%" controls={true} />
                 </div>
               </div>
-              <button className="SettingButton" type="button" onClick={upload}>
+              <button className="SettingButton" type="button" onClick={uploadVideo}>
                 Upload Video
               </button>
             </article>
           </section>
           <section id="section3">
             <input className="t" type="radio" name="sections" id="option3" />
-            <label for="option3" className="trr">
+            <label for="option3" className="trr" onClick={loadPhoto}>
               Photos
             </label>
             <article className="articleDiv">

@@ -99,11 +99,13 @@ exports.deleteAccount = async (req,res)=>{
     const record = await Profile.deleteOne({email});
     const matches = await Match.deleteMany({matchFrom:email});
     const matchesto = await Match.deleteMany({matchTo:email});
+    const subs = await Subscription.deleteMany({email});
 
     console.log(data);
     console.log(record);
     console.log(matches);
     console.log(matchesto);
+    console.log(subs);
 
 
     if(data.acknowledged && record.acknowledged && matches.acknowledged && matchesto.acknowledged)

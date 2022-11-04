@@ -45,11 +45,11 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { selectedChat, setSelectedChat, setChats, chats } =
-    useContext(DateContext);
+
   var email = "",
     dist = 100000000;
-
+  const { selectedChat, setSelectedChat, setChats, chats } =
+    useContext(DateContext);
   const navigate = useNavigate();
 
   let { user } = useSelector((state) => ({ ...state }));
@@ -76,16 +76,7 @@ function Wink() {
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
         response.data.forEach(function (x) {
-          var y = 0;
-          if (coords) {
-            y = getDistance(
-              { latitude: coords.latitude, longitude: coords.longitude },
-              {
-                latitude: x.location.coordinates[1],
-                longitude: x.location.coordinates[0],
-              }
-            );
-          }
+          console.log(x);
 
           var imageListRef = ref(storage, `${x.email}`);
 
@@ -101,16 +92,18 @@ function Wink() {
                     email: x.email,
                     image: url,
                   };
-                  console.log(y, dist, x.name);
-                  if (email != x.email && y <= dist)
-                    setPeople((prev) => [...prev, local]);
+
+                  if (email != x.email) setPeople((prev) => [...prev, local]);
                 }
               });
             });
           });
         });
       })
-      .catch((error) => toast.warn(error.message));
+      .catch((error) => {
+        console.log(error);
+        toast.warn(error.response.data.message);
+      });
 
     setLoading(false);
   }, []);
@@ -127,21 +120,6 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
-          // create a new chat
-
-          axios
-            .post("http://localhost:4000/api/chat", {
-              fromemail: email,
-              toemail: toemail,
-            })
-            .then((respose) => {
-              console.log(response);
-              if (!chats.find((c) => c._id === respose.data._id))
-                setChats([respose.data, ...chats]);
-              setSelectedChat(response.data);
-              toast.success("Chat Created");
-            })
-            .catch((err) => console.log(err));
         })
         .catch(function (error) {
           console.log(error.message);

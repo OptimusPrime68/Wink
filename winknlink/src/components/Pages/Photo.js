@@ -103,9 +103,7 @@ const Photo = () => {
       const d2 = new Date(newEvent.start);
       const d3 = new Date(allEvents[i].end);
       const d4 = new Date(newEvent.end);
-
       console.log(d1 + d2 + d3 + d4);
-
       if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
         console.log("Clash");
         break;

@@ -47,7 +47,7 @@ const ChatPage = () => {
       <div className="chats">
         <h2>chatIDs</h2>
         {/* {chats.map(val=> <p>{val._id+"----"+val.chatName}</p>)} */}
-        {chats.map((chat) => (
+        {chats && chats.map((chat) => (
           <div onClick={() => setSelectedChat(chat)}>
             <Chat
               name="Manish"
