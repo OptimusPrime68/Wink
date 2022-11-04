@@ -1,14 +1,24 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
 import "../styles/MatchProfile.css";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 import axios from "axios";
 import {useState} from 'react'
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
+import ReactPlayer from "react-player";
 
 function MatchProfile({id}) {
 
@@ -16,6 +26,9 @@ function MatchProfile({id}) {
   console.log(id);
 
   const [data,setData] = useState();
+  const [imageList, setImageList] = useState([]);
+  const [videoList, setVideoList] = useState([]);
+  const [profileImage,setProfileImage] = useState();
 
   useEffect(()=>{
 
@@ -28,8 +41,46 @@ function MatchProfile({id}) {
     }).catch((err)=>{
       console.log(err);
     })
+
+    const imageListRef = ref(storage, id);
+    listAll(imageListRef)
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            if (url.includes("profile")) {
+               setProfileImage(url);
+            }
+            else
+            {
+              setImageList((prev) => [...prev, url]);
+            }
+          });
+        });
+      })
+      .catch((error) => console.log(error));
+
+
+      const videoRef= ref(storage, `${id}/video`);
+      listAll(videoRef)
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+         
+              setVideoList((prev) => [...prev, url]);
+            
+          });
+        });
+      })
+      .catch((error) => console.log(error));
+
+
+
+
   },[])
 
+
+  console.log(imageList);
+  console.log("Video List",videoList);
 
   return (
     <div>
@@ -42,7 +93,7 @@ function MatchProfile({id}) {
                   <div className="col" style={{ textAlign: "center" }}>
                     <CardMedia
                       component="img"
-                      image="/person.svg"
+                      image={profileImage}
                       alt="Person"
                       style={{
                         height: "200px",
@@ -66,40 +117,74 @@ function MatchProfile({id}) {
                     {data ? data.hobbies:""}
                   </p>
                 </div>
-                <div className="row">
-                  <div className="matchDiv col mb-3">
-                    <Card id="matchProfileImageDiv">
-                      <CardMedia
-                        component="img"
-                        image="/person.svg"
-                        alt="Profile Image"
-                        className="profileDivImage"
-                        style={{
-                          height: "200px",
-                          width: "200px",
-                          margin: "auto",
-                        }}
-                      />
-                    </Card>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="matchDiv col mb-3">
-                    <Card id="matchProfileImageDiv">
-                      <CardMedia
-                        component="img"
-                        image="/person.svg"
-                        alt="Profile Image"
-                        className="profileDivImage"
-                        style={{
-                          height: "200px",
-                          width: "200px",
-                          margin: "auto",
-                        }}
-                      />
-                    </Card>
-                  </div>
-                </div>
+                <Tabs
+                  variant="pills"
+                  fill
+                  defaultActiveKey="photo"
+                  id="uncontrolled-tab-example"
+                  className="mb-3"
+                >
+                  <Tab eventKey="photo" title="Photos">
+                    <div className="row">
+                     {imageList &&imageList.map((url)=>{
+
+                    return (
+                     <div className="matchDiv col mb-3">
+                        <Card id="matchProfileImageDiv">
+                        <CardMedia
+                          component="img"
+                          image={url}
+                          alt="Profile Image"
+                          className="profileDivImage"
+                          style={{
+                             height: "200px",
+                             width: "200px",
+                              margin: "auto",
+                                }}
+                            />
+                         </Card>
+                       </div>
+                       
+                     )})} 
+                    </div>
+                  </Tab>
+                  <Tab eventKey="video" title="Videos">
+                    <div className="row">
+                    {videoList && videoList.map((url)=>{
+                          return (
+                      <div className="matchDiv col mb-3">
+                            <ReactPlayer      
+                              url={url}
+                              controls={true}
+                            />
+                          
+                          </div>
+                          )
+                        })}
+                       
+                      
+                    </div>
+                  </Tab>
+                  <Tab eventKey="feed" title="Newsfeed">
+                    <div className="row">
+                      <div className="matchDiv col mb-3">
+                        <Card id="matchProfileImageDiv">
+                          <CardMedia
+                            component="img"
+                            image="/person.svg"
+                            alt="Profile Image"
+                            className="profileDivImage"
+                            style={{
+                              height: "200px",
+                              width: "200px",
+                              margin: "auto",
+                            }}
+                          />
+                        </Card>
+                      </div>
+                    </div>
+                  </Tab>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
