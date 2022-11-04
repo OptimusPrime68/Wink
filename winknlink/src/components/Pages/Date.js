@@ -50,6 +50,13 @@ export default function Date(props) {
   const switchToSetting = () => setActiveTab("Setting");
   const switchToChatTab = () => setActiveTab("ChatTab");
 
+ 
+  const [selectedChat, setSelectedChat] = useState();
+  const [vdo,setVdo] = useState(false);
+  const [chats, setChats] = useState([]);
+  const [notification, setNotification] = useState([]);
+
+  
   const contextValue = {
     switchToWink,
     switchToProfile,
@@ -57,6 +64,13 @@ export default function Date(props) {
     switchToChat,
     switchToSetting,
     switchToChatTab,
+    
+        selectedChat,
+        setSelectedChat,
+        chats,
+        setChats,
+       
+       
   };
 
   const navigate = useNavigate();

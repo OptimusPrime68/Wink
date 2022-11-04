@@ -63,6 +63,7 @@ const PrettoSlider = styled(Slider)({
 export default function Settings() {
   const [value, setValue] = React.useState(0);
   const [valueAge, setValueAge] = React.useState([18, 25]);
+;
 
   const [pref, setPref] = React.useState("");
 
@@ -71,7 +72,25 @@ export default function Settings() {
   const [month, setMonth] = React.useState("");
 
   const handleChange = (event, newValue) => {
+    
     setValue(newValue);
+
+    axios
+    .post("http://localhost:4000/api/update-profile", {
+      distance: (newValue[1]*1000),
+      email: user.email,
+    })
+    .then(function (response) {
+      toast.success("Updated");
+      console.log(response);
+    })
+    .catch(function (error) {
+      toast.error("Some Error Occured");
+      console.log(error);
+    });
+
+
+
   };
 
   const handleChangeAge = (eventAge, newValueAge) => {

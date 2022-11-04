@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
 import axios from "axios";
 import { storage } from "../../firebase";
+import { getDistance } from 'geolib';
 import {
   ref,
   uploadBytes,
@@ -16,14 +17,18 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CircleLoader from 'react-spinners/CircleLoader'
 import Header from "./Header";
+import { useGeolocated } from "react-geolocated";
+import {DateContext} from "./DateContext"
+
 
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading,setLoading] = useState(false);
-
-  var email = "";
+  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
+  var email = "",dist = 100000000;
 
   const navigate = useNavigate();
+ 
 
 
 
@@ -31,10 +36,18 @@ function Wink() {
 
   if (!user) navigate("/");
 
-  if (user) email = user.email;
+  if (user) {email = user.email;  dist = user.distance;}
+
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
 
 
-
+  
 
 
   useEffect(()=>{
@@ -53,6 +66,16 @@ function Wink() {
           .then(function (response) {
             response.data.forEach(function (x) {
 
+                var y = 0;
+                if(coords){
+                y = getDistance(
+                  { latitude: coords.latitude, longitude: coords.longitude},
+                  { latitude: x.location.coordinates[1], longitude: x.location.coordinates[0] }
+                )
+                }
+
+              
+
                 var imageListRef = ref(storage,`${x.email}`);
               
                 listAll(imageListRef).then((response)=>{
@@ -68,15 +91,17 @@ function Wink() {
                                 email:x.email,
                                 image:url
                             }
-                            if(email != x.email)
+                            console.log(y,dist,x.name);
+                            if(email != x.email && y <= dist)
                             setPeople((prev)=>[...prev,local]);
                            
                         }
+                          
                     })
                 })
               })
             });
-          }).catch((error)=>toast.warn(error.response.data.message));
+          }).catch((error)=>toast.warn(error.message));
 
           setLoading(false);
 
@@ -95,6 +120,20 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
+          // create a new chat 
+          
+            axios.post("http://localhost:4000/api/chat",{
+              fromemail: email,
+              toemail: toemail,
+            }).then((respose)=>{
+                console.log(response);
+                if (!chats.find((c) => c._id === respose.data._id)) 
+                    setChats([respose.data, ...chats]);
+                setSelectedChat(response.data)
+                toast.success("Chat Created")
+            }).catch((err)=> console.log(err));
+
+
         })
         .catch(function (error) {
           console.log(error.message);
@@ -106,7 +145,6 @@ function Wink() {
     console.log(myIdentifier + " left the screen");
   };
 
-  console.log(people);
 
   return (
     <div className="DateMainDiv">

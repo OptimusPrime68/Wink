@@ -142,6 +142,7 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
+    var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
@@ -150,7 +151,7 @@ export default function Profile() {
         console.log("Response", response);
         if (response.data) {
           const data = response.data;
-          setName(data.name);
+          setName(data.name);   
           setPhone(data.phone);
           setGender(data.gender);
           if (data.dob != null) 
@@ -158,7 +159,10 @@ export default function Profile() {
           setAddress(data.address);
           setHobby(data.hobbies);
           if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
+          if(data.distance)
+          dist = data.distance;
           toast.success("Profile Loaded");
+          window.localStorage.setItem("distance",dist);
         }
       })
       .catch(function (error) {
@@ -188,9 +192,10 @@ export default function Profile() {
                   email: email,
                   token: user.token,
                   id: user.id,
-                  user: user.userType,
+                  user: user.user,
                   name: user.name,
                   image: url,
+                  distance:dist,
                 },
               });
             }

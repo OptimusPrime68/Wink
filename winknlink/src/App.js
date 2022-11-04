@@ -28,6 +28,10 @@ function App() {
          const name = window.localStorage.getItem("name");
 
          const image = window.localStorage.getItem("image");
+
+         var dist = 10000000;
+
+         dist = window.localStorage.getItem("distance");
         
          if(email && token &&  id){
          dispatch({
@@ -38,7 +42,8 @@ function App() {
             id: id,
             user,
             name,
-            image
+            image,
+            distance:dist
           },
         });
       }

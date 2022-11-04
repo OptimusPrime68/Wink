@@ -73,6 +73,9 @@ exports.getUserType= async (req,res)=>{
 
     const data = await Subscription.findOne({email});
 
+
+    console.log(data);
+
     if(data){    
     const diff = (datediff(data.date_of_joining,new Date()));
 

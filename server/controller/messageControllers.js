@@ -6,8 +6,9 @@ const User = require("../models/user");
 
 const sendMessage = asyncHandler( async (req,res)=>{
 
-    const { content,chatId,currUser } = req.body;
+    const { content,chatId,email } = req.body;
     // we need the logged in user (from middleware)
+    var currUser= await User.findOne({email});
     if(!content || !chatId){
 
         return res.sendStatus(400);
