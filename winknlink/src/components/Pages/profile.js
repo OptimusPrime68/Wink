@@ -26,6 +26,7 @@ import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
 import { useRef } from "react";
+import BottomDrawer from "./BottomDrawer";
 
 export default function Profile() {
   var email = "";
@@ -45,7 +46,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const { t } = useTranslation(["home"]);
   const myRef = useRef();
-
 
   const dispatch = useDispatch();
   let { user } = useSelector((state) => ({ ...state }));
@@ -170,9 +170,7 @@ export default function Profile() {
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
-   
-   
-  
+
     listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
@@ -332,17 +330,13 @@ export default function Profile() {
     setPhone(e.target.value);
   };
 
-
   const handleDelete = (e) => {
     const storage = getStorage();
     const desertRef = ref(storage, e);
     deleteObject(desertRef)
       .then((s) => {
-      
-        setImageList(
-          imageList.filter(a => a !== e)
-        );
-    
+        setImageList(imageList.filter((a) => a !== e));
+
         toast.success("Image Deleted");
       })
       .catch((error) => {
@@ -354,7 +348,7 @@ export default function Profile() {
 
   const uploadVideo = (e) => {
     e.preventDefault();
-    console.log(videoUpload)
+    console.log(videoUpload);
     if (videoUpload) {
       let r = (Math.random() + 1).toString(36).substring(7);
       const VideoRef = ref(storage, `${email}/video/${r}`);
@@ -377,20 +371,18 @@ export default function Profile() {
     seVideoSrc(URL.createObjectURL(event.target.files[0]));
   };
 
-
-  const loadPhoto = async () =>{
+  const loadPhoto = async () => {
     setImageList([]);
     listAll(imageListRef)
-    .then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          setImageList((prev) => [...prev, url]);
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            setImageList((prev) => [...prev, url]);
+          });
         });
-      });
-    })
-    .catch((error) => console.log(error));
-
-  }
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
@@ -534,14 +526,14 @@ export default function Profile() {
                 <br />
 
                 <label className="label" for="gender">
-                      Address
-                    </label>
+                  Address
+                </label>
                 <input
                   value={address}
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e)=>setAddress(e.target.value)}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
 
                 <label className="label" for="phone">
@@ -602,7 +594,7 @@ export default function Profile() {
             <article style={{ textAlign: "center" }} className="articleDiv">
               <div className="tr wwq">
                 <div className="row mb-3" style={{ width: "100%" }}>
-                  <Dropzone className="mainDropzone" ref = {myRef} />
+                  <Dropzone className="mainDropzone" ref={myRef} />
                 </div>
               </div>
               {/* <button className="SettingButton" type="button"  >
@@ -623,7 +615,11 @@ export default function Profile() {
                   <ReactPlayer url={videoSrc} width="100%" controls={true} />
                 </div>
               </div>
-              <button className="SettingButton" type="button" onClick={uploadVideo}>
+              <button
+                className="SettingButton"
+                type="button"
+                onClick={uploadVideo}
+              >
                 Upload Video
               </button>
             </article>
@@ -669,6 +665,7 @@ export default function Profile() {
           </section>
         </div>
       </div>
+      <BottomDrawer />
     </div>
   );
 }

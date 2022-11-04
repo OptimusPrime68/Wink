@@ -21,6 +21,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
 import "../styles/Matches.css";
+import BottomDrawer from "./BottomDrawer";
 
 function Matches() {
   const [people, setPeople] = useState([]);
@@ -39,7 +40,7 @@ function Matches() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/all-match", { email})
+      .post("http://localhost:4000/api/all-match", { email })
       .then(function (response) {
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
@@ -116,6 +117,7 @@ function Matches() {
         ))}
       </div> */}
       {loading && <CircleLoader color="#f70177" />}
+      <BottomDrawer />
     </div>
   );
 }

@@ -46,6 +46,8 @@ function MatchProfile() {
                   defaultActiveKey="photo"
                   id="uncontrolled-tab-example"
                   className="mb-3"
+                  fill
+                  variant="pills"
                 >
                   <Tab eventKey="photo" title="Photos">
                     <div className="row">

@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import Dropzone from "./Dropzone";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import BottomDrawer from "./BottomDrawer";
 
 const style = {
   position: "relative",
@@ -69,6 +70,7 @@ function Newsfeed() {
           <Dropzone />
         </Box>
       </Modal>
+      <BottomDrawer />
     </div>
   );
 }
