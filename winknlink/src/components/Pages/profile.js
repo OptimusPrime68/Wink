@@ -23,6 +23,8 @@ import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import CircleLoader from "react-spinners/CircleLoader";
 import { useDispatch } from "react-redux";
+import Dropzone from "./Dropzone";
+import ReactPlayer from "react-player";
 
 export default function Profile() {
   var email = "";
@@ -140,6 +142,7 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
+    var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email,
@@ -148,14 +151,18 @@ export default function Profile() {
         console.log("Response", response);
         if (response.data) {
           const data = response.data;
-          setName(data.name);
+          setName(data.name);   
           setPhone(data.phone);
           setGender(data.gender);
-          if (data.dob != null) setDob(data.dob.substr(0, 10));
+          if (data.dob != null) 
+          setDob(data.dob.substr(0, 10));
           setAddress(data.address);
           setHobby(data.hobbies);
           if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
+          if(data.distance)
+          dist = data.distance;
           toast.success("Profile Loaded");
+          window.localStorage.setItem("distance",dist);
         }
       })
       .catch(function (error) {
@@ -185,9 +192,10 @@ export default function Profile() {
                   email: email,
                   token: user.token,
                   id: user.id,
-                  user: user.userType,
+                  user: user.user,
                   name: user.name,
                   image: url,
+                  distance:dist,
                 },
               });
             }
@@ -213,6 +221,13 @@ export default function Profile() {
 
     console.log(coordinates);
     setCoordinates(coordinates);
+
+    if(phone && phone.length != 10)
+    {
+      toast.error("Phone Number Incorrect");
+      return;
+    }
+
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -301,9 +316,31 @@ export default function Profile() {
   console.log(coords);
 
   const handleDOB = (e) => {
+
+
+    const max=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+(new Date().getDate()<=9?'0'+new Date().getDate():new Date().getDate())
+
+    if(e.target.value >= max)
+    {
+      toast.error("Wrong Date Selected");
+      return;
+    }
+
+    console.log(max + e.target.value);
+   
+
+    
+
     setDob(e.target.value);
     setAge(getAge(e.target.value));
   };
+
+  const handlePhone = (e) =>{
+
+    setPhone(e.target.value);
+    
+
+  }
 
   const handleDelete = (e) => {
     const storage = getStorage();
@@ -311,7 +348,6 @@ export default function Profile() {
     console.log(imageList);
     deleteObject(desertRef)
       .then((s) => {
-        // File deleted successfully
         var rem;
         rem = imageList.slice(imageList.indexOf(e), -1);
         console.log(rem);
@@ -319,7 +355,6 @@ export default function Profile() {
         toast.success("Image Deleted");
       })
       .catch((error) => {
-        // Uh-oh, an error occurred!
         console.log(error);
       });
 
@@ -339,6 +374,12 @@ export default function Profile() {
           toast.error(err.message);
         });
     }
+  };
+
+  const [videoSrc, seVideoSrc] = useState("");
+
+  const handleVideo = (event) => {
+    seVideoSrc(URL.createObjectURL(event.target.files[0]));
   };
 
   return (
@@ -423,6 +464,7 @@ export default function Profile() {
                     type="date"
                     id="input"
                     onChange={handleDOB}
+                   
                   />
                 </div>
                 <br />
@@ -458,7 +500,7 @@ export default function Profile() {
                   className="input"
                   type="text"
                   id="phone"
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={handlePhone}
                 />
 
                 <div className="row">
@@ -538,40 +580,30 @@ export default function Profile() {
               Upload
             </label>
             <article style={{ textAlign: "center" }} className="articleDiv">
-              <div className="tr wwq" style={{ justifyContent: "center" }}>
-                <div className="row mb-3">
-                  <div className="col-md-6 mb-3">
-                    <label className="label" for="photo">
-                      Add photos
-                    </label>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <input
-                      type="file"
-                      multiple
-                      id="photo"
-                      onChange={(e) => setImageUpload(e.target.files[0])}
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-md-6 mb-3">
-                    <label className="label" for="video">
-                      Add Video
-                    </label>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <input
-                      type="file"
-                      multiple
-                      id="video"
-                      onChange={(e) => setVideoUpload(e.target.files[0])}
-                    />
-                  </div>
+              <div className="tr wwq">
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <Dropzone className="mainDropzone" />
                 </div>
               </div>
               <button className="SettingButton" type="button" onClick={upload}>
-                Upload
+                Upload Photo
+              </button>
+              <div className="tr wwq">
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <Form.Control
+                    size="lg"
+                    type="file"
+                    placeholder="Video Upload"
+                    onClick={handleVideo}
+                    style={{ margin: "auto", width: "90%" }}
+                  />
+                </div>
+                <div className="row mb-3" style={{ width: "100%" }}>
+                  <ReactPlayer url={videoSrc} width="100%" controls={true} />
+                </div>
+              </div>
+              <button className="SettingButton" type="button" onClick={upload}>
+                Upload Video
               </button>
             </article>
           </section>
@@ -585,10 +617,17 @@ export default function Profile() {
                 {imageList &&
                   imageList.map((url) => {
                     return (
-                      <div className="row photoArea">
+                      <div
+                        className="row photoArea"
+                        style={{ padding: "10px" }}
+                      >
                         <div className="col-auto mb-3 m-auto PhotoDiv">
-                          <Card style={{ width: "18rem" }}>
-                            <Card.Img variant="top" src={url} />
+                          <Card style={{ width: "18rem", padding: "10px" }}>
+                            <Card.Img
+                              className="PhotoPreviewSection"
+                              variant="top"
+                              src={url}
+                            />
                             <Card.Body style={{ textAlign: "center" }}>
                               <Button
                                 variant="outline-danger"

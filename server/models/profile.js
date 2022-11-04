@@ -34,7 +34,7 @@ const profileSchema = new mongoose.Schema({
         type:String
     },
     location: {
-        type: { type: String },
+        type: { type: String},
         coordinates: [Number]
     },
     profileScore:{
@@ -47,11 +47,12 @@ const profileSchema = new mongoose.Schema({
     },
     distance:{
         type:Number,
-        default:100000
+        default:1000000
     }
    },
     {timestamps:true}
 );
+
 
 
 module.exports = mongoose.model('Profile',profileSchema);
