@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/landingPage.css";
+import "../styles/RegisterComplete.css";
 import { useDispatch } from "react-redux";
 
 const RegisterComplete = ({ history }) => {
@@ -42,13 +42,13 @@ const RegisterComplete = ({ history }) => {
                 email: email,
                 token: idTokenResult.token,
                 id: id,
-                user:"free",
+                user: "free",
               },
             });
-            window.localStorage.setItem("token",idTokenResult.token);
-            window.localStorage.setItem("id",id);
+            window.localStorage.setItem("token", idTokenResult.token);
+            window.localStorage.setItem("id", id);
             toast.success("User Saved");
-            if (result.user.emailVerified) {;
+            if (result.user.emailVerified) {
               let user = auth.currentUser;
               user.updatePassword(password);
               navigate("/wink");
@@ -67,11 +67,16 @@ const RegisterComplete = ({ history }) => {
   };
 
   return (
-    <>
-      <button type="submit" onClick={signUp}>
-        Sign Up
-      </button>
-    </>
+    <div id="RegisterPage">
+      <div class="Registerbuttons" id="part1">
+        <h3 style={{ marginTop: "70px" }}>
+          Click the Sign Up button to verify yourself
+        </h3>
+        <div class="RegisterCompletebutton" onClick={signUp}>
+          <span>Sign Up</span>
+        </div>
+      </div>
+    </div>
   );
 };
 

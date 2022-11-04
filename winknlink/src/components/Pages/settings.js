@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/settings.css";
 import Slider from "@mui/material/Slider";
 import Language from "../Language";
@@ -10,7 +10,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import Header from "./Header";
-import { Button } from "react-bootstrap";
+import Button from "@mui/material/Button";
+import Modal from "react-bootstrap/Modal";
 
 function valuetext(value) {
   return value;
@@ -60,12 +61,14 @@ const PrettoSlider = styled(Slider)({
 });
 
 export default function Settings() {
-  const [value, setValue] = React.useState([0, 37]);
+  const [value, setValue] = React.useState(0);
   const [valueAge, setValueAge] = React.useState([18, 25]);
 
   const [pref, setPref] = React.useState("");
 
   const [sub, setSub] = React.useState("");
+
+  const [month, setMonth] = React.useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -112,6 +115,15 @@ export default function Settings() {
   const handleSubscription = async (e) => {
     setSub(e);
   };
+
+  const handleMonth = async (e) => {
+    setMonth(e);
+  };
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <div>
@@ -179,7 +191,7 @@ export default function Settings() {
                   valueLabelDisplay="auto"
                   getAriaValueText={valuetext}
                   color="secondary"
-                  min={0}
+                  min={1}
                   max={500}
                 />
               </div>
@@ -207,7 +219,9 @@ export default function Settings() {
                     </FormControl>
                   </div>
                   <div className="col-md-6 mb-1" style={{ margin: "auto" }}>
-                    <Button>Buy</Button>
+                    <Button variant="outlined" onClick={handleShow}>
+                      Upgrade
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -220,6 +234,38 @@ export default function Settings() {
           </section>
         </div>
       </div>
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Premium Features</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ol>
+            <li>Super Like</li>
+            <li>Undo</li>
+          </ol>
+          <FormControl sx={{ minWidth: 200 }} size="small">
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={month}
+              label="Subscription"
+              onChange={(e) => handleMonth(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value="">1 Month (₹60)</MenuItem>
+              <MenuItem value="2">3 Month (₹170)</MenuItem>
+              <MenuItem value="3">6 Month (₹330)</MenuItem>
+              <MenuItem value="4">12 Month (₹650)</MenuItem>
+            </Select>
+          </FormControl>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary">Buy</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
