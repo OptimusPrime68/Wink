@@ -133,7 +133,7 @@ export default function Settings() {
               id: user.id,
               user: "premium",
               name: user.name,
-              image: user.url,
+              image: user.image,
               distance: user.dist,
             },
           });

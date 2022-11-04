@@ -137,8 +137,12 @@ function Wink() {
   // const handleClose = () => setShow(false);
   // const handleShow = () => setShow(true);
 
+  const [id,setId] = useState();
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  function handleOpen (e) {
+    setId(e)
+    setOpen(true);
+  }
   const handleClose = () => setOpen(false);
 
   return (
@@ -159,7 +163,7 @@ function Wink() {
             >
               <h3>
                 {person.name}{" "}
-                <IconButton style={{ color: "#fbab7e" }} onClick={handleOpen}>
+                <IconButton style={{ color: "#fbab7e" }} onClick={()=>handleOpen(person.email)}>
                   <PersonPinSharpIcon fontSize="large" />
                 </IconButton>
               </h3>
@@ -173,13 +177,14 @@ function Wink() {
 
       <Modal
         open={open}
+      
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         style={{ padding: "10px" }}
       >
         <Box sx={style}>
-          <MatchProfile />
+          <MatchProfile    id={id} />
           <div style={{ textAlign: "center" }}>
             <Button onClick={handleClose}>Close</Button>
           </div>
