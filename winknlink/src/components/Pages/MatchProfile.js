@@ -1,12 +1,10 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
 import "../styles/MatchProfile.css";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 
 function MatchProfile() {
   return (
@@ -44,40 +42,69 @@ function MatchProfile() {
                     Hobbies
                   </p>
                 </div>
-                <div className="row">
-                  <div className="matchDiv col mb-3">
-                    <Card id="matchProfileImageDiv">
-                      <CardMedia
-                        component="img"
-                        image="/person.svg"
-                        alt="Profile Image"
-                        className="profileDivImage"
-                        style={{
-                          height: "200px",
-                          width: "200px",
-                          margin: "auto",
-                        }}
-                      />
-                    </Card>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="matchDiv col mb-3">
-                    <Card id="matchProfileImageDiv">
-                      <CardMedia
-                        component="img"
-                        image="/person.svg"
-                        alt="Profile Image"
-                        className="profileDivImage"
-                        style={{
-                          height: "200px",
-                          width: "200px",
-                          margin: "auto",
-                        }}
-                      />
-                    </Card>
-                  </div>
-                </div>
+                <Tabs
+                  defaultActiveKey="photo"
+                  id="uncontrolled-tab-example"
+                  className="mb-3"
+                >
+                  <Tab eventKey="photo" title="Photos">
+                    <div className="row">
+                      <div className="matchDiv col mb-3">
+                        <Card id="matchProfileImageDiv">
+                          <CardMedia
+                            component="img"
+                            image="/person.svg"
+                            alt="Profile Image"
+                            className="profileDivImage"
+                            style={{
+                              height: "200px",
+                              width: "200px",
+                              margin: "auto",
+                            }}
+                          />
+                        </Card>
+                      </div>
+                    </div>
+                  </Tab>
+                  <Tab eventKey="video" title="Videos">
+                    <div className="row">
+                      <div className="matchDiv col mb-3">
+                        <Card id="matchProfileImageDiv">
+                          <CardMedia
+                            component="img"
+                            image="/person.svg"
+                            alt="Profile Image"
+                            className="profileDivImage"
+                            style={{
+                              height: "200px",
+                              width: "200px",
+                              margin: "auto",
+                            }}
+                          />
+                        </Card>
+                      </div>
+                    </div>
+                  </Tab>
+                  <Tab eventKey="feed" title="Newsfeed">
+                    <div className="row">
+                      <div className="matchDiv col mb-3">
+                        <Card id="matchProfileImageDiv">
+                          <CardMedia
+                            component="img"
+                            image="/person.svg"
+                            alt="Profile Image"
+                            className="profileDivImage"
+                            style={{
+                              height: "200px",
+                              width: "200px",
+                              margin: "auto",
+                            }}
+                          />
+                        </Card>
+                      </div>
+                    </div>
+                  </Tab>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
