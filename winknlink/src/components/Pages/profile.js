@@ -151,18 +151,16 @@ export default function Profile() {
         console.log("Response", response);
         if (response.data) {
           const data = response.data;
-          setName(data.name);   
+          setName(data.name);
           setPhone(data.phone);
           setGender(data.gender);
-          if (data.dob != null) 
-          setDob(data.dob.substr(0, 10));
+          if (data.dob != null) setDob(data.dob.substr(0, 10));
           setAddress(data.address);
           setHobby(data.hobbies);
           if (data.dob) setAge(getAge(data.dob.substr(0, 10)));
-          if(data.distance)
-          dist = data.distance;
+          if (data.distance) dist = data.distance;
           toast.success("Profile Loaded");
-          window.localStorage.setItem("distance",dist);
+          window.localStorage.setItem("distance", dist);
         }
       })
       .catch(function (error) {
@@ -195,7 +193,7 @@ export default function Profile() {
                   user: user.user,
                   name: user.name,
                   image: url,
-                  distance:dist,
+                  distance: dist,
                 },
               });
             }
@@ -222,12 +220,10 @@ export default function Profile() {
     console.log(coordinates);
     setCoordinates(coordinates);
 
-    if(phone && phone.length != 10)
-    {
+    if (phone && phone.length != 10) {
       toast.error("Phone Number Incorrect");
       return;
     }
-
 
     axios
       .post("http://localhost:4000/api/update-profile", {
@@ -316,31 +312,29 @@ export default function Profile() {
   console.log(coords);
 
   const handleDOB = (e) => {
+    const max =
+      new Date().getFullYear() +
+      "-" +
+      (new Date().getMonth() + 1) +
+      "-" +
+      (new Date().getDate() <= 9
+        ? "0" + new Date().getDate()
+        : new Date().getDate());
 
-
-    const max=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+(new Date().getDate()<=9?'0'+new Date().getDate():new Date().getDate())
-
-    if(e.target.value >= max)
-    {
+    if (e.target.value >= max) {
       toast.error("Wrong Date Selected");
       return;
     }
 
     console.log(max + e.target.value);
-   
-
-    
 
     setDob(e.target.value);
     setAge(getAge(e.target.value));
   };
 
-  const handlePhone = (e) =>{
-
+  const handlePhone = (e) => {
     setPhone(e.target.value);
-    
-
-  }
+  };
 
   const handleDelete = (e) => {
     const storage = getStorage();
@@ -464,7 +458,6 @@ export default function Profile() {
                     type="date"
                     id="input"
                     onChange={handleDOB}
-                   
                   />
                 </div>
                 <br />

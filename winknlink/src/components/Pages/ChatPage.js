@@ -1,17 +1,17 @@
 import React from "react";
-import { useEffect,useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import Header from "./Header";
 import Chat from "./Chat";
 import axios from "axios";
 import { toast } from "react-toastify";
 // import { ChatState } from "./ChatProvider";
-import {DateContext} from "./DateContext"
+import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
 
 const ChatPage = () => {
- 
-  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
- 
+  const { selectedChat, setSelectedChat, setChats, chats } =
+    useContext(DateContext);
+
   const fetchChats = async () => {
     try {
       // const config = {
@@ -20,12 +20,10 @@ const ChatPage = () => {
       //   },
       // };
       // fetch all
-      axios.get("http://localhost:4000/api/chat").then((res)=>{
-          console.log(res)
-          setChats(res.data);
+      axios.get("http://localhost:4000/api/chat").then((res) => {
+        console.log(res);
+        setChats(res.data);
       });
-     
-  
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -39,12 +37,10 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    console.log("imside")
+    console.log("imside");
     fetchChats();
-  
-    
-  }, [])
-  
+  }, []);
+
   return (
     <div>
       <Header />
@@ -53,7 +49,7 @@ const ChatPage = () => {
         {/* {chats.map(val=> <p>{val._id+"----"+val.chatName}</p>)} */}
         {chats.map((chat) => (
           <div onClick={() => setSelectedChat(chat)}>
-             <Chat
+            <Chat
               name="Manish"
               message="Hey! how are you :)"
               timestamp="35 minutes ago"
@@ -61,7 +57,7 @@ const ChatPage = () => {
             />
           </div>
         ))}
-       
+
         {/* <Chat
           name="Manish"
           message="Hey! how are you :)"

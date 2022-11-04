@@ -15,10 +15,7 @@ import { DateContext } from "./DateContext";
 import ChatPage from "./ChatPage";
 import ChatScreen from "./ChatScreen";
 import { getAuth, deleteUser } from "firebase/auth";
-import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -27,8 +24,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { Avatar, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
@@ -37,6 +32,10 @@ import ForumIcon from "@mui/icons-material/Forum";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import axios from "axios";
+import BookIcon from "@mui/icons-material/Book";
+import Photo from "./Photo";
+import Newsfeed from "./Newsfeed";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 export default function Date(props) {
   const drawerWidth = 240;
@@ -49,14 +48,14 @@ export default function Date(props) {
   const switchToChat = () => setActiveTab("Chat");
   const switchToSetting = () => setActiveTab("Setting");
   const switchToChatTab = () => setActiveTab("ChatTab");
+  const switchToDatePlanner = () => setActiveTab("DatePlanner");
+  const switchToNewsfeed = () => setActiveTab("Newsfeed");
 
- 
   const [selectedChat, setSelectedChat] = useState();
-  const [vdo,setVdo] = useState(false);
+  const [vdo, setVdo] = useState(false);
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
 
-  
   const contextValue = {
     switchToWink,
     switchToProfile,
@@ -64,13 +63,13 @@ export default function Date(props) {
     switchToChat,
     switchToSetting,
     switchToChatTab,
-    
-        selectedChat,
-        setSelectedChat,
-        chats,
-        setChats,
-       
-       
+    switchToDatePlanner,
+    switchToNewsfeed,
+
+    selectedChat,
+    setSelectedChat,
+    chats,
+    setChats,
   };
 
   const navigate = useNavigate();
@@ -203,6 +202,22 @@ export default function Date(props) {
                   <ListItemText primary="Settings" />
                 </ListItemButton>
               </ListItem>
+              <ListItem key="DatePlanner" disablePadding>
+                <ListItemButton onClick={switchToDatePlanner}>
+                  <ListItemIcon>
+                    <BookIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Date Planner" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Newdfeed" disablePadding>
+                <ListItemButton onClick={switchToNewsfeed}>
+                  <ListItemIcon>
+                    <NewspaperIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="News Feed" />
+                </ListItemButton>
+              </ListItem>
               <ListItem key="Logout" disablePadding>
                 <ListItemButton onClick={logOut}>
                   <ListItemIcon>
@@ -236,6 +251,8 @@ export default function Date(props) {
             {activeTab === "Chat" && <ChatPage />}
             {activeTab === "Setting" && <Setting />}
             {activeTab === "ChatTab" && <ChatScreen />}
+            {activeTab === "DatePlanner" && <Photo />}
+            {activeTab === "Newsfeed" && <Newsfeed />}
           </div>
         </DateContext.Provider>
       </div>

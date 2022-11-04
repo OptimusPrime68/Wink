@@ -10,6 +10,9 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Form from "react-bootstrap/Form";
+import Header from "./Header";
+import { Button } from "react-bootstrap";
 
 const locales = {
   "en-US": require("date-fns/locale/en-US"),
@@ -114,41 +117,71 @@ const Photo = () => {
 
   return (
     <>
-      <p>{book.price}</p>
-      <button onClick={handlePayment}>Buy Now</button>
+      <div style={{ textAlign: "center" }}>
+        <Header />
+        <h1>Dates</h1>
+        <div
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            padding: "10px",
+          }}
+        >
+          <h6>Add New Event</h6>
+          <div className="row" style={{ padding: "5px" }}>
+            <div className="col mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Add Title"
+                style={{ margin: "auto" }}
+                value={newEvent.title}
+                onChange={(e) =>
+                  setNewEvent({ ...newEvent, title: e.target.value })
+                }
+              />
+            </div>
+            <div
+              className="col mb-3"
+              style={{
+                alignContent: "center",
+              }}
+            >
+              <DatePicker
+                placeholderText="Start Date"
+                selected={newEvent.start}
+                onChange={(start) => setNewEvent({ ...newEvent, start })}
+              />
+            </div>
+            <div
+              className="col mb-3"
+              style={{
+                alignContent: "center",
+              }}
+            >
+              <DatePicker
+                placeholderText="End Date"
+                selected={newEvent.end}
+                onChange={(end) => setNewEvent({ ...newEvent, end })}
+              />
+            </div>
 
-      <h1>Calendar</h1>
-      <h2>Add New Event</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Add Title"
-          style={{ width: "20%", marginRight: "10px" }}
-          value={newEvent.title}
-          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+            <Button
+              variant="outline-success"
+              stlye={{ marginTop: "10px" }}
+              onClick={handleAddEvent}
+            >
+              Add Event
+            </Button>
+          </div>
+        </div>
+        <Calendar
+          localizer={localizer}
+          events={allEvents}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500, margin: "50px" }}
         />
-        <DatePicker
-          placeholderText="Start Date"
-          style={{ marginRight: "10px" }}
-          selected={newEvent.start}
-          onChange={(start) => setNewEvent({ ...newEvent, start })}
-        />
-        <DatePicker
-          placeholderText="End Date"
-          selected={newEvent.end}
-          onChange={(end) => setNewEvent({ ...newEvent, end })}
-        />
-        <button stlye={{ marginTop: "10px" }} onClick={handleAddEvent}>
-          Add Event
-        </button>
       </div>
-      <Calendar
-        localizer={localizer}
-        events={allEvents}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500, margin: "50px" }}
-      />
     </>
   );
 };
