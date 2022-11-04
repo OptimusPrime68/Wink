@@ -94,6 +94,7 @@ export default function Date(props) {
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
         window.localStorage.removeItem("user");
+    
 
         console.log("hello");
         dispatch({

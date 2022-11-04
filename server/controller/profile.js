@@ -105,7 +105,7 @@ exports.allProfile=(req,res)=>{
     Profile.findOne({email},function(err,result){
 
         
-        if(result == null) res.status(400).json({message:"No User Found"});
+        if(result == null) res.status(400).json({message:"Complete Your Profile"});
         else if(result.name == null) res.status(400).json({message:"Please Update Your Name"});
         else if(result.dob == null) res.status(400).json({message:"Please Update Your Date of Birth"});
         else if(result.location == null) res.status(400).json({message:"Please upload your location"});

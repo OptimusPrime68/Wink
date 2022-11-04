@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "../styles/Dropzone.css";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
+import { useSelector,useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { Navigate, useNavigate } from "react-router-dom";
+
+
 
 const thumbsContainer = {
   display: "flex",
@@ -33,7 +48,7 @@ const img = {
   height: "100%",
 };
 
-function Dropzone(props) {
+const Dropzone=(props) =>{
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -50,13 +65,29 @@ function Dropzone(props) {
     },
   });
 
+  const {acceptedFiles} = useDropzone();
+
+  const {user} = useSelector((state) => ({ ...state }));
+  const navigate = useNavigate();
+
+  if(user == null) Navigate("/");
+
+
+  console.log(user);
+
+
+
+
+
+   
+
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
         <img
           src={file.preview}
           style={img}
-          // Revoke data uri after image is loaded
+          
           onLoad={() => {
             URL.revokeObjectURL(file.preview);
           }}
@@ -65,18 +96,39 @@ function Dropzone(props) {
     </div>
   ));
 
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, []);
+
+  const upload = () =>{
+    files.map((e)=>{
+      let r = (Math.random() + 1).toString(36).substring(7);
+
+      const imageRef = ref(storage, `${user.email}/${r}`);
+      console.log(imageRef);
+      uploadBytes(imageRef, e)
+        .then(() => {
+          toast.success("Image Uploaded");
+          setFiles([]);
+          console.log(e);
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    });
+  }
+
+  
 
   return (
+    <>
     <section className="container">
       <div {...getRootProps({ className: "mainDropzone" })}>
         <input {...getInputProps()} />
       </div>
       <aside style={thumbsContainer}>{thumbs}</aside>
     </section>
+    <button className="SettingButton" type="button" onClick={upload} >
+    Upload Photo
+  </button>
+  </>
   );
 }
 

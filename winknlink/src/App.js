@@ -29,6 +29,7 @@ function App() {
 
          const image = window.localStorage.getItem("image");
 
+
          var dist = 10000000;
 
          dist = window.localStorage.getItem("distance");
