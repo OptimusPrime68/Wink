@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
@@ -18,11 +18,13 @@ import { toast } from "react-toastify";
 import CircleLoader from 'react-spinners/CircleLoader'
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
+import {DateContext} from "./DateContext"
+
 
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading,setLoading] = useState(false);
-
+  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
   var email = "",dist = 100000000;
 
   const navigate = useNavigate();
@@ -118,6 +120,20 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
+          // create a new chat 
+          
+            axios.post("http://localhost:4000/api/chat",{
+              fromemail: email,
+              toemail: toemail,
+            }).then((respose)=>{
+                console.log(response);
+                if (!chats.find((c) => c._id === respose.data._id)) 
+                    setChats([respose.data, ...chats]);
+                setSelectedChat(response.data)
+                toast.success("Chat Created")
+            }).catch((err)=> console.log(err));
+
+
         })
         .catch(function (error) {
           console.log(error.message);
