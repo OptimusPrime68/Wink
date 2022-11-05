@@ -7,7 +7,7 @@ import "../styles/MatchProfile.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import axios from "axios";
-import {useState} from 'react'
+import { useState } from "react";
 import {
   ref,
   uploadBytes,
@@ -20,27 +20,26 @@ import { storage } from "../../firebase";
 import { getStorage } from "firebase/storage";
 import ReactPlayer from "react-player";
 
-function MatchProfile({id}) {
-
-
+function MatchProfile({ id }) {
   console.log(id);
 
-  const [data,setData] = useState();
+  const [data, setData] = useState();
   const [imageList, setImageList] = useState([]);
   const [videoList, setVideoList] = useState([]);
-  const [profileImage,setProfileImage] = useState();
+  const [profileImage, setProfileImage] = useState();
 
-  useEffect(()=>{
-
+  useEffect(() => {
     axios
-    .post("http://localhost:4000/api/get-user-profile", {
-      email:id,
-    }).then((response)=>{
-      console.log(response);
-      setData(response.data);
-    }).catch((err)=>{
-      console.log(err);
-    })
+      .post("http://localhost:4000/api/get-user-profile", {
+        email: id,
+      })
+      .then((response) => {
+        console.log(response);
+        setData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const imageListRef = ref(storage, id);
     listAll(imageListRef)
@@ -48,10 +47,8 @@ function MatchProfile({id}) {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
             if (url.includes("profile")) {
-               setProfileImage(url);
-            }
-            else
-            {
+              setProfileImage(url);
+            } else {
               setImageList((prev) => [...prev, url]);
             }
           });
@@ -59,28 +56,20 @@ function MatchProfile({id}) {
       })
       .catch((error) => console.log(error));
 
-
-      const videoRef= ref(storage, `${id}/video`);
-      listAll(videoRef)
+    const videoRef = ref(storage, `${id}/video`);
+    listAll(videoRef)
       .then((response) => {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
-         
-              setVideoList((prev) => [...prev, url]);
-            
+            setVideoList((prev) => [...prev, url]);
           });
         });
       })
       .catch((error) => console.log(error));
-
-
-
-
-  },[])
-
+  }, []);
 
   console.log(imageList);
-  console.log("Video List",videoList);
+  console.log("Video List", videoList);
 
   return (
     <div>
@@ -104,17 +93,17 @@ function MatchProfile({id}) {
                         marginBottom: "10px",
                       }}
                     />
-                    {data ? data.name:""}
+                    {data ? data.name : ""}
                   </div>
                 </div>
                 <div className="row mb-3">
                   <h3>About</h3>
                   <p>
-                    {data ? data.address:""}
+                    {data ? data.address : ""}
                     <br />
-                    {data ? data.age:""}
+                    {data ? data.age : ""}
                     <br />
-                    {data ? data.hobbies:""}
+                    {data ? data.hobbies : ""}
                   </p>
                 </div>
                 <Tabs
@@ -126,43 +115,51 @@ function MatchProfile({id}) {
                 >
                   <Tab eventKey="photo" title="Photos">
                     <div className="row">
-                     {imageList &&imageList.map((url)=>{
-
-                    return (
-                     <div className="matchDiv col mb-3">
-                        <Card id="matchProfileImageDiv">
-                        <CardMedia
-                          component="img"
-                          image={url}
-                          alt="Profile Image"
-                          className="profileDivImage"
-                          style={{
-                             height: "200px",
-                             width: "200px",
-                              margin: "auto",
-                                }}
-                            />
-                         </Card>
-                       </div>
-                       
-                     )})} 
+                      {imageList &&
+                        imageList.map((url) => {
+                          return (
+                            <div className="matchDiv col mb-3">
+                              <Card id="matchProfileImageDiv">
+                                <CardMedia
+                                  component="img"
+                                  image={url}
+                                  alt="Profile Image"
+                                  className="profileDivImage"
+                                  style={{
+                                    height: "200px",
+                                    width: "200px",
+                                    margin: "auto",
+                                  }}
+                                />
+                              </Card>
+                            </div>
+                          );
+                        })}
                     </div>
                   </Tab>
                   <Tab eventKey="video" title="Videos">
                     <div className="row">
-                    {videoList && videoList.map((url)=>{
+                      {videoList &&
+                        videoList.map((url) => {
                           return (
-                      <div className="matchDiv col mb-3">
-                            <ReactPlayer      
-                              url={url}
-                              controls={true}
-                            />
-                          
-                          </div>
-                          )
+                            <div className="matchDiv col mb-3">
+                              <Card id="matchProfileImageDiv">
+                                <CardMedia
+                                  component="video"
+                                  src={url}
+                                  alt="Profile Image"
+                                  className="profileDivImage"
+                                  style={{
+                                    height: "200px",
+                                    width: "200px",
+                                    margin: "auto",
+                                  }}
+                                  controls={true}
+                                />
+                              </Card>
+                            </div>
+                          );
                         })}
-                       
-                      
                     </div>
                   </Tab>
                   <Tab eventKey="feed" title="Newsfeed">

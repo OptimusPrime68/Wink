@@ -26,6 +26,7 @@ import Button from "@mui/material/Button";
 import MatchProfile from "./MatchProfile";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import BottomDrawer from "./BottomDrawer";
 
 const style = {
   position: "relative",
@@ -189,6 +190,7 @@ function Wink() {
           </div>
         </Box>
       </Modal>
+      <BottomDrawer />
     </div>
   );
 }

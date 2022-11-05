@@ -93,7 +93,6 @@ export default function Date(props) {
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
         window.localStorage.removeItem("user");
-    
 
         console.log("hello");
         dispatch({
@@ -257,9 +256,9 @@ export default function Date(props) {
           </div>
         </DateContext.Provider>
       </div>
-      <div id="bottomDrawer">
+      {/* <div id="bottomDrawer">
         <BottomDrawer />
-      </div>
+      </div> */}
     </>
   );
 }

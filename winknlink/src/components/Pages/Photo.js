@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import { Button } from "react-bootstrap";
+import BottomDrawer from "./BottomDrawer";
 import { useSelector } from "react-redux";
 
 const locales = {
@@ -148,6 +149,7 @@ const Photo = () => {
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />
+        <BottomDrawer />
       </div>
     </>
   );

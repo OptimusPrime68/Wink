@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 // import { ChatState } from "./ChatProvider";
 import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
+import BottomDrawer from "./BottomDrawer";
 
 const ChatPage = () => {
   const { selectedChat, setSelectedChat, setChats, chats } =
@@ -47,16 +48,17 @@ const ChatPage = () => {
       <div className="chats">
         <h2>chatIDs</h2>
         {/* {chats.map(val=> <p>{val._id+"----"+val.chatName}</p>)} */}
-        {chats && chats.map((chat) => (
-          <div onClick={() => setSelectedChat(chat)}>
-            <Chat
-              name="Manish"
-              message="Hey! how are you :)"
-              timestamp="35 minutes ago"
-              profilePic="/profile.jpg"
-            />
-          </div>
-        ))}
+        {chats &&
+          chats.map((chat) => (
+            <div onClick={() => setSelectedChat(chat)}>
+              <Chat
+                name="Manish"
+                message="Hey! how are you :)"
+                timestamp="35 minutes ago"
+                profilePic="/profile.jpg"
+              />
+            </div>
+          ))}
 
         {/* <Chat
           name="Manish"
@@ -77,6 +79,7 @@ const ChatPage = () => {
           profilePic="/profile.jpg"
         /> */}
       </div>
+      <BottomDrawer />
     </div>
   );
 };
