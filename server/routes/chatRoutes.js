@@ -7,7 +7,8 @@ const {accessChat,
 
 const router = express.Router();
 
-router.route("/chat").post(authCheck,accessChat).get(authCheck,fetchChats);
+router.route("/chat").post(authCheck,accessChat)
+router.route("/chat/all").post(authCheck,fetchChats);
 
 
 module.exports= router;

@@ -120,20 +120,6 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
-          // create a new chat 
-          
-            axios.post("http://localhost:4000/api/chat",{
-              fromemail: email,
-              toemail: toemail,
-            }).then((respose)=>{
-                console.log(response);
-                if (!chats.find((c) => c._id === respose.data._id)) 
-                    setChats([respose.data, ...chats]);
-                setSelectedChat(response.data)
-                toast.success("Chat Created")
-            }).catch((err)=> console.log(err));
-
-
         })
         .catch(function (error) {
           console.log(error.message);

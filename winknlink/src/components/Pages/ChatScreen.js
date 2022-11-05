@@ -6,10 +6,12 @@ import HeaderDesktop from "./HeaderDesktop";
 import {DateContext} from "./DateContext"
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function ChatScreen() {
   const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
- 
+  let { user } = useSelector((state) => ({ ...state }));
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -19,7 +21,7 @@ function ChatScreen() {
 
   const id=localStorage.getItem("id");
   const email=localStorage.getItem("email");
-
+ // fetch all messages of current user
   const fetchMessages = async () => {
     if (!selectedChat) return;
     console.log("open messages2")
@@ -29,6 +31,9 @@ function ChatScreen() {
         `http://localhost:4000/api/chat/message/${selectedChat._id}`
       );
       console.log(data)
+      data.forEach(element => {
+        console.log(element.sender.email,email)
+      });
       setMessages(data);
       setLoading(false);
 
@@ -80,16 +85,17 @@ function ChatScreen() {
       <HeaderDesktop />
       <div className="chatScreen">
         <p className="chatScreenTimeStamp">
-          You matched with Ellen on 01/08/22
+          You matched with Ellen on
+          {selectedChat.createdAt}
         </p>
         {messages.map((message) =>
           message.sender.email!=email ? (
             <div className="chatScreenMessage">
-              {/* <Avatar
+              <Avatar
                 className="chatScreenImage"
                 alt={message.name}
                 src={message.image}
-              /> */}
+              />
               <p className="chatScreenText">{message.content}</p>
             </div>
           ) : 
@@ -101,6 +107,7 @@ function ChatScreen() {
         )}
 
         <form className="ChatScreenInput"
+        onSubmit={(e)=> e.preventDefault()}
         // onKeyDown={sendMessage}
         >
           <input

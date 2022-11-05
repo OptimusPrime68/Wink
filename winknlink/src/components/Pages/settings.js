@@ -210,10 +210,7 @@ export default function Settings() {
                   valueLabelDisplay="auto"
                   getAriaValueText={valuetext}
                   color="secondary"
-<<<<<<< HEAD
-=======
                   min={1}
->>>>>>> 491b21ad289ed6090e5acfa019368b061a99e4e0
                   max={500}
                 />
               </div>
