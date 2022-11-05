@@ -20,7 +20,7 @@ exports.getDate= async (req,res)=>{
 
     
 
-    const data =await Date.find({from:req.body.email});
+    const data =await Date.find({$or:[{from:req.body.email},{to:req.body.email}]});
 
     console.log(data);
 

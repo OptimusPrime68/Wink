@@ -33,6 +33,8 @@ const Photo = () => {
   const { user } = useSelector((state) => ({ ...state }));
   var email = user.email;
 
+  const [person,setPerson] = useState([]);
+
   useEffect(() => {
     axios
       .post("http://localhost:4000/api/get-date", { email })
@@ -40,6 +42,14 @@ const Photo = () => {
         setAllEvents(r.data.m);
       })
       .catch((c) => {});
+
+      axios
+      .post("http://localhost:4000/api/all-match", { email })
+      .then(function (response) {
+        console.log(response.data);
+        setPerson(response.data);
+      }).catch((error)=>console.log(error));
+
   }, []);
 
   const [newEvent, setNewEvent] = useState({
@@ -57,13 +67,21 @@ const Photo = () => {
     axios.post("http://localhost:4000/api/make-date", { newEvent });
   };
 
-  const handleDeleteEvent = async (e) => {
-    console.log(e);
+  const handleDeleteEvent = async (e,key) => {
+    
 
+    console.log(key);
+
+    if(key.key == "Delete"){
+      console.log(e,key);
     axios.post("http://localhost:4000/api/remove-date", { e });
-
     setAllEvents(allEvents.filter((a) => a !== e));
+    }
   };
+
+  const handlePopup = async (e) =>{
+    alert(e.title);
+  }
 
   return (
     <>
@@ -122,11 +140,13 @@ const Photo = () => {
                 alignContent: "center",
               }}
             >
-              <Form.Select aria-label="Default select example">
+              <Form.Select aria-label="Default select example" onChange={(to)=>setNewEvent({...newEvent,to:to.target.value})}>
                 <option>Select Person</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {person && person.map((a)=>{
+                  return   <option value={a}>{a}</option>
+                })}
+              
+                
               </Form.Select>
             </div>
 
@@ -147,8 +167,9 @@ const Photo = () => {
         <Calendar
           localizer={localizer}
           events={allEvents}
+          onKeyPressEvent={handleDeleteEvent}
           startAccessor="start"
-          onSelectEvent={handleDeleteEvent}
+          onSelectEvent={handlePopup}
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />
