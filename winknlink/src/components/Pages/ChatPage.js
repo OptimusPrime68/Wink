@@ -1,16 +1,22 @@
 import React from "react";
-import { useEffect,useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import Header from "./Header";
 import Chat from "./Chat";
 import axios from "axios";
 import { toast } from "react-toastify";
 // import { ChatState } from "./ChatProvider";
-import {DateContext} from "./DateContext"
+import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
+import BottomDrawer from "./BottomDrawer";
+
+
 
 
 
 const ChatPage = () => {
+  const { selectedChat, setSelectedChat, setChats, chats } =
+    useContext(DateContext);
+
  
   const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
   const email=localStorage.getItem("email");
@@ -25,16 +31,16 @@ const ChatPage = () => {
 
   const fetchChats = async () => {
     try {
-     
-      // fetch all chats of current user
-      axios.post("http://localhost:4000/api/chat/all",{
-        email:email
-      }).then((res)=>{
-          console.log(res.data)
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${user.token}`,
+      //   },
+      // };
+      // fetch all
+      axios.get("http://localhost:4000/api/chat").then((res)=>{
+          console.log(res)
           setChats(res.data);
       });
-     
-  
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -48,12 +54,10 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    console.log("imside")
+    console.log("imside");
     fetchChats();
-  
-    
-  }, [])
-  
+  }, []);
+
   return (
     <div>
       <Header />
@@ -89,6 +93,7 @@ const ChatPage = () => {
           profilePic="/profile.jpg"
         /> */}
       </div>
+      <BottomDrawer />
     </div>
   );
 };

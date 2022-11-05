@@ -22,6 +22,7 @@ import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
 import {DateContext} from "./DateContext"
 import "../styles/Matches.css";
+import BottomDrawer from "./BottomDrawer";
 
 function Matches() {
   const [people, setPeople] = useState([]);
@@ -42,7 +43,7 @@ function Matches() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/all-match", { email})
+      .post("http://localhost:4000/api/all-match", { email })
       .then(function (response) {
 
         
@@ -143,6 +144,7 @@ function Matches() {
         ))}
       </div> */}
       {loading && <CircleLoader color="#f70177" />}
+      <BottomDrawer />
     </div>
   );
 }

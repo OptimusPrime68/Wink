@@ -16,26 +16,13 @@
   background-color: #fff;
 }
 
-#bottomDrawer {
-  display: none;
-}
-
 @media only screen and (max-width: 895px) {
-  #bottomDrawer {
-    display: flex;
-    bottom: 0;
-    position: fixed;
-    width: 100%;
-    border-top: 1px solid #f9f9f9;
-    background-color: white;
-  }
-
   #sideDrawer {
     display: none;
   }
 
   #dateDiv {
-    min-height: 90vh;
+    /* max-height: 90vh; */
     height: fit-content;
     width: 100%;
   }

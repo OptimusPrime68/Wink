@@ -7,6 +7,7 @@
   font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-radius: 20px;
   border: 1px solid black;
+  overflow: hidden;
 }
 
 .sttngs h2 {
@@ -29,6 +30,11 @@
 
 .sttngs .tabordion section {
   display: block;
+}
+
+.tabordion {
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .tabordion section label {
@@ -358,12 +364,6 @@ textarea {
   border-radius: 10px;
 }
 
-/* .tabordion {
-  overflow-y: scroll;
-  max-height: 660px;
-  overflow-x: hidden;
-} */
-
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -379,14 +379,6 @@ textarea {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-/* @media only screen and (max-width: 895px) {
-  .tabordion {
-    overflow-y: scroll;
-    max-height: 660px;
-    overflow-x: hidden;
-  }
-} */
 
 #photoDel {
   background: white;
