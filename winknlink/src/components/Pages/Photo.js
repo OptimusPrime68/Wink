@@ -81,6 +81,7 @@ const Photo = () => {
 
   const handlePopup = async (e) =>{
     alert(e.title);
+    
   }
 
   return (

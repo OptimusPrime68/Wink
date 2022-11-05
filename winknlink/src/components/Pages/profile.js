@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
-import CircleLoader from "react-spinners/CircleLoader";
+import Loader from "../Pages/Loader";
 import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
@@ -56,31 +56,7 @@ export default function Profile() {
 
   const imageListRef = ref(storage, email);
 
-  const upload = async (e) => {
-    e.preventDefault();
-    if (imageUpload) {
-      let r = (Math.random() + 1).toString(36).substring(7);
-      const imageRef = ref(storage, `${email}/${r}`);
-      uploadBytes(imageRef, imageUpload)
-        .then(() => {
-          toast.success("Image Uploaded");
-
-          setImageList([]);
-          listAll(imageListRef)
-            .then((response) => {
-              response.items.forEach((item) => {
-                getDownloadURL(item).then((url) => {
-                  setImageList((prev) => [...prev, url]);
-                });
-              });
-            })
-            .catch((error) => console.log(error));
-        })
-        .catch((err) => {
-          toast.error(err.message);
-        });
-    }
-  };
+ 
 
   const uploadProfile = async (e) => {
     e.preventDefault();
@@ -388,6 +364,7 @@ export default function Profile() {
     <div>
       <Header />
 
+     
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -420,6 +397,7 @@ export default function Profile() {
                         className="upload"
                         onChange={readURL}
                       />
+                      
                       <div className="icon">
                         <div className="camera4">
                           <span></span>
@@ -428,6 +406,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
+               
 
                 <div className="row">
                   <Button
@@ -440,7 +419,8 @@ export default function Profile() {
                 </div>
 
                 <div className="tr">
-                  {loading && <CircleLoader color="#f70177" />}
+                
+                  
                   <label className="label" for="input">
                     NAME
                   </label>
@@ -459,7 +439,7 @@ export default function Profile() {
                   >
                     Date Of Birth
                   </label>
-
+         
                   <input
                     value={dob}
                     className="input"

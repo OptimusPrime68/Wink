@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/RegisterComplete.css";
 import { useDispatch } from "react-redux";
+import Loader from "../Pages/Loader";
 
 const RegisterComplete = ({ history }) => {
   const navigate = useNavigate();

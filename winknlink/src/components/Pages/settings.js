@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import BottomDrawer from "./BottomDrawer";
+import Loader from "../Pages/Loader";
 
 function valuetext(value) {
   return value;

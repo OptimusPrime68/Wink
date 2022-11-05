@@ -28,6 +28,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
+import Loader from "../Pages/Loader";
 import io from 'socket.io-client'
 const ENDPOINT = "http://localhost:4000";
 var socket;
@@ -53,6 +54,7 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+  var swipe = [];
   socket = io(ENDPOINT);
 
   var email = "",
@@ -66,13 +68,17 @@ function Wink() {
 
   if (!user) navigate("/");
 
+
+
   if (user) {
     email = user.email;
     dist = user.distance;
+    swipe= user.user == "free"?["up","down"]:["down"];
   }
 
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     socket = io(ENDPOINT);
     socket.on('match-to',(data)=>{
       console.log(data);
@@ -82,7 +88,7 @@ function Wink() {
       })
     })
 
-    console.log("Hello");
+    
   
   })
 
@@ -93,6 +99,7 @@ function Wink() {
       },
       userDecisionTimeout: 5000,
     });
+
 
   useEffect(() => {
     setLoading(true);
@@ -147,7 +154,7 @@ function Wink() {
     console.log(toemail);
     if (direction == "left") {
       toast.success(name + " Removed");
-    } else {
+    } else if(direction == "right"){
 
     
      
@@ -166,11 +173,38 @@ function Wink() {
           console.log(error.message);
         });
     }
+    else if(direction == "up")
+    {
+      if(user.user == "free")
+      {
+        toast.warn("Purchase Subscription to Send Super Likes");
+        return;
+      }
+
+      axios
+      .post("http://localhost:4000/api/make-super-like", {
+        from: email,
+        to: toemail,
+      })
+      .then(function (response) {
+        toast.success("Super Like Sent");
+        
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+
+    }
   };
 
   const onCardLeftScreen = (myIdentifier) => {
     console.log(myIdentifier + " left the screen");
   };
+
+  const onCardUpScreen = (myIdentifier) =>{
+    console.log(myIdentifier);
+  }
 
   // const [show, setShow] = useState(false);
 
@@ -195,9 +229,10 @@ function Wink() {
           <TinderCard
             className="swipe"
             key={person.email}
-            preventSwipe={["up", "down"]}
+            preventSwipe={swipe}
             onSwipe={(dir) => swiped(dir, person.name, person.email)}
             onCardLeftScreen={onCardLeftScreen}
+            onCardUpScreen={onCardUpScreen}
           >
             <div
               style={{ backgroundImage: `url(${person.image})` }}
