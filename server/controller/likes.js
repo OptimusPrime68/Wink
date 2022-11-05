@@ -1,38 +1,23 @@
 const Date= require('../models/date');
 const SuperLike = require('../models/superLike')
 const Profile = require('../models/profile');
+const Match = require('../models/match')
 
 
-
-exports.makeDate= async (req,res)=>{
-
-    console.log(req.body);
-    const date = new Date(req.body.newEvent);
-    date.save(function(err,result){
-      console.log(result);  
-      res.status(200).json({result});
-    });
-  
-}
-
-exports.getDate= async (req,res)=>{
-
-    const data =await Date.find({$or:[{from:req.body.email},{to:req.body.email}]});
-    console.log(data);
-    if(data == null)
+exports.getLike = async (req,res)=>{
+   
+    const data =await Match.find({matchTo:req.body.email});
+    var result = [];
+    for(var i = 0;i<data.length;i++)
+    {
+       const d= await Profile.findOne({email:data[i].matchFrom});
+       result.push(d);
+    }
+    console.log("Result",result);
+    if(result == null)
     return res.status(400).json({m:"no user found"});
-    return res.status(200).json({m:data});
-  
+    return res.status(200).json({m:result});
 }
-
-exports.removeDate = async (req,res)=>{
-
-    var r = req.body
-    console.log('R',r);
-    const data = await Date.findOneAndRemove(r);
-    console.log("Data",data);
-}
-
 
 exports.makeSuperLike = async (req,res)=>{
     const superLike = new SuperLike(req.body);
@@ -55,8 +40,6 @@ exports.getSuperLike = async (req,res)=> {
        const d= await Profile.findOne({email:data[i].from});
        result.push(d);
     }
-
-    console.log("Result",result);
     if(result == null)
     return res.status(400).json({m:"no user found"});
     return res.status(200).json({m:result});
