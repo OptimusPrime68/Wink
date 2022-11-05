@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const locales = {
   "en-US": require("date-fns/locale/en-US"),
@@ -26,51 +27,46 @@ const localizer = dateFnsLocalizer({
 });
 
 const events = [
-  {
-    title: "Big Meeting",
-    start: new Date(2021, 6, 0),
-    end: new Date(2021, 6, 0),
-  },
-  {
-    title: "Vacation",
-    start: new Date(2021, 6, 7),
-    end: new Date(2021, 6, 10),
-  },
-  {
-    title: "Conference",
-    start: new Date(2021, 6, 20),
-    end: new Date(2021, 6, 23),
-  },
 ];
 
 const Photo = () => {
 
+
+  const {user} = useSelector((state) => ({ ...state }))
+  var email = user.email;
+
+
+  useEffect(()=>{
+
+    axios.post("http://localhost:4000/api/get-date",{email}).then((r)=>{
+
+    setAllEvents(r.data.m);
+
+    }).catch((c)=>{
+
+    });
+
+
+  },[])
  
 
   
-  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
+  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" ,from:email,to:""});
   const [allEvents, setAllEvents] = useState(events);
 
-  const handleAddEvent = (e) => {
-    for (let i = 0; i < allEvents.length; i++) {
-      const d1 = new Date(allEvents[i].start);
-      const d2 = new Date(newEvent.start);
-      const d3 = new Date(allEvents[i].end);
-      const d4 = new Date(newEvent.end);
-      console.log(d1 + d2 + d3 + d4);
-      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
-        console.log("Clash");
-        break;
-      }
-    }
-
+  const handleAddEvent = async (e) => {
+   
+    console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
+    axios.post("http://localhost:4000/api/make-date",{newEvent});
   };
 
 
-  const handleEvent = (e)=>{
+  const handleDeleteEvent = async (e)=>{
 
     console.log(e);
+
+    
 
     setAllEvents(
       allEvents.filter(a => a !== e)
@@ -117,6 +113,8 @@ const Photo = () => {
                 selected={newEvent.start}
                 onChange={(start) => setNewEvent({ ...newEvent, start })}
               />
+             
+              <input />
             </div>
             <div
               className="col mb-3"
@@ -140,11 +138,13 @@ const Photo = () => {
             </Button>
           </div>
         </div>
+      
+<input type="text" onChange={(e)=>setNewEvent({...newEvent,to:e.target.value})} />
         <Calendar
           localizer={localizer}
           events={allEvents}
           startAccessor="start"
-          onSelectEvent={handleEvent}
+          onSelectEvent={handleDeleteEvent}
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />
