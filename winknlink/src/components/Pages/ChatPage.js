@@ -14,9 +14,6 @@ import BottomDrawer from "./BottomDrawer";
 
 
 const ChatPage = () => {
-  const { selectedChat, setSelectedChat, setChats, chats } =
-    useContext(DateContext);
-
  
   const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
   const email=localStorage.getItem("email");
