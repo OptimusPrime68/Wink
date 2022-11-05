@@ -67,6 +67,8 @@ const Photo = () => {
 
     console.log(e);
 
+
+    axios.post("http://localhost:4000/api/remove-date",{e});
     
 
     setAllEvents(

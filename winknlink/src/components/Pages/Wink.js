@@ -43,6 +43,17 @@ const style = {
   overflowY: "scroll",
 };
 
+function removeDuplicates(arr) {
+  var unique = [];
+  arr.forEach(element => {
+      if (!unique.includes(element)) {
+          unique.push(element);
+      }
+  });
+  return unique;
+}
+
+
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -77,7 +88,6 @@ function Wink() {
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
         response.data.forEach(function (x) {
-          console.log(x);
 
           var imageListRef = ref(storage, `${x.email}`);
 
@@ -94,17 +104,27 @@ function Wink() {
                     image: url,
                   };
 
-                  if (email != x.email) setPeople((prev) => [...prev, local]);
+       
+                  if (email != x.email) 
+                  setPeople((prev) => [...prev, local]);
+
                 }
               });
             });
           });
+          
+          const uniqueNames = Array.from(new Set(people));
+
+
         });
       })
       .catch((error) => {
         console.log(error);
         toast.warn(error.response.data.message);
       });
+
+     
+ 
 
     setLoading(false);
   }, []);
@@ -144,6 +164,8 @@ function Wink() {
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
+
+  console.log(people);
 
   return (
     <div className="DateMainDiv">

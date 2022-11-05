@@ -54,11 +54,13 @@ function Matches() {
                     email: x,
                   };
                   console.log(local);
+              
                   setPeople((prev) => [...prev, local]);
                 }
               });
             });
           });
+          
         });
       });
 

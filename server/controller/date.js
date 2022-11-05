@@ -31,3 +31,12 @@ exports.getDate= async (req,res)=>{
 
   
 }
+
+exports.removeDate = async (req,res)=>{
+
+    var r = req.body
+    console.log('R',r);
+    const data = await Date.findOneAndRemove(r);
+
+    console.log("Data",data);
+}
