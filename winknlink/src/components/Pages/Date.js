@@ -36,6 +36,8 @@ import BookIcon from "@mui/icons-material/Book";
 import Photo from "./Photo";
 import Newsfeed from "./Newsfeed";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import Like from "./Like";
 
 export default function Date(props) {
   const drawerWidth = 240;
@@ -50,6 +52,7 @@ export default function Date(props) {
   const switchToChatTab = () => setActiveTab("ChatTab");
   const switchToDatePlanner = () => setActiveTab("DatePlanner");
   const switchToNewsfeed = () => setActiveTab("Newsfeed");
+  const switchToLikes = () => setActiveTab("Likes");
 
   const [selectedChat, setSelectedChat] = useState();
   const [vdo, setVdo] = useState(false);
@@ -65,6 +68,7 @@ export default function Date(props) {
     switchToChatTab,
     switchToDatePlanner,
     switchToNewsfeed,
+    switchToLikes,
 
     selectedChat,
     setSelectedChat,
@@ -211,6 +215,15 @@ export default function Date(props) {
                 </ListItemButton>
               </ListItem>
               <ListItem key="Newdfeed" disablePadding>
+                <ListItemButton onClick={switchToLikes}>
+                  <ListItemIcon>
+                    <ThumbUpIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Likes" />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem key="Newdfeed" disablePadding>
                 <ListItemButton onClick={switchToNewsfeed}>
                   <ListItemIcon>
                     <NewspaperIcon />
@@ -253,6 +266,7 @@ export default function Date(props) {
             {activeTab === "ChatTab" && <ChatScreen />}
             {activeTab === "DatePlanner" && <Photo />}
             {activeTab === "Newsfeed" && <Newsfeed />}
+            {activeTab === "Likes" && <Like />}
           </div>
         </DateContext.Provider>
       </div>
