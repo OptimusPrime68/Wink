@@ -81,28 +81,9 @@ function Matches() {
               });
             });
           });
-<<<<<<< HEAD
-
-           // create a new chat 
-          
-         axios.post("http://localhost:4000/api/chat",{
-          fromemail: email,
-          toemail: x,
-        }).then((respose)=>{
-            console.log(response.data);
-            if (!chats.find((c) => c._id === respose.data._id)) 
-                setChats([respose.data, ...chats]);
-            setSelectedChat(response.data)
-            // toast.success("Chat Created")
-        }).catch((err)=> console.log(err));
-        
-=======
->>>>>>> 4fb75227d011654c47835ccedbbe7a094e5be19d
 
           // create a new chat
 
-<<<<<<< HEAD
-=======
           axios
             .post("http://localhost:4000/api/chat", {
               fromemail: email,
@@ -116,7 +97,6 @@ function Matches() {
               // toast.success("Chat Created")
             })
             .catch((err) => console.log(err));
->>>>>>> 4fb75227d011654c47835ccedbbe7a094e5be19d
         });
       });
 
