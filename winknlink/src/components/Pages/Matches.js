@@ -20,7 +20,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
-import {DateContext} from "./DateContext"
+import { DateContext } from "./DateContext";
 import "../styles/Matches.css";
 import BottomDrawer from "./BottomDrawer";
 import io from 'socket.io-client'
@@ -30,8 +30,8 @@ var socket;
 function Matches() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
-
+  const { selectedChat, setSelectedChat, setChats, chats } =
+    useContext(DateContext);
 
   var email = "";
 
@@ -60,16 +60,11 @@ function Matches() {
     axios
       .post("http://localhost:4000/api/all-match", { email })
       .then(function (response) {
-
-        
-
         console.log(response.data);
 
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
-          console.log(x)
-          
-
+          console.log(x);
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -80,12 +75,13 @@ function Matches() {
                     email: x,
                   };
                   console.log(local);
-              
+
                   setPeople((prev) => [...prev, local]);
                 }
               });
             });
           });
+<<<<<<< HEAD
 
            // create a new chat 
           
@@ -100,8 +96,27 @@ function Matches() {
             // toast.success("Chat Created")
         }).catch((err)=> console.log(err));
         
+=======
+>>>>>>> 4fb75227d011654c47835ccedbbe7a094e5be19d
 
+          // create a new chat
 
+<<<<<<< HEAD
+=======
+          axios
+            .post("http://localhost:4000/api/chat", {
+              fromemail: email,
+              toemail: x,
+            })
+            .then((respose) => {
+              console.log(response.data);
+              if (!chats.find((c) => c._id === respose.data._id))
+                setChats([respose.data, ...chats]);
+              setSelectedChat(response.data);
+              // toast.success("Chat Created")
+            })
+            .catch((err) => console.log(err));
+>>>>>>> 4fb75227d011654c47835ccedbbe7a094e5be19d
         });
       });
 

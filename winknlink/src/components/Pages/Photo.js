@@ -27,58 +27,43 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-const events = [
-];
+const events = [];
 
 const Photo = () => {
-
-
-  const {user} = useSelector((state) => ({ ...state }))
+  const { user } = useSelector((state) => ({ ...state }));
   var email = user.email;
 
+  useEffect(() => {
+    axios
+      .post("http://localhost:4000/api/get-date", { email })
+      .then((r) => {
+        setAllEvents(r.data.m);
+      })
+      .catch((c) => {});
+  }, []);
 
-  useEffect(()=>{
-
-    axios.post("http://localhost:4000/api/get-date",{email}).then((r)=>{
-
-    setAllEvents(r.data.m);
-
-    }).catch((c)=>{
-
-    });
-
-
-  },[])
- 
-
-  
-  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" ,from:email,to:""});
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    start: "",
+    end: "",
+    from: email,
+    to: "",
+  });
   const [allEvents, setAllEvents] = useState(events);
 
   const handleAddEvent = async (e) => {
-   
     console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
-    axios.post("http://localhost:4000/api/make-date",{newEvent});
+    axios.post("http://localhost:4000/api/make-date", { newEvent });
   };
 
-
-  const handleDeleteEvent = async (e)=>{
-
+  const handleDeleteEvent = async (e) => {
     console.log(e);
 
+    axios.post("http://localhost:4000/api/remove-date", { e });
 
-    axios.post("http://localhost:4000/api/remove-date",{e});
-    
-
-    setAllEvents(
-      allEvents.filter(a => a !== e)
-    );
-
-  }
-
-
-
+    setAllEvents(allEvents.filter((a) => a !== e));
+  };
 
   return (
     <>
@@ -116,7 +101,7 @@ const Photo = () => {
                 selected={newEvent.start}
                 onChange={(start) => setNewEvent({ ...newEvent, start })}
               />
-             
+
               <input />
             </div>
             <div
@@ -131,6 +116,19 @@ const Photo = () => {
                 onChange={(end) => setNewEvent({ ...newEvent, end })}
               />
             </div>
+            <div
+              className="col mb-3"
+              style={{
+                alignContent: "center",
+              }}
+            >
+              <Form.Select aria-label="Default select example">
+                <option>Select Person</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+            </div>
 
             <Button
               variant="outline-success"
@@ -141,8 +139,11 @@ const Photo = () => {
             </Button>
           </div>
         </div>
-      
-<input type="text" onChange={(e)=>setNewEvent({...newEvent,to:e.target.value})} />
+
+        <input
+          type="text"
+          onChange={(e) => setNewEvent({ ...newEvent, to: e.target.value })}
+        />
         <Calendar
           localizer={localizer}
           events={allEvents}
