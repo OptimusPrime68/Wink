@@ -8,6 +8,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import BottomDrawer from "./BottomDrawer";
 
+import io from 'socket.io-client'
+
+const ENDPOINT = "http://localhost:4000";
+var socket,selectedChatCompare;
 function ChatScreen() {
   const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
@@ -22,6 +26,25 @@ function ChatScreen() {
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
 
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup",id);
+    socket.on('connection',()=> setSocketConnected(true));
+    
+  }, [])
+
+  useEffect(() => {
+    socket.on("message recieved",(newMessageR)=>{
+        if(!selectedChatCompare || selectedChatCompare._id!==newMessageR.chat._id)
+          console.log("notify");
+        
+        else{
+          console.log(newMessageR)
+          setMessages([...messages,newMessageR]);
+        }
+    })
+  })
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
     console.log("open messages2");
@@ -32,6 +55,8 @@ function ChatScreen() {
       console.log(data);
       setMessages(data);
       setLoading(false);
+
+      socket.emit('join chat',selectedChat._id)
     } catch (error) {
       toast.error(error.message);
     }
@@ -39,7 +64,13 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
+
+    selectedChatCompare=selectedChat;
   }, [selectedChat]);
+
+ 
+  
+
 
   const sendMessage = async (e) => {
     console.log(newMessage);
@@ -57,6 +88,7 @@ function ChatScreen() {
           }
         );
         console.log(data);
+        socket.emit("new message",data);
 
         setMessages([...messages, data]);
       } catch (err) {
@@ -69,6 +101,9 @@ function ChatScreen() {
     setNewMessage(e.target.value);
     //typing indicator logic
   };
+
+ 
+  
 
   return (
     <div>

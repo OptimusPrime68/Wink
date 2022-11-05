@@ -29,6 +29,43 @@ mongoose
 
 
 const port = process.env.PORT || 8000;
-app.listen(port,()=> console.log(`server is running ${port}`));
+const server = app.listen(port,()=> console.log(`server is running ${port}`));
+
+const io = require('socket.io')(server,{
+  pingTimeout:60000,
+  cors:{
+    origin:"http://localhost:3000",
+  },
+});
+
+io.on("connection",(socket)=>{
+  console.log('connected to socket.io');
+  
+  socket.on('setup', (id)=>{
+    console.log("in setup")
+    socket.join(id);
+    socket.emit('connected');
+  })
+  socket.on('join chat', (room)=>{
+    console.log("in room",room)
+    socket.join(room);
+    socket.emit('user joined room');
+  })
+
+  socket.on("new message",(newMessage)=>{
+    var chat = newMessage.chat;
+    console.log(chat)
+
+    if(!chat.users) return console.log('chat.users not defined')
+
+    chat.users.forEach(user => {
+      console.log(user)
+      if(user == newMessage.sender._id) return;
+
+      socket.in(user).emit("message recieved",newMessage);
+    });
+
+  })
+})
 
 
