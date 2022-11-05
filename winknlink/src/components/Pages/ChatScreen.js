@@ -8,6 +8,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import BottomDrawer from "./BottomDrawer";
 
+import io from 'socket.io-client'
+
+const ENDPOINT = "http://localhost:4000";
+var socket,selectedChatCompare;
 function ChatScreen() {
   const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
@@ -22,6 +26,25 @@ function ChatScreen() {
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
 
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup",id);
+    socket.on('connection',()=> setSocketConnected(true));
+    
+  }, [])
+
+  useEffect(() => {
+    socket.on("message recieved",(newMessageR)=>{
+        if(!selectedChatCompare || selectedChatCompare._id!==newMessageR.chat._id)
+          console.log("notify");
+        
+        else{
+          console.log(newMessageR)
+          setMessages([...messages,newMessageR]);
+        }
+    })
+  })
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
     console.log("open messages2");
@@ -32,6 +55,8 @@ function ChatScreen() {
       console.log(data);
       setMessages(data);
       setLoading(false);
+
+      socket.emit('join chat',selectedChat._id)
     } catch (error) {
       toast.error(error.message);
     }
@@ -39,7 +64,13 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
+
+    selectedChatCompare=selectedChat;
   }, [selectedChat]);
+
+ 
+  
+
 
   const sendMessage = async (e) => {
     console.log(newMessage);
@@ -57,6 +88,7 @@ function ChatScreen() {
           }
         );
         console.log(data);
+        socket.emit("new message",data);
 
         setMessages([...messages, data]);
       } catch (err) {
@@ -70,22 +102,26 @@ function ChatScreen() {
     //typing indicator logic
   };
 
+ 
+  
+
   return (
     <div>
       <Header backButton="/" />
       <HeaderDesktop />
       <div className="chatScreen">
         <p className="chatScreenTimeStamp">
-          You matched with Ellen on 01/08/22
+          You matched with Ellen on
+          {selectedChat.createdAt}
         </p>
         {messages.map((message) =>
           message.sender.email != email ? (
             <div className="chatScreenMessage">
-              {/* <Avatar
+              <Avatar
                 className="chatScreenImage"
                 alt={message.name}
                 src={message.image}
-              /> */}
+              />
               <p className="chatScreenText">{message.content}</p>
             </div>
           ) : (
@@ -95,9 +131,9 @@ function ChatScreen() {
           )
         )}
 
-        <form
-          className="ChatScreenInput"
-          // onKeyDown={sendMessage}
+        <form className="ChatScreenInput"
+        onSubmit={(e)=> e.preventDefault()}
+        // onKeyDown={sendMessage}
         >
           <input
             className="ChatScreenInputField"

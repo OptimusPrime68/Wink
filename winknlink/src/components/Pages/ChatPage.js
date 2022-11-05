@@ -9,21 +9,32 @@ import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
 import BottomDrawer from "./BottomDrawer";
 
+
+
+
+
 const ChatPage = () => {
-  const { selectedChat, setSelectedChat, setChats, chats } =
-    useContext(DateContext);
+ 
+  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
+  const email=localStorage.getItem("email");
+
+  const senderHandler = (users)=>{
+    return users[0].email===email?users[1].email:users[0].email
+  }
+
+  const latestmsgHandler = (msg)=>{
+    return msg.latestMessage?msg.latestMessage.content:"Say hi!"
+  }
 
   const fetchChats = async () => {
     try {
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${user.token}`,
-      //   },
-      // };
-      // fetch all
-      axios.get("http://localhost:4000/api/chat").then((res) => {
-        console.log(res);
-        setChats(res.data);
+     
+      // fetch all chats
+      axios.post("http://localhost:4000/api/chat/all",{
+        email:email
+      }).then((res)=>{
+          console.log(res)
+          setChats(res.data);
       });
     } catch (error) {
       toast({
@@ -46,20 +57,18 @@ const ChatPage = () => {
     <div>
       <Header />
       <div className="chats">
-        <h2>chatIDs</h2>
         {/* {chats.map(val=> <p>{val._id+"----"+val.chatName}</p>)} */}
-        {chats &&
-          chats.map((chat) => (
-            <div onClick={() => setSelectedChat(chat)}>
-              <Chat
-                name="Manish"
-                message="Hey! how are you :)"
-                timestamp="35 minutes ago"
-                profilePic="/profile.jpg"
-              />
-            </div>
-          ))}
-
+        {chats.map((chat) => (
+          <div onClick={() => setSelectedChat(chat)}>
+             <Chat
+              name={senderHandler(chat.users)}
+              message={latestmsgHandler(chat)}
+              timestamp="35 minutes ago"
+              profilePic="/profile.jpg"
+            />
+          </div>
+        ))}
+       
         {/* <Chat
           name="Manish"
           message="Hey! how are you :)"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import axios from "axios";
@@ -20,12 +20,15 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
+import {DateContext} from "./DateContext"
 import "../styles/Matches.css";
 import BottomDrawer from "./BottomDrawer";
 
 function Matches() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { selectedChat,setSelectedChat,setChats,chats } = useContext(DateContext);
+
 
   var email = "";
 
@@ -42,8 +45,16 @@ function Matches() {
     axios
       .post("http://localhost:4000/api/all-match", { email })
       .then(function (response) {
+
+        
+
+        console.log(response.data);
+
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
+          console.log(x)
+          
+
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -60,7 +71,26 @@ function Matches() {
               });
             });
           });
+<<<<<<< HEAD
           
+=======
+
+           // create a new chat 
+          
+         axios.post("http://localhost:4000/api/chat",{
+          fromemail: email,
+          toemail: x,
+        }).then((respose)=>{
+            console.log(response.data);
+            if (!chats.find((c) => c._id === respose.data._id)) 
+                setChats([respose.data, ...chats]);
+            setSelectedChat(response.data)
+            // toast.success("Chat Created")
+        }).catch((err)=> console.log(err));
+        
+
+
+>>>>>>> faeccff947815f4ca7722e4979db258b04732b94
         });
       });
 

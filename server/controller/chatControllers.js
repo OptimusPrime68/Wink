@@ -16,11 +16,14 @@ const Profile = require("../models/profile")
 const accessChat = asyncHandler(async (req, res) => {
  // create chat with the userID provided
   const {fromemail,toemail} = req.body;
-
-  var curruser= await User.findOne({fromemail});
-  var userid  = await User.findOne({toemail});
+  // console.log(fromemail,toemail)
+  var curruser= await User.findOne({email:fromemail});
+  var userid  = await User.findOne({email:toemail});
   curruser=curruser._id.toString();
   userid=userid._id.toString();
+  console.log("accessing chats-->")
+  console.log(fromemail,curruser);
+  console.log(toemail,userid);
 
   // console.log(req.headers.userid,req.headers.curruser)
   if (!userid) {
@@ -43,6 +46,7 @@ const accessChat = asyncHandler(async (req, res) => {
   });
   // console.log(isChat)
   if (isChat.length > 0) {
+    console.log("chat exits")
     res.send(isChat[0]);
   } else {
     var ChatData = {
@@ -69,10 +73,14 @@ const accessChat = asyncHandler(async (req, res) => {
 
 const fetchChats = asyncHandler(async (req, res) => {
     console.log("in fetchChats")
+    const {email} = req.body;
+    console.log(email)
+    var userId= await User.findOne({email});
+    userId=userId._id.toString();
+    console.log(userId)
   try {
     // console.log("in fetch Chats---->")
-    // Chat.find({ users: { $elemMatch: { $eq: req.user._id } } }) //check if user is signed in or not
-    Chat.find({})
+    Chat.find({ users: { $elemMatch: { $eq: userId } } }) //check if user is signed in or not
       .populate("users", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
