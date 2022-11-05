@@ -27,6 +27,11 @@ import MatchProfile from "./MatchProfile";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import BottomDrawer from "./BottomDrawer";
+import { useDispatch } from "react-redux";
+import io from 'socket.io-client'
+const ENDPOINT = "http://localhost:4000";
+var socket;
+
 
 const style = {
   position: "relative",
@@ -43,20 +48,12 @@ const style = {
   overflowY: "scroll",
 };
 
-function removeDuplicates(arr) {
-  var unique = [];
-  arr.forEach(element => {
-      if (!unique.includes(element)) {
-          unique.push(element);
-      }
-  });
-  return unique;
-}
 
 
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+  socket = io(ENDPOINT);
 
   var email = "",
     dist = 100000000;
@@ -65,6 +62,7 @@ function Wink() {
   const navigate = useNavigate();
 
   let { user } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
 
   if (!user) navigate("/");
 
@@ -72,6 +70,21 @@ function Wink() {
     email = user.email;
     dist = user.distance;
   }
+
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.on('match-to',(data)=>{
+      console.log(data);
+      dispatch({
+        type:"NEW_MATCH",
+        payload:data,
+      })
+    })
+
+    console.log("Hello");
+  
+  })
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -104,7 +117,6 @@ function Wink() {
                     image: url,
                   };
 
-       
                   if (email != x.email) 
                   setPeople((prev) => [...prev, local]);
 
@@ -129,11 +141,18 @@ function Wink() {
     setLoading(false);
   }, []);
 
+ 
+
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
     if (direction == "left") {
       toast.success(name + " Removed");
     } else {
+
+    
+     
+    
+
       axios
         .post("http://localhost:4000/api/make-match", {
           fromemail: email,
@@ -141,6 +160,7 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
+          socket.emit("match",{fromemail:email,toemail:toemail});
         })
         .catch(function (error) {
           console.log(error.message);

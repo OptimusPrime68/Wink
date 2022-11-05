@@ -66,6 +66,13 @@ io.on("connection",(socket)=>{
     });
 
   })
+
+
+  socket.on('match',(data)=>{
+    console.log("DATA",data);
+    socket.emit('match-to',data);
+  })
+ 
 })
 
 

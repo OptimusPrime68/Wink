@@ -23,6 +23,9 @@ import { CardMedia } from "@mui/material";
 import {DateContext} from "./DateContext"
 import "../styles/Matches.css";
 import BottomDrawer from "./BottomDrawer";
+import io from 'socket.io-client'
+const ENDPOINT = "http://localhost:4000";
+var socket;
 
 function Matches() {
   const [people, setPeople] = useState([]);
@@ -40,7 +43,19 @@ function Matches() {
 
   if (user) email = user.email;
 
+
   useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("match","hello");
+    
+  }, [])
+
+  useEffect(() => {
+
+
+
+
+
     setLoading(true);
     axios
       .post("http://localhost:4000/api/all-match", { email })
@@ -71,9 +86,6 @@ function Matches() {
               });
             });
           });
-<<<<<<< HEAD
-          
-=======
 
            // create a new chat 
           
@@ -90,7 +102,6 @@ function Matches() {
         
 
 
->>>>>>> faeccff947815f4ca7722e4979db258b04732b94
         });
       });
 
