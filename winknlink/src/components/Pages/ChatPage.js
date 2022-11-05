@@ -28,13 +28,11 @@ const ChatPage = () => {
 
   const fetchChats = async () => {
     try {
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${user.token}`,
-      //   },
-      // };
-      // fetch all
-      axios.get("http://localhost:4000/api/chat").then((res)=>{
+     
+      // fetch all chats
+      axios.post("http://localhost:4000/api/chat/all",{
+        email:email
+      }).then((res)=>{
           console.log(res)
           setChats(res.data);
       });
