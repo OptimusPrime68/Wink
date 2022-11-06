@@ -3,17 +3,18 @@ import { Button } from "react-bootstrap";
 import Header from "./Header";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Dropzone from "./Dropzone";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BottomDrawer from "./BottomDrawer";
+import "../styles/Newsfeed.css";
+import DropzonePost from "./DropzonePost";
 
 const style = {
   position: "relative",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  maxWidth: 800,
+  maxWidth: 500,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -32,16 +33,7 @@ function Newsfeed() {
     <div style={{ textAlign: "center" }}>
       <Header />
       <h1>News Feed</h1>
-      <div
-        style={{
-          border: "1px solid black",
-          borderRadius: "10px",
-          padding: "10px",
-          maxWidth: "500px",
-          margin: "auto",
-          marginTop: "50px",
-        }}
-      >
+      <div className="newsDiv">
         <h6>Post Something...</h6>
         <div
           className="row"
@@ -56,6 +48,15 @@ function Newsfeed() {
           </Button>
         </div>
       </div>
+      <div className="PostDiv">
+        <div className="col CaptionDiv">
+          <h3>Caption</h3>
+        </div>
+        <div className="row PostImgDiv">
+          <img className="PostImg" src="/person.svg" />
+        </div>
+        <h4>Time</h4>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -64,13 +65,16 @@ function Newsfeed() {
         style={{ padding: "10px" }}
       >
         <Box sx={style}>
-          <IconButton>
-            <CloseIcon />
-          </IconButton>
-          <Dropzone />
+          <div className="row" style={{ width: "100%" }}>
+            <div className="col" style={{ width: "100%" }}>
+              <IconButton onClick={handleClose} style={{ float: "right" }}>
+                <CloseIcon fontSize="large" />
+              </IconButton>
+            </div>
+          </div>
+          <DropzonePost />
         </Box>
       </Modal>
-      <BottomDrawer />
     </div>
   );
 }

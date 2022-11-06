@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
@@ -125,8 +125,6 @@ function Wink() {
         console.log(error);
         toast.warn(error.response.data.message);
       });
-
-    setLoading(false);
   }, []);
 
   const swiped = (direction, name, toemail) => {
@@ -189,6 +187,13 @@ function Wink() {
 
   console.log(people);
 
+  const counter = useRef(0);
+
+  const handleLoad = () => {
+    counter.current += 1;
+    if (counter.current >= people.length) setLoading(false);
+  };
+
   return (
     <div className="DateMainDiv">
       <Header />
@@ -206,6 +211,12 @@ function Wink() {
               style={{ backgroundImage: `url(${person.image})` }}
               className="Winkcard"
             >
+              <img
+                onLoad={handleLoad}
+                src={person.image}
+                alt="Image"
+                className="TinderImage"
+              />
               <h3>
                 {person.name}{" "}
                 <IconButton
@@ -220,7 +231,6 @@ function Wink() {
         ))}
 
         <SwipeButtons />
-        {loading && <CircleLoader color="#f70177" />}
       </div>
 
       <Modal
@@ -237,7 +247,7 @@ function Wink() {
           </div>
         </Box>
       </Modal>
-      <BottomDrawer />
+      {loading && <Loader />}
     </div>
   );
 }

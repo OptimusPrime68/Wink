@@ -6,7 +6,6 @@ import HeaderDesktop from "./HeaderDesktop";
 import { DateContext } from "./DateContext";
 import { toast } from "react-toastify";
 import axios from "axios";
-import BottomDrawer from "./BottomDrawer";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 
@@ -122,61 +121,70 @@ function ChatScreen() {
 
   return (
     <div>
-      <Header backButton="/" />
-      <HeaderDesktop  />
+      <Header videoButton="/" />
+      <HeaderDesktop />
       <div className="chatScreen">
-        <p className="chatScreenTimeStamp">
-          You matched with Ellen on
-          {getMatchedHandler(selectedChat)}
-        </p>
-        {messages.map((message) =>
-          message.sender.email != email ? (
-            <div className="chatScreenMessage">
-              <Avatar
-                className="chatScreenImage"
-                alt={message.name}
-                src={message.image}
-              />
-              <p className="chatScreenText">{message.content}</p>
-              <p>{getTimeHandler(message)}</p>
-            </div>
-          ) : (
-            <div className="chatScreenMessage">
-              <p className="chatScreenTextUser">{message.content}</p>
-              <p>{getTimeHandler(message)}</p>
-            </div>
-          )
-        )}
+        <div className="ChatMessageDiv">
+          <p className="chatScreenTimeStamp">
+            You matched with Ellen on
+            {getMatchedHandler(selectedChat)}
+          </p>
+          {messages.map((message) =>
+            message.sender.email != email ? (
+              <div className="chatScreenMessage">
+                <Avatar
+                  className="chatScreenImage"
+                  alt={message.name}
+                  src={message.image}
+                />
+                <p className="chatScreenText">{message.content}</p>
+                <p>{getTimeHandler(message)}</p>
+              </div>
+            ) : (
+              <div className="chatScreenMessage">
+                <p className="chatScreenTextUser">{message.content}</p>
+                <p>{getTimeHandler(message)}</p>
+              </div>
+            )
+          )}
+        </div>
 
-        <form className="ChatScreenInput" onSubmit={(e) => e.preventDefault()}>
-          <div className="emoji">
-            <h2
-              onClick={() => setEmojiBtn(!emojiBtn)}
-              style={{ cursor: "pointer" }}
-            >
-              &#128512;
-            </h2>
-            {emojiBtn ? (
-              <EmojiPicker
-                style={{ position: "fixed" }}
-                onEmojiClick={emojiClickHandler}
-                searchDisabled={true}
-              />
-            ) : null}
-            <input
-              className="ChatScreenInputField"
-              placeholder="Type a message..."
-              type="text"
-              onChange={typingHandler}
-              value={newMessage}
-            />
-            <Button className="ChatScreenButton" onClick={sendMessage}>
-              SEND
-            </Button>
+        <div className="row MessageDiv">
+          <div className="col-auto">
+            <div className="emoji">
+              <h2
+                onClick={() => setEmojiBtn(!emojiBtn)}
+                style={{ cursor: "pointer" }}
+              >
+                &#128512;
+              </h2>
+              {emojiBtn ? (
+                <EmojiPicker
+                  onEmojiClick={emojiClickHandler}
+                  searchDisabled={true}
+                />
+              ) : null}
+            </div>
           </div>
-        </form>
+          <div className="col">
+            <form
+              className="ChatScreenInput"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                className="ChatScreenInputField"
+                placeholder="Type a message..."
+                type="text"
+                onChange={typingHandler}
+                value={newMessage}
+              />
+              <Button className="ChatScreenButton" onClick={sendMessage}>
+                SEND
+              </Button>
+            </form>
+          </div>
+        </div>
       </div>
-      <BottomDrawer />
     </div>
   );
 }

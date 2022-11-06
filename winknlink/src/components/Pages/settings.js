@@ -419,7 +419,6 @@ export default function Settings() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <BottomDrawer />
     </div>
   );
 }

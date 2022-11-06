@@ -43,6 +43,7 @@ export default function Date(props) {
   const drawerWidth = 240;
 
   const [activeTab, setActiveTab] = useState("Profile");
+  const [page, setPage] = useState("profile");
 
   const switchToWink = () => setActiveTab("Wink");
   const switchToProfile = () => setActiveTab("Profile");
@@ -69,7 +70,7 @@ export default function Date(props) {
     switchToDatePlanner,
     switchToNewsfeed,
     switchToLikes,
-
+    activeTab,
     selectedChat,
     setSelectedChat,
     chats,
@@ -270,9 +271,6 @@ export default function Date(props) {
           </div>
         </DateContext.Provider>
       </div>
-      {/* <div id="bottomDrawer">
-        <BottomDrawer />
-      </div> */}
     </>
   );
 }
