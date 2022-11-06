@@ -28,7 +28,7 @@
   display: flex;
   padding: 5px;
   position: relative;
-  border-top: 1px solid lightgray;
+  /* border-top: 1px solid lightgray; */
   bottom: 0;
 }
 
@@ -49,8 +49,12 @@
 }
 
 .emoji {
-  display: flex;
-  width: 100%;
+  margin-top: 12px;
+  margin-left: 5px;
+}
+
+.MessageDiv {
+  border-top: 1px solid lightgray;
 }
 
 .ChatMessageDiv {
@@ -63,5 +67,23 @@
 @media only screen and (max-width: 895px) {
   .ChatMessageDiv {
     max-height: 84.5vh;
+  }
+}
+
+@media only screen and (max-height: 875px) {
+  .ChatMessageDiv {
+    max-height: 83.5vh;
+  }
+}
+
+@media only screen and (max-height: 668px) {
+  .ChatMessageDiv {
+    max-height: 78.5vh;
+  }
+}
+
+@media only screen and (max-height: 741px) {
+  .ChatMessageDiv {
+    max-height: 81vh;
   }
 }

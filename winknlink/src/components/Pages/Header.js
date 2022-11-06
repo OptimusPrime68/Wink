@@ -13,97 +13,108 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import Dropdown from "react-bootstrap/Dropdown";
 
 function Header({ videoButton }) {
-  const { switchToWink } = useContext(DateContext);
-  const { switchToProfile } = useContext(DateContext);
-  const { switchToChat } = useContext(DateContext);
+  const {
+    switchToWink,
+    switchToProfile,
+    switchToChat,
+    activeTab,
+    switchToMacthes,
+    switchToSetting,
+    switchToDatePlanner,
+    switchToNewsfeed,
+    switchToLikes,
+  } = useContext(DateContext);
 
   const navigate = useNavigate();
 
-  const [page, setPage] = useState("profile");
-
-  // const handleProfile = () =>{
-  //   setPage('profile')
-  //   switchToProfile;
-  // }
-
   return (
     <div className="HeaderWink">
-      {/* <ul className="avatarMenu">
-        <li>
-          <IconButton onClick={switchToProfile}>
-            <PersonIcon fontSize="large" />
-          </IconButton>
-          <ul class="drop-menu menu-2">
-            <li>
-              <IconButton onClick={switchToProfile}>
-                <PersonIcon fontSize="large" />
-              </IconButton>
-            </li>
-            <li>
-              <IconButton onClick={switchToChat}>
-                <ChatIcon fontSize="large" />
-              </IconButton>
-            </li>
-            <li>
-              <IconButton className="BottomButtons">
-                <GroupIcon className="matchIconColor" fontSize="large" />
-              </IconButton>
-            </li>
-            <li>
-              <IconButton className="BottomButtons">
-                <NewspaperIcon className="newsFeedIconColor" fontSize="large" />
-              </IconButton>
-            </li>
-            <li>
-              <IconButton className="BottomButtons">
-                <BookIcon className="DatePlannerIconColor" fontSize="large" />
-              </IconButton>
-            </li>
-            <li>
-              <IconButton className="BottomButtons">
-                <SettingsIcon className="settingsIconColor" fontSize="large" />
-              </IconButton>
-            </li>
-          </ul>
-        </li>
-      </ul> */}
       <Dropdown>
-        <Dropdown.Toggle className="DropItems" id="dropdown-basic">
-          <IconButton>
-            <PersonIcon fontSize="large" />
-          </IconButton>
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu className="DropMenu">
-          <Dropdown.Item href="#/action-1">
-            <IconButton onClick={switchToProfile}>
+        <Dropdown.Toggle
+          variant="secondary"
+          className="DropItems"
+          id="dropdown-basic"
+        >
+          {activeTab === "Profile" && (
+            <IconButton>
               <PersonIcon fontSize="large" />
             </IconButton>
-          </Dropdown.Item>
-          <Dropdown.Item href="#/action-2">
-            {" "}
-            <IconButton onClick={switchToChat}>
-              <ChatIcon fontSize="large" />
-            </IconButton>
-          </Dropdown.Item>
-          <Dropdown.Item href="#/action-3">
+          )}
+          {activeTab === "Matches" && (
             <IconButton>
               <GroupIcon className="matchIconColor" fontSize="large" />
             </IconButton>
-          </Dropdown.Item>
-          <Dropdown.Item href="#/action-4">
+          )}
+          {activeTab === "Chat" && (
             <IconButton>
-              <NewspaperIcon className="newsFeedIconColor" fontSize="large" />
+              <ChatIcon fontSize="large" />
             </IconButton>
-          </Dropdown.Item>
-          <Dropdown.Item href="#/action-5">
+          )}
+          {activeTab === "Setting" && (
+            <IconButton>
+              <SettingsIcon className="settingsIconColor" fontSize="large" />
+            </IconButton>
+          )}
+          {activeTab === "DatePlanner" && (
             <IconButton>
               <BookIcon className="DatePlannerIconColor" fontSize="large" />
             </IconButton>
+          )}
+          {activeTab === "Newsfeed" && (
+            <IconButton>
+              <NewspaperIcon className="newsFeedIconColor" fontSize="large" />
+            </IconButton>
+          )}
+          {activeTab === "ChatTab" && (
+            <IconButton>
+              <ChatIcon fontSize="large" />
+            </IconButton>
+          )}
+          {activeTab === "Wink" && (
+            <IconButton>
+              <PersonIcon fontSize="large" />
+            </IconButton>
+          )}
+          {/* {activeTab === "Likes" && <Like />} */}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className="DropMenu">
+          <Dropdown.Item onClick={switchToProfile}>
+            <IconButton>
+              <PersonIcon fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Profile</p>
+            </IconButton>
           </Dropdown.Item>
-          <Dropdown.Item href="#/action-6">
+          <Dropdown.Item onClick={switchToChat}>
+            <IconButton>
+              <ChatIcon fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Chat</p>
+            </IconButton>
+          </Dropdown.Item>
+          <Dropdown.Item onClick={switchToMacthes}>
+            <IconButton>
+              <GroupIcon className="matchIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Matches</p>
+            </IconButton>
+          </Dropdown.Item>
+          <Dropdown.Item onClick={switchToNewsfeed}>
+            <IconButton>
+              <NewspaperIcon className="newsFeedIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>NewsFeed</p>
+            </IconButton>
+          </Dropdown.Item>
+          <Dropdown.Item onClick={switchToDatePlanner}>
+            <IconButton>
+              <BookIcon className="DatePlannerIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>
+                Date Planner
+              </p>
+            </IconButton>
+          </Dropdown.Item>
+          <Dropdown.Item onClick={switchToSetting}>
             <IconButton>
               <SettingsIcon className="settingsIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Settings</p>
             </IconButton>
           </Dropdown.Item>
         </Dropdown.Menu>
@@ -115,9 +126,14 @@ function Header({ videoButton }) {
         className="headerLogo"
         onClick={switchToWink}
       />
-      <IconButton>
-        <VideocamIcon fontSize="large" />
-      </IconButton>
+
+      {videoButton ? (
+        <IconButton>
+          <VideocamIcon fontSize="large" />
+        </IconButton>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
