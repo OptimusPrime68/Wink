@@ -25,6 +25,14 @@ const ChatPage = () => {
   const latestmsgHandler = (msg)=>{
     return msg.latestMessage?msg.latestMessage.content:"Say hi!"
   }
+  const latestTimeHadler = (msg)=>{
+    console.log("change")
+    if(msg.latestMessage){
+      var dt =new Date(msg.latestMessage.createdAt);
+      return dt.getHours()+":"+dt.getMinutes();
+    }
+    else return "";
+  }
 
   const fetchChats = async () => {
     try {
@@ -57,36 +65,20 @@ const ChatPage = () => {
     <div>
       <Header />
       <div className="chats">
-        {/* {chats.map(val=> <p>{val._id+"----"+val.chatName}</p>)} */}
-        {chats.map((chat) => (
-          <div onClick={() => setSelectedChat(chat)}>
+
+        {chats.map((chat,i) => (
+          <div onClick={() => setSelectedChat(chat)} 
+          style={{cursor: "pointer"}}
+          key={i}>
              <Chat
               name={senderHandler(chat.users)}
               message={latestmsgHandler(chat)}
-              timestamp="35 minutes ago"
+              timestamp={latestTimeHadler(chat)}
               profilePic="/profile.jpg"
             />
           </div>
         ))}
        
-        {/* <Chat
-          name="Manish"
-          message="Hey! how are you :)"
-          timestamp="35 minutes ago"
-          profilePic="/profile.jpg"
-        />
-        <Chat
-          name="Manish"
-          message="Hey! how are you :)"
-          timestamp="35 minutes ago"
-          profilePic="/profile.jpg"
-        />
-        <Chat
-          name="Manish"
-          message="Hey! how are you :)"
-          timestamp="35 minutes ago"
-          profilePic="/profile.jpg"
-        /> */}
       </div>
       <BottomDrawer />
     </div>

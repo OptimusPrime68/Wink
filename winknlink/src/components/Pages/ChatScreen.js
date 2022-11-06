@@ -120,7 +120,7 @@ function ChatScreen() {
  const getMatchedHandler = (timestamp)=>{
   var s = timestamp.createdAt;
   var dt =new Date(s);
-  return dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear();
+  return " "+dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear();
  }
 
   return (
@@ -156,7 +156,9 @@ function ChatScreen() {
         onSubmit={(e)=> e.preventDefault()}
         >
           <div className="emoji">
-          <h2 onClick={() => setEmojiBtn(!emojiBtn)}>
+          <h2 onClick={() => setEmojiBtn(!emojiBtn)}
+          style={{cursor: "pointer"}}
+          >
           &#128512;</h2>
           {emojiBtn?(<EmojiPicker 
           style={{ position: "fixed"}}
