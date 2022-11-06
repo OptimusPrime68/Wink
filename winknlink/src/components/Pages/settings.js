@@ -14,7 +14,8 @@ import Button from "@mui/material/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import BottomDrawer from "./BottomDrawer";
-import Loader from "../Pages/Loader";
+import Loader from "./Loader";
+import Multiselect from "multiselect-react-dropdown";
 
 function valuetext(value) {
   return value;
@@ -64,6 +65,47 @@ const PrettoSlider = styled(Slider)({
 });
 
 export default function Settings() {
+  const [hobbies, setHobby] = useState([]);
+
+  const options = [
+    { name: "Playing", id: 1 },
+    { name: "Gaming", id: 2 },
+    { name: "Trekking", id: 3 },
+    { name: "Nothing", id: 4 },
+    { name: "Blogging", id: 5 },
+    { name: "Reading", id: 6 },
+    { name: "Journaling", id: 7 },
+    { name: "Vacation planning", id: 8 },
+    { name: "Nature identification", id: 9 },
+    { name: "Playing an instrument", id: 10 },
+  ];
+
+  const style = {
+    chips: {
+      background: "#fbab7e",
+    },
+    searchBox: {
+      border: "none",
+      "border-bottom": "1px solid #fbab7e",
+      "border-radius": "0px",
+    },
+    multiselectContainer: {
+      color: "#fbab7e",
+    },
+  };
+
+  const onSelect = (e) => {
+    var list = [];
+    for (var i = 0; i < e.length; i++) list.push(e[i].name);
+    setHobby(list);
+  };
+
+  const onRemove = (e) => {
+    var list = [];
+    for (var i = 0; i < e.length; i++) list.push(e[i].name);
+    setHobby(list);
+  };
+
   const [value, setValue] = React.useState(0);
   const [valueAge, setValueAge] = React.useState([18, 25]);
   const [pref, setPref] = React.useState("");
@@ -314,6 +356,21 @@ export default function Settings() {
                     </Button>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="row p-3">
+              <div className="col-md-6 mb-3">
+                <h4 className="Language">Hobby Preference</h4>
+              </div>
+              <div className="col-md-6 mb-3">
+                <Multiselect
+                  id="hobby"
+                  options={options}
+                  displayValue="name"
+                  style={style}
+                  onSelect={onSelect}
+                  onRemove={onRemove}
+                />
               </div>
             </div>
             <div className="" style={{ textAlign: "center" }}>

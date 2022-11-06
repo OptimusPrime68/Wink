@@ -7,11 +7,11 @@ import { DateContext } from "./DateContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import BottomDrawer from "./BottomDrawer";
-import EmojiPicker from 'emoji-picker-react';
-import io from 'socket.io-client'
+import EmojiPicker from "emoji-picker-react";
+import io from "socket.io-client";
 
 const ENDPOINT = "http://localhost:4000";
-var socket,selectedChatCompare;
+var socket, selectedChatCompare;
 function ChatScreen() {
   const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
@@ -30,22 +30,23 @@ function ChatScreen() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit("setup",id);
-    socket.on('connection',()=> setSocketConnected(true));
-    
-  }, [])
+    socket.emit("setup", id);
+    socket.on("connection", () => setSocketConnected(true));
+  }, []);
 
   useEffect(() => {
-    socket.on("message recieved",(newMessageR)=>{
-        if(!selectedChatCompare || selectedChatCompare._id!==newMessageR.chat._id)
-          console.log("notify");
-        
-        else{
-          console.log(newMessageR)
-          setMessages([...messages,newMessageR]);
-        }
-    })
-  })
+    socket.on("message recieved", (newMessageR) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageR.chat._id
+      )
+        console.log("notify");
+      else {
+        console.log(newMessageR);
+        setMessages([...messages, newMessageR]);
+      }
+    });
+  });
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -56,12 +57,12 @@ function ChatScreen() {
       );
       console.log(data);
       var s = data[0].createdAt;
-      var dt =new Date(s);
-      console.log(dt.getHours(),dt.getMinutes());
+      var dt = new Date(s);
+      console.log(dt.getHours(), dt.getMinutes());
       setMessages(data);
       setLoading(false);
 
-      socket.emit('join chat',selectedChat._id)
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast.error(error.message);
     }
@@ -70,12 +71,8 @@ function ChatScreen() {
   useEffect(() => {
     fetchMessages();
 
-    selectedChatCompare=selectedChat;
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
-
- 
-  
-
 
   const sendMessage = async (e) => {
     console.log(newMessage);
@@ -93,7 +90,7 @@ function ChatScreen() {
           }
         );
         console.log(data);
-        socket.emit("new message",data);
+        socket.emit("new message", data);
 
         setMessages([...messages, data]);
       } catch (err) {
@@ -107,21 +104,21 @@ function ChatScreen() {
     //typing indicator logic
   };
 
- const emojiClickHandler = (emojiObj,event)=>{
-  setEmojiObj(emojiObj);
-  setNewMessage(prev=> prev+emojiObj?.emoji);
- }
- const getTimeHandler = (timestamp)=>{
-  var s = timestamp.createdAt;
-  var dt =new Date(s);
-  return dt.getHours()+":"+dt.getMinutes();
- }
+  const emojiClickHandler = (emojiObj, event) => {
+    setEmojiObj(emojiObj);
+    setNewMessage((prev) => prev + emojiObj?.emoji);
+  };
+  const getTimeHandler = (timestamp) => {
+    var s = timestamp.createdAt;
+    var dt = new Date(s);
+    return dt.getHours() + ":" + dt.getMinutes();
+  };
 
- const getMatchedHandler = (timestamp)=>{
-  var s = timestamp.createdAt;
-  var dt =new Date(s);
-  return " "+dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear();
- }
+  const getMatchedHandler = (timestamp) => {
+    var s = timestamp.createdAt;
+    var dt = new Date(s);
+    return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
+  };
 
   return (
     <div>
@@ -141,42 +138,42 @@ function ChatScreen() {
                 src={message.image}
               />
               <p className="chatScreenText">{message.content}</p>
-              <p >{getTimeHandler(message)}</p>
+              <p>{getTimeHandler(message)}</p>
             </div>
           ) : (
             <div className="chatScreenMessage">
               <p className="chatScreenTextUser">{message.content}</p>
               <p>{getTimeHandler(message)}</p>
             </div>
-            
           )
         )}
 
-        <form className="ChatScreenInput"
-        onSubmit={(e)=> e.preventDefault()}
-        >
+        <form className="ChatScreenInput" onSubmit={(e) => e.preventDefault()}>
           <div className="emoji">
-          <h2 onClick={() => setEmojiBtn(!emojiBtn)}
-          style={{cursor: "pointer"}}
-          >
-          &#128512;</h2>
-          {emojiBtn?(<EmojiPicker 
-          style={{ position: "fixed"}}
-          onEmojiClick={emojiClickHandler}
-          searchDisabled={true}
-          />):null}
-          <input
-            className="ChatScreenInputField"
-            placeholder="Type a message..."
-            type="text"
-            onChange={typingHandler}
-            value={newMessage}
-          />
-          <Button className="ChatScreenButton" onClick={sendMessage}>
-            SEND
-          </Button>
+            <h2
+              onClick={() => setEmojiBtn(!emojiBtn)}
+              style={{ cursor: "pointer" }}
+            >
+              &#128512;
+            </h2>
+            {emojiBtn ? (
+              <EmojiPicker
+                style={{ position: "fixed" }}
+                onEmojiClick={emojiClickHandler}
+                searchDisabled={true}
+              />
+            ) : null}
+            <input
+              className="ChatScreenInputField"
+              placeholder="Type a message..."
+              type="text"
+              onChange={typingHandler}
+              value={newMessage}
+            />
+            <Button className="ChatScreenButton" onClick={sendMessage}>
+              SEND
+            </Button>
           </div>
-         
         </form>
       </div>
       <BottomDrawer />

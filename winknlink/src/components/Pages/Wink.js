@@ -29,10 +29,9 @@ import Modal from "@mui/material/Modal";
 import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 const ENDPOINT = "http://localhost:4000";
 var socket;
-
 
 const style = {
   position: "relative",
@@ -48,8 +47,6 @@ const style = {
   overflowX: "hidden",
   overflowY: "scroll",
 };
-
-
 
 function Wink() {
   const [people, setPeople] = useState([]);
@@ -68,29 +65,22 @@ function Wink() {
 
   if (!user) navigate("/");
 
-
-
   if (user) {
     email = user.email;
     dist = user.distance;
-    swipe= user.user == "free"?["up","down"]:["down"];
+    swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
-
-  useEffect(() => 
-  {
+  useEffect(() => {
     socket = io(ENDPOINT);
-    socket.on('match-to',(data)=>{
+    socket.on("match-to", (data) => {
       console.log(data);
       dispatch({
-        type:"NEW_MATCH",
-        payload:data,
-      })
-    })
-
-    
-  
-  })
+        type: "NEW_MATCH",
+        payload: data,
+      });
+    });
+  });
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -100,7 +90,6 @@ function Wink() {
       userDecisionTimeout: 5000,
     });
 
-
   useEffect(() => {
     setLoading(true);
 
@@ -108,7 +97,6 @@ function Wink() {
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
         response.data.forEach(function (x) {
-
           var imageListRef = ref(storage, `${x.email}`);
 
           listAll(imageListRef).then((response) => {
@@ -124,17 +112,13 @@ function Wink() {
                     image: url,
                   };
 
-                  if (email != x.email) 
-                  setPeople((prev) => [...prev, local]);
-
+                  if (email != x.email) setPeople((prev) => [...prev, local]);
                 }
               });
             });
           });
-          
+
           const uniqueNames = Array.from(new Set(people));
-
-
         });
       })
       .catch((error) => {
@@ -142,24 +126,14 @@ function Wink() {
         toast.warn(error.response.data.message);
       });
 
-     
- 
-
     setLoading(false);
   }, []);
-
- 
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
     if (direction == "left") {
       toast.success(name + " Removed");
-    } else if(direction == "right"){
-
-    
-     
-    
-
+    } else if (direction == "right") {
       axios
         .post("http://localhost:4000/api/make-match", {
           fromemail: email,
@@ -167,34 +141,28 @@ function Wink() {
         })
         .then(function (response) {
           toast.success("Like Sent");
-          socket.emit("match",{fromemail:email,toemail:toemail});
+          socket.emit("match", { fromemail: email, toemail: toemail });
         })
         .catch(function (error) {
           console.log(error.message);
         });
-    }
-    else if(direction == "up")
-    {
-      if(user.user == "free")
-      {
+    } else if (direction == "up") {
+      if (user.user == "free") {
         toast.warn("Purchase Subscription to Send Super Likes");
         return;
       }
 
       axios
-      .post("http://localhost:4000/api/make-super-like", {
-        from: email,
-        to: toemail,
-      })
-      .then(function (response) {
-        toast.success("Super Like Sent");
-        
-      })
-      .catch(function (error) {
-        console.log(error.message);
-      });
-
-
+        .post("http://localhost:4000/api/make-super-like", {
+          from: email,
+          to: toemail,
+        })
+        .then(function (response) {
+          toast.success("Super Like Sent");
+        })
+        .catch(function (error) {
+          console.log(error.message);
+        });
     }
   };
 
@@ -202,19 +170,19 @@ function Wink() {
     console.log(myIdentifier + " left the screen");
   };
 
-  const onCardUpScreen = (myIdentifier) =>{
+  const onCardUpScreen = (myIdentifier) => {
     console.log(myIdentifier);
-  }
+  };
 
   // const [show, setShow] = useState(false);
 
   // const handleClose = () => setShow(false);
   // const handleShow = () => setShow(true);
 
-  const [id,setId] = useState();
+  const [id, setId] = useState();
   const [open, setOpen] = React.useState(false);
-  function handleOpen (e) {
-    setId(e)
+  function handleOpen(e) {
+    setId(e);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
@@ -240,7 +208,10 @@ function Wink() {
             >
               <h3>
                 {person.name}{" "}
-                <IconButton style={{ color: "#fbab7e" }} onClick={()=>handleOpen(person.email)}>
+                <IconButton
+                  style={{ color: "#fbab7e" }}
+                  onClick={() => handleOpen(person.email)}
+                >
                   <PersonPinSharpIcon fontSize="large" />
                 </IconButton>
               </h3>
@@ -254,14 +225,13 @@ function Wink() {
 
       <Modal
         open={open}
-      
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         style={{ padding: "10px" }}
       >
         <Box sx={style}>
-          <MatchProfile    id={id} />
+          <MatchProfile id={id} />
           <div style={{ textAlign: "center" }}>
             <Button onClick={handleClose}>Close</Button>
           </div>
