@@ -26,7 +26,7 @@ import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
 import { useRef } from "react";
 import BottomDrawer from "./BottomDrawer";
-import Loader from "../Pages/Loader";
+import Loader from "./Loader";
 
 export default function Profile() {
   var email = "";

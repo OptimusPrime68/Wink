@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
@@ -29,10 +29,9 @@ import Modal from "@mui/material/Modal";
 import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 const ENDPOINT = "http://localhost:4000";
 var socket;
-
 
 const style = {
   position: "relative",
@@ -48,8 +47,6 @@ const style = {
   overflowX: "hidden",
   overflowY: "scroll",
 };
-
-
 
 function Wink() {
   const [people, setPeople] = useState([]);
@@ -72,29 +69,22 @@ function Wink() {
 
   if (!user) navigate("/");
 
-
-
   if (user) {
     email = user.email;
     dist = user.distance;
-    swipe= user.user == "free"?["up","down"]:["down"];
+    swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
-
-  useEffect(() => 
-  {
+  useEffect(() => {
     socket = io(ENDPOINT);
-    socket.on('match-to',(data)=>{
+    socket.on("match-to", (data) => {
       console.log(data);
       dispatch({
-        type:"NEW_MATCH",
-        payload:data,
-      })
-    })
-
-    
-  
-  })
+        type: "NEW_MATCH",
+        payload: data,
+      });
+    });
+  });
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -104,15 +94,19 @@ function Wink() {
       userDecisionTimeout: 5000,
     });
 
-
   useEffect(() => {
+
+    setLoading(true);
 
     axios
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
-        response.data.forEach(function (x) {
+        console.log(response.data);
+        response.data.forEach(function ({x,cpy}) {
 
+          [x,cpy] = [cpy,x];
           var imageListRef = ref(storage, `${x.email}`);
+          console.log(cpy,x);
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -125,11 +119,10 @@ function Wink() {
                     dob: x.dob,
                     email: x.email,
                     image: url,
+                    dist:cpy,
                   };
 
-                  if (email != x.email) 
-                  setPeople((prev) => [...prev, local]);
-
+                  if (email != x.email) setPeople((prev) => [...prev, local]);
                 }
               });
             });
@@ -145,8 +138,6 @@ function Wink() {
       });
     
   }, []);
-
- 
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
@@ -251,6 +242,13 @@ function Wink() {
 
   console.log(people);
 
+  const counter = useRef(0);
+
+  const handleLoad = () => {
+    counter.current += 1;
+    if (counter.current >= people.length) setLoading(false);
+  };
+
   return (
     <div className="DateMainDiv">
       <Header />
@@ -270,10 +268,21 @@ function Wink() {
               style={{ backgroundImage: `url(${person.image})` }}
               className="Winkcard"
             >
+              <img
+                onLoad={handleLoad}
+                src={person.image}
+                alt="Image"
+                className="TinderImage"
+              />
               <h3>
-                {person.name}{" "}
-                <IconButton style={{ color: "#fbab7e" }} onClick={()=>handleOpen(person.email)}>
+                {person.name}{" "} 
+                <IconButton
+                  style={{ color: "#fbab7e" }}
+                  onClick={() => handleOpen(person.email)}
+                >
+                  
                   <PersonPinSharpIcon fontSize="large" />
+                  {parseInt(person.dist/1000)+"KM Away"}
                 </IconButton>
               </h3>
             </div>
@@ -286,20 +295,20 @@ function Wink() {
 
       <Modal
         open={open}
-      
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         style={{ padding: "10px" }}
       >
         <Box sx={style}>
-          <MatchProfile    id={id} />
+          <MatchProfile id={id} />
           <div style={{ textAlign: "center" }}>
             <Button onClick={handleClose}>Close</Button>
           </div>
         </Box>
       </Modal>
       <BottomDrawer />
+      {loading && <Loader />}
     </div>
   );
 }
