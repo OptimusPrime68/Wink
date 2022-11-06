@@ -16,14 +16,20 @@
   margin-top: 50px;
 }
 
-.PostDiv > h3 {
+.CaptionDiv {
   float: left;
 }
 
-.PostDiv > img {
+.PostImgDiv {
+  height: 300px;
   margin: auto;
-  height: 400px;
-  width: 400px;
+  width: 100%;
+}
+
+.PostImg {
+  margin: auto;
+  height: 300px;
+  width: 300px;
 }
 
 .PostDiv > h4 {

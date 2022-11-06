@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 // import { ChatState } from "./ChatProvider";
 import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
-import BottomDrawer from "./BottomDrawer";
 
 const ChatPage = () => {
   const { selectedChat, setSelectedChat, setChats, chats } =
@@ -76,7 +75,6 @@ const ChatPage = () => {
           </div>
         ))}
       </div>
-      <BottomDrawer />
     </div>
   );
 };

@@ -270,9 +270,6 @@ export default function Date(props) {
           </div>
         </DateContext.Provider>
       </div>
-      {/* <div id="bottomDrawer">
-        <BottomDrawer />
-      </div> */}
     </>
   );
 }

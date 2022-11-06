@@ -247,7 +247,6 @@ function Wink() {
           </div>
         </Box>
       </Modal>
-      <BottomDrawer />
       {loading && <Loader />}
     </div>
   );

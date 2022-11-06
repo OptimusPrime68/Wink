@@ -6,7 +6,6 @@ import HeaderDesktop from "./HeaderDesktop";
 import { DateContext } from "./DateContext";
 import { toast } from "react-toastify";
 import axios from "axios";
-import BottomDrawer from "./BottomDrawer";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 
@@ -122,31 +121,33 @@ function ChatScreen() {
 
   return (
     <div>
-      <Header backButton="/" />
+      <Header videoButton="/" />
       <HeaderDesktop />
       <div className="chatScreen">
-        <p className="chatScreenTimeStamp">
-          You matched with Ellen on
-          {getMatchedHandler(selectedChat)}
-        </p>
-        {messages.map((message) =>
-          message.sender.email != email ? (
-            <div className="chatScreenMessage">
-              <Avatar
-                className="chatScreenImage"
-                alt={message.name}
-                src={message.image}
-              />
-              <p className="chatScreenText">{message.content}</p>
-              <p>{getTimeHandler(message)}</p>
-            </div>
-          ) : (
-            <div className="chatScreenMessage">
-              <p className="chatScreenTextUser">{message.content}</p>
-              <p>{getTimeHandler(message)}</p>
-            </div>
-          )
-        )}
+        <div className="ChatMessageDiv">
+          <p className="chatScreenTimeStamp">
+            You matched with Ellen on
+            {getMatchedHandler(selectedChat)}
+          </p>
+          {messages.map((message) =>
+            message.sender.email != email ? (
+              <div className="chatScreenMessage">
+                <Avatar
+                  className="chatScreenImage"
+                  alt={message.name}
+                  src={message.image}
+                />
+                <p className="chatScreenText">{message.content}</p>
+                <p>{getTimeHandler(message)}</p>
+              </div>
+            ) : (
+              <div className="chatScreenMessage">
+                <p className="chatScreenTextUser">{message.content}</p>
+                <p>{getTimeHandler(message)}</p>
+              </div>
+            )
+          )}
+        </div>
 
         <form className="ChatScreenInput" onSubmit={(e) => e.preventDefault()}>
           <div className="emoji">
@@ -176,7 +177,6 @@ function ChatScreen() {
           </div>
         </form>
       </div>
-      <BottomDrawer />
     </div>
   );
 }
