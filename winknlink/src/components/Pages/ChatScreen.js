@@ -7,7 +7,7 @@ import { DateContext } from "./DateContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import BottomDrawer from "./BottomDrawer";
-
+import EmojiPicker from 'emoji-picker-react';
 import io from 'socket.io-client'
 
 const ENDPOINT = "http://localhost:4000";
@@ -22,6 +22,8 @@ function ChatScreen() {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [emojiObj, setEmojiObj] = useState(null);
+  const [emojiBtn, setEmojiBtn] = useState(false);
 
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
@@ -102,7 +104,10 @@ function ChatScreen() {
     //typing indicator logic
   };
 
- 
+ const emojiClickHandler = (emojiObj,event)=>{
+  setEmojiObj(emojiObj);
+  setNewMessage(prev=> prev+emojiObj?.emoji);
+ }
   
 
   return (
@@ -135,6 +140,14 @@ function ChatScreen() {
         onSubmit={(e)=> e.preventDefault()}
         // onKeyDown={sendMessage}
         >
+          <div className="emoji">
+          <h2 onClick={() => setEmojiBtn(!emojiBtn)}>
+          &#128512;</h2>
+          {emojiBtn?(<EmojiPicker 
+          style={{ position: "fixed"}}
+          onEmojiClick={emojiClickHandler}
+          searchDisabled={true}
+          />):null}
           <input
             className="ChatScreenInputField"
             placeholder="Type a message..."
@@ -145,6 +158,8 @@ function ChatScreen() {
           <Button className="ChatScreenButton" onClick={sendMessage}>
             SEND
           </Button>
+          </div>
+         
         </form>
       </div>
       <BottomDrawer />
