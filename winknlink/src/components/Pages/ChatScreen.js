@@ -123,7 +123,7 @@ function ChatScreen() {
   return (
     <div>
       <Header backButton="/" />
-      <HeaderDesktop />
+      <HeaderDesktop  />
       <div className="chatScreen">
         <p className="chatScreenTimeStamp">
           You matched with Ellen on
