@@ -28,5 +28,8 @@
     "socket.io": "^4.5.3",
     "stripe": "^10.15.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "twilio": "^3.83.1"
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext,useRef } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
@@ -54,6 +54,10 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
+
+
   var swipe = [];
   socket = io(ENDPOINT);
 
@@ -102,7 +106,6 @@ function Wink() {
 
 
   useEffect(() => {
-    setLoading(true);
 
     axios
       .post("http://localhost:4000/api/all-profile", { email })
@@ -132,69 +135,36 @@ function Wink() {
             });
           });
           
-          const uniqueNames = Array.from(new Set(people));
-
-
+         
+         
         });
       })
       .catch((error) => {
         console.log(error);
         toast.warn(error.response.data.message);
       });
-
-     
- 
-
-    setLoading(false);
+    
   }, []);
 
  
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
-    if (direction == "left") {
+    if(direction == "down")
+    {
+       return;
+    }
+    else if (direction == "left") {
       toast.success(name + " Removed");
     } else if(direction == "right"){
 
-    
+      handleRight(email,toemail);
      
-    
-
-      axios
-        .post("http://localhost:4000/api/make-match", {
-          fromemail: email,
-          toemail: toemail,
-        })
-        .then(function (response) {
-          toast.success("Like Sent");
-          socket.emit("match",{fromemail:email,toemail:toemail});
-        })
-        .catch(function (error) {
-          console.log(error.message);
-        });
     }
     else if(direction == "up")
     {
-      if(user.user == "free")
-      {
-        toast.warn("Purchase Subscription to Send Super Likes");
-        return;
-      }
-
-      axios
-      .post("http://localhost:4000/api/make-super-like", {
-        from: email,
-        to: toemail,
-      })
-      .then(function (response) {
-        toast.success("Super Like Sent");
-        
-      })
-      .catch(function (error) {
-        console.log(error.message);
-      });
-
-
+      
+       handleUp(email,toemail);
     }
   };
 
@@ -219,11 +189,73 @@ function Wink() {
   }
   const handleClose = () => setOpen(false);
 
+
+  const handleRight = async (email,toemail) =>{
+
+    axios
+    .post("http://localhost:4000/api/make-match", {
+      fromemail: email,
+      toemail: toemail,
+    })
+    .then(function (response) {
+      toast.success("Like Sent");
+      socket.emit("match",{fromemail:email,toemail:toemail});
+    })
+    .catch(function (error) {
+      console.log(error.message);
+    });
+
+  }
+
+  const handleUp = async (email,toemail)=>{
+
+
+    if(user.user == "free")
+      {
+        toast.warn("Purchase Subscription to Send Super Likes");
+        return;
+      }
+
+      axios
+      .post("http://localhost:4000/api/make-super-like", {
+        from: email,
+        to: toemail,
+      })
+      .then(function (response) {
+        toast.success("Super Like Sent");
+        
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+  }
+
+
+
+  const swipes = async () => {
+    console.log("aa");
+    // if (canSwipe && currentIndex < db.length) {
+    //   await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
+    // }
+  }
+
+  // increase current index and show card
+  const goBack = async () => {
+    console.log("hh");
+    // if (!canGoBack) return
+    // const newIndex = currentIndex + 1
+    // updateCurrentIndex(newIndex)
+    // await childRefs[newIndex].current.restoreCard()
+  }
+
   console.log(people);
 
   return (
     <div className="DateMainDiv">
       <Header />
+
+     
       <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
@@ -248,8 +280,8 @@ function Wink() {
           </TinderCard>
         ))}
 
-        <SwipeButtons />
-        {loading && <CircleLoader color="#f70177" />}
+        <SwipeButtons swipe={swipes} goBack={goBack} />
+   
       </div>
 
       <Modal

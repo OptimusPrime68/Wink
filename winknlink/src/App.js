@@ -75,7 +75,7 @@ function App() {
                 path="/register-complete"
                 element={<RegisterComplete />}
               ></Route>
-              {user ? <Route path="/Wink" element={<Date />}></Route> : <Route path="*" element={<Home />}></Route>}
+              <Route path="/Wink" element={<Date />}></Route> 
               <Route path="/buy-plan" element={<Plan />}></Route>
               <Route path="/photo-upload" element={<Photo />}></Route>
               
