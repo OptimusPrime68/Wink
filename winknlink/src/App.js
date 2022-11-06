@@ -42,6 +42,8 @@ function App() {
 
          const image = window.localStorage.getItem("image");
 
+         const profileId  = window.localStorage.getItem("profileId");
+
 
          var dist = 10000000;
 
@@ -57,7 +59,8 @@ function App() {
             user,
             name,
             image,
-            distance:dist
+            distance:dist,
+            profile:profileId
           },
         });
       }
@@ -75,7 +78,7 @@ function App() {
                 path="/register-complete"
                 element={<RegisterComplete />}
               ></Route>
-              {user ? <Route path="/Wink" element={<Date />}></Route> : <Route path="*" element={<Home />}></Route>}
+              <Route path="/Wink" element={<Date />}></Route> 
               <Route path="/buy-plan" element={<Plan />}></Route>
               <Route path="/photo-upload" element={<Photo />}></Route>
               

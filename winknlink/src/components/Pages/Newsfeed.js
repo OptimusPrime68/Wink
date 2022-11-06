@@ -8,6 +8,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import BottomDrawer from "./BottomDrawer";
 import "../styles/Newsfeed.css";
 import DropzonePost from "./DropzonePost";
+import { useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
 
 const style = {
   position: "relative",
@@ -26,8 +39,71 @@ const style = {
 
 function Newsfeed() {
   const [open, setOpen] = React.useState(false);
+  const [post,setPost] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  let { user } = useSelector((state) => ({ ...state }));
+
+
+
+  useEffect(()=>{
+
+
+  axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
+
+      const id = data.data.id;
+       
+    axios.post("http://localhost:4000/api/get-all-post",{authorid:id,email:user.email}).then((data)=>{
+      
+      data.data.map((e)=>{
+      const id = e._id;
+      const ex = e.authorId.email;
+      const imageListRef = ref(storage, `${ex}/post/${id}`);
+      e['files'] = [];
+      setPost((prev) => [...prev, e]);
+      listAll(imageListRef)
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            
+
+           setPost(current=>current.map(obj=>{
+            
+             if(obj == e){
+             obj.files = [...obj.files,url]; 
+             console.log(obj);
+             }
+             return obj;
+          
+             
+           }))
+                         
+            
+          });
+        });
+      })
+      .catch((error) => console.log(error));
+
+
+  
+     
+       })
+
+
+
+    }).catch((error)=>{
+      console.log(error);
+    })  
+    }).catch((error)=>{
+      console.log(error);
+    })
+
+
+
+  },[])
+
+  console.log(post);
+
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -48,15 +124,31 @@ function Newsfeed() {
           </Button>
         </div>
       </div>
-      <div className="PostDiv">
+      
+      
+      {post && post.map((e)=>{
+
+         return (
+         <div className="PostDiv">
         <div className="col CaptionDiv">
-          <h3>Caption</h3>
+          <h3>{e.content}</h3>
         </div>
-        <div className="row PostImgDiv">
-          <img className="PostImg" src="/person.svg" />
-        </div>
-        <h4>Time</h4>
+        {e.files && e.files.map((url)=>{
+          return (
+            <div className="row PostImgDiv">
+            <img className="PostImg" src={url} /> 
+           </div>
+          )
+        })}
+       
+        <h4>{new Date(e.createdAt).toDateString() +" " + new Date(e.createdAt).toLocaleTimeString()}</h4>
       </div>
+         )
+      })
+     
+
+      }
+
       <Modal
         open={open}
         onClose={handleClose}

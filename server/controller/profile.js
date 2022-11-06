@@ -92,6 +92,15 @@ exports.fetchProfile=(req,res)=>{
 
 }
 
+exports.fetchProfileId = (req,res)=>{
+    console.log(req.body);
+    Profile.findOne({email:req.body.email},function(error,r){
+        if(error) res.status(400).json({error:error.message});
+        console.log(r);
+        if(r && r.name != null) res.status(200).json({id:r._id});
+        else res.status(400).json({message:"Update Your Profile First"});
+    })
+}
 
 exports.allProfile=(req,res)=>{
 
@@ -99,8 +108,6 @@ exports.allProfile=(req,res)=>{
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
-
-    console.log(req.body);
 
     Profile.findOne({email},function(err,result){
 
@@ -116,8 +123,6 @@ exports.allProfile=(req,res)=>{
         lat = result.location.coordinates[1];
         var dist = result.distance;
 
-        console.log("dist",dist);
-
         
         
 
@@ -129,15 +134,20 @@ exports.allProfile=(req,res)=>{
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 
-                    console.log(success[i].name,geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}))
+                    const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
 
-                    if(geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}) <= dist)
+                    if(x <= dist)
                     {
-                          arr.push(success[i]);
+                         
+                        
+                          var cpy = success[i];
+                          arr.push({x,cpy});
                     }
-                    console.log(arr);
+                    
 
                 }
+
+                console.log(arr);
                 
                 return res.status(201).json(arr);
             }

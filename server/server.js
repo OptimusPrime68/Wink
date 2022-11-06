@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const fs = require("fs");
 
+
 require("dotenv").config();
 
 const app = express();
@@ -39,7 +40,7 @@ const io = require('socket.io')(server,{
 });
 
 io.on("connection",(socket)=>{
-  console.log('connected to socket.io');
+  //console.log('connected to socket.io');
   
   socket.on('setup', (id)=>{
     console.log("in setup")
@@ -74,5 +75,7 @@ io.on("connection",(socket)=>{
   })
  
 })
+
+
 
 

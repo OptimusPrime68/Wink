@@ -21,12 +21,12 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
-import Loader from "../Pages/Loader";
 import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
 import { useRef } from "react";
 import BottomDrawer from "./BottomDrawer";
+import Loader from "./Loader";
 
 export default function Profile() {
   var email = "";
@@ -119,7 +119,9 @@ export default function Profile() {
   }
 
   useEffect(() => {
+   
     setLoading(true);
+
     var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
@@ -169,7 +171,9 @@ export default function Profile() {
         });
       })
       .catch((error) => console.log(error));
-    setLoading(false);
+     
+      setLoading(false);
+
   }, []);
 
   const update = (e) => {
@@ -357,11 +361,19 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
   };
+  console.log("Loading",loading);
+
+  const imageLoaded= () =>{
+    console.log("Loading IMages");
+  }
+
 
   return (
     <div>
       <Header />
+     
 
+      {loading ? (<Loader />):<></>}
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -384,6 +396,7 @@ export default function Profile() {
                   <div
                     className="m-auto"
                     id="profile-upload"
+                    onLoad={imageLoaded}
                     style={{ backgroundImage: `url(${profileImageList[0]})` }}
                   >
                     <div className="hvr-profile-img">

@@ -132,6 +132,7 @@ export default function Date(props) {
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
         window.localStorage.removeItem("user");
+        window.localStorage.removeItem("profileId");
 
         console.log("hello");
         dispatch({
@@ -158,6 +159,7 @@ export default function Date(props) {
         window.localStorage.removeItem("user");
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
+
         axios
           .post("http://localhost:4000/api/delete-account", {
             email: user.email,

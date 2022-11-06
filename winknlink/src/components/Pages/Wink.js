@@ -51,6 +51,10 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
+
+
   var swipe = [];
   socket = io(ENDPOINT);
 
@@ -91,13 +95,18 @@ function Wink() {
     });
 
   useEffect(() => {
+
     setLoading(true);
 
     axios
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
-        response.data.forEach(function (x) {
+        console.log(response.data);
+        response.data.forEach(function ({x,cpy}) {
+
+          [x,cpy] = [cpy,x];
           var imageListRef = ref(storage, `${x.email}`);
+          console.log(cpy,x);
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -110,6 +119,7 @@ function Wink() {
                     dob: x.dob,
                     email: x.email,
                     image: url,
+                    dist:cpy,
                   };
 
                   if (email != x.email) setPeople((prev) => [...prev, local]);
@@ -117,50 +127,35 @@ function Wink() {
               });
             });
           });
-
-          const uniqueNames = Array.from(new Set(people));
+          
+         
+         
         });
       })
       .catch((error) => {
         console.log(error);
         toast.warn(error.response.data.message);
       });
+    
   }, []);
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
-    if (direction == "left") {
+    if(direction == "down")
+    {
+       return;
+    }
+    else if (direction == "left") {
       toast.success(name + " Removed");
-    } else if (direction == "right") {
-      axios
-        .post("http://localhost:4000/api/make-match", {
-          fromemail: email,
-          toemail: toemail,
-        })
-        .then(function (response) {
-          toast.success("Like Sent");
-          socket.emit("match", { fromemail: email, toemail: toemail });
-        })
-        .catch(function (error) {
-          console.log(error.message);
-        });
-    } else if (direction == "up") {
-      if (user.user == "free") {
-        toast.warn("Purchase Subscription to Send Super Likes");
-        return;
-      }
+    } else if(direction == "right"){
 
-      axios
-        .post("http://localhost:4000/api/make-super-like", {
-          from: email,
-          to: toemail,
-        })
-        .then(function (response) {
-          toast.success("Super Like Sent");
-        })
-        .catch(function (error) {
-          console.log(error.message);
-        });
+      handleRight(email,toemail);
+     
+    }
+    else if(direction == "up")
+    {
+      
+       handleUp(email,toemail);
     }
   };
 
@@ -168,22 +163,82 @@ function Wink() {
     console.log(myIdentifier + " left the screen");
   };
 
-  const onCardUpScreen = (myIdentifier) => {
+  const onCardUpScreen = (myIdentifier) =>{
     console.log(myIdentifier);
-  };
+  }
 
   // const [show, setShow] = useState(false);
 
   // const handleClose = () => setShow(false);
   // const handleShow = () => setShow(true);
 
-  const [id, setId] = useState();
+  const [id,setId] = useState();
   const [open, setOpen] = React.useState(false);
-  function handleOpen(e) {
-    setId(e);
+  function handleOpen (e) {
+    setId(e)
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
+
+
+  const handleRight = async (email,toemail) =>{
+
+    axios
+    .post("http://localhost:4000/api/make-match", {
+      fromemail: email,
+      toemail: toemail,
+    })
+    .then(function (response) {
+      toast.success("Like Sent");
+      socket.emit("match",{fromemail:email,toemail:toemail});
+    })
+    .catch(function (error) {
+      console.log(error.message);
+    });
+
+  }
+
+  const handleUp = async (email,toemail)=>{
+
+
+    if(user.user == "free")
+      {
+        toast.warn("Purchase Subscription to Send Super Likes");
+        return;
+      }
+
+      axios
+      .post("http://localhost:4000/api/make-super-like", {
+        from: email,
+        to: toemail,
+      })
+      .then(function (response) {
+        toast.success("Super Like Sent");
+        
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+  }
+
+
+
+  const swipes = async () => {
+    console.log("aa");
+    // if (canSwipe && currentIndex < db.length) {
+    //   await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
+    // }
+  }
+
+  // increase current index and show card
+  const goBack = async () => {
+    console.log("hh");
+    // if (!canGoBack) return
+    // const newIndex = currentIndex + 1
+    // updateCurrentIndex(newIndex)
+    // await childRefs[newIndex].current.restoreCard()
+  }
 
   console.log(people);
 
@@ -197,6 +252,8 @@ function Wink() {
   return (
     <div className="DateMainDiv">
       <Header />
+
+     
       <div className="ProfieCards">
         {people.map((person) => (
           <TinderCard
@@ -218,19 +275,22 @@ function Wink() {
                 className="TinderImage"
               />
               <h3>
-                {person.name}{" "}
+                {person.name}{" "} 
                 <IconButton
                   style={{ color: "#fbab7e" }}
                   onClick={() => handleOpen(person.email)}
                 >
+                  
                   <PersonPinSharpIcon fontSize="large" />
+                  {parseInt(person.dist/1000)+"KM Away"}
                 </IconButton>
               </h3>
             </div>
           </TinderCard>
         ))}
 
-        <SwipeButtons />
+        <SwipeButtons swipe={swipes} goBack={goBack} />
+   
       </div>
 
       <Modal
