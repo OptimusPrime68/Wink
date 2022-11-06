@@ -5,9 +5,6 @@ const postSchema = new mongoose.Schema({
     content:{
         type:String,
     },
-    files:{
-        type:[String],
-    },
     authorId:{
         type:'ObjectId',
         ref:"Profile",

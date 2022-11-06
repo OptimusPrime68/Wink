@@ -1,10 +1,8 @@
 import React from "react";
-import BottomDrawer from "./BottomDrawer";
 import Header from "./Header";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import { CardMedia } from "@mui/material";
 import {useEffect,useState} from 'react';
 import axios from 'axios';
@@ -170,7 +168,6 @@ function Like() {
           </Tab>
         </Tabs>
       </div>
-      <BottomDrawer />
     </div>
   );
 }

@@ -42,6 +42,8 @@ function App() {
 
          const image = window.localStorage.getItem("image");
 
+         const profileId  = window.localStorage.getItem("profileId");
+
 
          var dist = 10000000;
 
@@ -57,7 +59,8 @@ function App() {
             user,
             name,
             image,
-            distance:dist
+            distance:dist,
+            profile:profileId
           },
         });
       }

@@ -33,7 +33,7 @@ const Photo = () => {
   const { user } = useSelector((state) => ({ ...state }));
   var email = user.email;
 
-  const [person,setPerson] = useState([]);
+  const [person, setPerson] = useState([]);
 
   useEffect(() => {
     axios
@@ -43,13 +43,13 @@ const Photo = () => {
       })
       .catch((c) => {});
 
-      axios
+    axios
       .post("http://localhost:4000/api/all-match", { email })
       .then(function (response) {
         console.log(response.data);
         setPerson(response.data);
-      }).catch((error)=>console.log(error));
-
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   const [newEvent, setNewEvent] = useState({
@@ -67,22 +67,19 @@ const Photo = () => {
     axios.post("http://localhost:4000/api/make-date", { newEvent });
   };
 
-  const handleDeleteEvent = async (e,key) => {
-    
-
+  const handleDeleteEvent = async (e, key) => {
     console.log(key);
 
-    if(key.key == "Delete"){
-      console.log(e,key);
-    axios.post("http://localhost:4000/api/remove-date", { e });
-    setAllEvents(allEvents.filter((a) => a !== e));
+    if (key.key == "Delete") {
+      console.log(e, key);
+      axios.post("http://localhost:4000/api/remove-date", { e });
+      setAllEvents(allEvents.filter((a) => a !== e));
     }
   };
 
-  const handlePopup = async (e) =>{
+  const handlePopup = async (e) => {
     alert(e.title);
-    
-  }
+  };
 
   return (
     <>
@@ -141,13 +138,17 @@ const Photo = () => {
                 alignContent: "center",
               }}
             >
-              <Form.Select aria-label="Default select example" onChange={(to)=>setNewEvent({...newEvent,to:to.target.value})}>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(to) =>
+                  setNewEvent({ ...newEvent, to: to.target.value })
+                }
+              >
                 <option>Select Person</option>
-                {person && person.map((a)=>{
-                  return   <option value={a}>{a}</option>
-                })}
-              
-                
+                {person &&
+                  person.map((a) => {
+                    return <option value={a}>{a}</option>;
+                  })}
               </Form.Select>
             </div>
 
@@ -174,7 +175,6 @@ const Photo = () => {
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />
-        <BottomDrawer />
       </div>
     </>
   );

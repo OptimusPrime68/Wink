@@ -92,6 +92,15 @@ exports.fetchProfile=(req,res)=>{
 
 }
 
+exports.fetchProfileId = (req,res)=>{
+    console.log(req.body);
+    Profile.findOne({email:req.body.email},function(error,r){
+        if(error) res.status(400).json({error:error.message});
+        console.log(r);
+        if(r && r.name != null) res.status(200).json({id:r._id});
+        else res.status(400).json({message:"Update Your Profile First"});
+    })
+}
 
 exports.allProfile=(req,res)=>{
 

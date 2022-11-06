@@ -56,8 +56,6 @@ export default function Profile() {
 
   const imageListRef = ref(storage, email);
 
- 
-
   const uploadProfile = async (e) => {
     e.preventDefault();
     if (imageUpload) {
@@ -363,7 +361,6 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
   };
-
   console.log("Loading",loading);
 
   const imageLoaded= () =>{
@@ -410,7 +407,7 @@ export default function Profile() {
                         className="upload"
                         onChange={readURL}
                       />
-                      
+
                       <div className="icon">
                         <div className="camera4">
                           <span></span>
@@ -419,7 +416,6 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-               
 
                 <div className="row">
                   <Button
@@ -432,8 +428,6 @@ export default function Profile() {
                 </div>
 
                 <div className="tr">
-                
-                  
                   <label className="label" for="input">
                     NAME
                   </label>
@@ -452,7 +446,7 @@ export default function Profile() {
                   >
                     Date Of Birth
                   </label>
-         
+
                   <input
                     value={dob}
                     className="input"
@@ -658,8 +652,6 @@ export default function Profile() {
           </section>
         </div>
       </div>
-
-      <BottomDrawer />
     </div>
   );
 }
