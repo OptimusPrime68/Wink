@@ -10,8 +10,8 @@ exports.makeSos= async(req,res)=>{
     client.messages
       .create({
         from: +18316536283,
-        to: req.headers.to,
-        body: "I am in Danger!" + req.headers.message,
+        to: req.body.to,
+        body: "Hi " + "I am " + req.body.message + " I am in Danger!" + "My Location Cordinates are " + req.body.latitude + " " + req.body.longitude,
       })
       .then(() => {
         res.send(JSON.stringify({ success: true }));

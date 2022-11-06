@@ -39,6 +39,7 @@ import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Like from "./Like";
 import SosIcon from "@mui/icons-material/Sos";
+import { useGeolocated } from "react-geolocated";
 
 export default function Date(props) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -122,6 +123,15 @@ export default function Date(props) {
     if (user == null) navigate("/");
   }, []);
 
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+  useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  });
+  console.log(coords);
+
   const logOut = () => {
     const auth = getAuth();
     signOut(auth)
@@ -180,6 +190,63 @@ export default function Date(props) {
         toast.error(error);
       });
   };
+
+  const handleSos = async () =>{
+
+
+    if(!isGeolocationAvailable)
+    {
+      toast.warn("Enable Location");
+      return;
+    }
+
+    if(!isGeolocationEnabled)
+    {
+      toast.warn("Enable Location");
+      return;
+    }
+    if(!coords)
+    {
+      toast.warn("Enable Location");
+      return;
+    }
+
+
+    var coordinates = [];
+    if (coords) coordinates = [coords.longitude, coords.latitude];
+
+
+    axios
+    .post("http://localhost:4000/api/messages", {
+
+       message:user.name,
+       latitude:coordinates[0],
+       longitude:coordinates[1],
+       to:"+919305250754"
+     
+    })
+    .then(function (response) {
+      toast.success("SMS Sent");
+      
+    })
+    .catch(function (error) {
+      console.log(error.message);
+    });
+
+    axios
+    .post("http://localhost:4000/api/call", {
+      
+    })
+    .then(function (response) {
+      toast.success("Call Made");
+      
+    })
+    .catch(function (error) {
+      console.log(error.message);
+    }); 
+
+    console.log("h");
+  }
 
   return (
     <>
@@ -305,8 +372,8 @@ export default function Date(props) {
             <Divider />
             <List>
               <ListItem disablePadding style={{ backgroundColor: "red" }}>
-                <ListItemButton>
-                  <ListItemIcon>
+                <ListItemButton onClick={handleSos}>
+                  <ListItemIcon >
                     <SosIcon style={{ color: "white" }} />
                   </ListItemIcon>
                   <ListItemText primary="SOS" />
