@@ -119,7 +119,6 @@ export default function Profile() {
   }
 
   useEffect(() => {
-   
     setLoading(true);
 
     var dist = 1000000000;
@@ -171,9 +170,8 @@ export default function Profile() {
         });
       })
       .catch((error) => console.log(error));
-     
-      setLoading(false);
 
+    setLoading(false);
   }, []);
 
   const update = (e) => {
@@ -361,19 +359,17 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
   };
-  console.log("Loading",loading);
+  console.log("Loading", loading);
 
-  const imageLoaded= () =>{
+  const imageLoaded = () => {
     console.log("Loading IMages");
-  }
-
+  };
 
   return (
     <div>
       <Header />
-     
 
-      {loading ? (<Loader />):<></>}
+      {loading ? <Loader /> : <></>}
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -566,13 +562,6 @@ export default function Profile() {
             </article>
           </section>
           <section id="section2">
-            <input
-              style={{ visibility: "hidden" }}
-              className="t"
-              type="radio"
-              name="sections"
-              id="option2"
-            />
             <input className="t" type="radio" name="sections" id="option2" />
             <label for="option2" className="trr">
               {" "}
