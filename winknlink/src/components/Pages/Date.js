@@ -38,22 +38,56 @@ import Newsfeed from "./Newsfeed";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Like from "./Like";
+import SosIcon from "@mui/icons-material/Sos";
 
 export default function Date(props) {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   const drawerWidth = 240;
 
   const [activeTab, setActiveTab] = useState("Profile");
   const [page, setPage] = useState("profile");
 
-  const switchToWink = () => setActiveTab("Wink");
-  const switchToProfile = () => setActiveTab("Profile");
-  const switchToMacthes = () => setActiveTab("Matches");
-  const switchToChat = () => setActiveTab("Chat");
-  const switchToSetting = () => setActiveTab("Setting");
-  const switchToChatTab = () => setActiveTab("ChatTab");
-  const switchToDatePlanner = () => setActiveTab("DatePlanner");
-  const switchToNewsfeed = () => setActiveTab("Newsfeed");
-  const switchToLikes = () => setActiveTab("Likes");
+  const switchToWink = () => {
+    setSelectedIndex(7);
+    setActiveTab("Wink");
+  };
+  const switchToProfile = () => {
+    setSelectedIndex(0);
+    setActiveTab("Profile");
+  };
+  const switchToMacthes = () => {
+    setSelectedIndex(1);
+    setActiveTab("Matches");
+  };
+  const switchToChat = () => {
+    setSelectedIndex(2);
+    setActiveTab("Chat");
+  };
+  const switchToSetting = () => {
+    setSelectedIndex(3);
+    setActiveTab("Setting");
+  };
+  const switchToChatTab = () => {
+    setSelectedIndex(2);
+    setActiveTab("ChatTab");
+  };
+  const switchToDatePlanner = () => {
+    setSelectedIndex(4);
+    setActiveTab("DatePlanner");
+  };
+  const switchToNewsfeed = () => {
+    setSelectedIndex(6);
+    setActiveTab("Newsfeed");
+  };
+  const switchToLikes = () => {
+    setSelectedIndex(5);
+    setActiveTab("Likes");
+  };
 
   const [selectedChat, setSelectedChat] = useState();
   const [vdo, setVdo] = useState(false);
@@ -161,8 +195,12 @@ export default function Date(props) {
             variant="permanent"
             anchor="left"
           >
-            <Toolbar>
-              <IconButton onClick={switchToWink} className="sideDivHeaderIcon">
+            <Toolbar style={{ backgroundColor: "#fbab7e" }}>
+              <IconButton
+                selected={selectedIndex === 7}
+                onClick={switchToWink}
+                className="sideDivHeaderIcon"
+              >
                 <Typography
                   variant="h6"
                   component="div"
@@ -176,68 +214,100 @@ export default function Date(props) {
             <Divider />
             <List>
               <ListItem key="Profile" disablePadding>
-                <ListItemButton onClick={switchToProfile}>
+                <ListItemButton
+                  onClick={switchToProfile}
+                  selected={selectedIndex === 0}
+                >
                   <ListItemIcon>
-                    <PersonIcon />
+                    <PersonIcon style={{ color: "black" }} />
                   </ListItemIcon>
                   <ListItemText primary="Profile" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Matches" disablePadding>
-                <ListItemButton onClick={switchToMacthes}>
+                <ListItemButton
+                  onClick={switchToMacthes}
+                  selected={selectedIndex === 1}
+                >
                   <ListItemIcon>
-                    <GroupIcon />
+                    <GroupIcon className="matchIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="Matches" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Chats" disablePadding>
-                <ListItemButton onClick={switchToChat}>
+                <ListItemButton
+                  onClick={switchToChat}
+                  selected={selectedIndex === 2}
+                >
                   <ListItemIcon>
-                    <ForumIcon />
+                    <ForumIcon style={{ color: "#f8de7e" }} />
                   </ListItemIcon>
                   <ListItemText primary="Chats" />
                 </ListItemButton>
               </ListItem>
-              <ListItem key="Setting" disablePadding>
-                <ListItemButton onClick={switchToSetting}>
-                  <ListItemIcon>
-                    <SettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Settings" />
-                </ListItemButton>
-              </ListItem>
               <ListItem key="DatePlanner" disablePadding>
-                <ListItemButton onClick={switchToDatePlanner}>
+                <ListItemButton
+                  onClick={switchToDatePlanner}
+                  selected={selectedIndex === 4}
+                >
                   <ListItemIcon>
-                    <BookIcon />
+                    <BookIcon className="DatePlannerIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="Date Planner" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Newdfeed" disablePadding>
-                <ListItemButton onClick={switchToLikes}>
+                <ListItemButton
+                  onClick={switchToLikes}
+                  selected={selectedIndex === 5}
+                >
                   <ListItemIcon>
-                    <ThumbUpIcon />
+                    <ThumbUpIcon className="DatePlannerIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="Likes" />
                 </ListItemButton>
               </ListItem>
 
               <ListItem key="Newdfeed" disablePadding>
-                <ListItemButton onClick={switchToNewsfeed}>
+                <ListItemButton
+                  onClick={switchToNewsfeed}
+                  selected={selectedIndex === 6}
+                >
                   <ListItemIcon>
-                    <NewspaperIcon />
+                    <NewspaperIcon className="newsFeedIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="News Feed" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Setting" disablePadding>
+                <ListItemButton
+                  onClick={switchToSetting}
+                  selected={selectedIndex === 3}
+                >
+                  <ListItemIcon>
+                    <SettingsIcon style={{ color: "gray" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Logout" disablePadding>
                 <ListItemButton onClick={logOut}>
                   <ListItemIcon>
-                    <PowerSettingsNewIcon />
+                    <PowerSettingsNewIcon style={{ color: "red" }} />
                   </ListItemIcon>
                   <ListItemText primary="Logout" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItem disablePadding style={{ backgroundColor: "red" }}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <SosIcon style={{ color: "white" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="SOS" />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -246,7 +316,7 @@ export default function Date(props) {
               <ListItem key="Delete" disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <DeleteIcon />
+                    <DeleteIcon style={{ color: "red" }} />
                   </ListItemIcon>
                   <ListItemText
                     primary="Delete Account"
