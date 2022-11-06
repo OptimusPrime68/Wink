@@ -55,6 +55,9 @@ function ChatScreen() {
         `http://localhost:4000/api/chat/message/${selectedChat._id}`
       );
       console.log(data);
+      var s = data[0].createdAt;
+      var dt =new Date(s);
+      console.log(dt.getHours(),dt.getMinutes());
       setMessages(data);
       setLoading(false);
 
@@ -108,7 +111,17 @@ function ChatScreen() {
   setEmojiObj(emojiObj);
   setNewMessage(prev=> prev+emojiObj?.emoji);
  }
-  
+ const getTimeHandler = (timestamp)=>{
+  var s = timestamp.createdAt;
+  var dt =new Date(s);
+  return dt.getHours()+":"+dt.getMinutes();
+ }
+
+ const getMatchedHandler = (timestamp)=>{
+  var s = timestamp.createdAt;
+  var dt =new Date(s);
+  return dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear();
+ }
 
   return (
     <div>
@@ -117,7 +130,7 @@ function ChatScreen() {
       <div className="chatScreen">
         <p className="chatScreenTimeStamp">
           You matched with Ellen on
-          {selectedChat.createdAt}
+          {getMatchedHandler(selectedChat)}
         </p>
         {messages.map((message) =>
           message.sender.email != email ? (
@@ -128,17 +141,19 @@ function ChatScreen() {
                 src={message.image}
               />
               <p className="chatScreenText">{message.content}</p>
+              <p >{getTimeHandler(message)}</p>
             </div>
           ) : (
             <div className="chatScreenMessage">
               <p className="chatScreenTextUser">{message.content}</p>
+              <p>{getTimeHandler(message)}</p>
             </div>
+            
           )
         )}
 
         <form className="ChatScreenInput"
         onSubmit={(e)=> e.preventDefault()}
-        // onKeyDown={sendMessage}
         >
           <div className="emoji">
           <h2 onClick={() => setEmojiBtn(!emojiBtn)}>
