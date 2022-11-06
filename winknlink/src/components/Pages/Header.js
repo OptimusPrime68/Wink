@@ -11,6 +11,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import Dropdown from "react-bootstrap/Dropdown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 function Header({ videoButton }) {
   const {
@@ -37,7 +38,7 @@ function Header({ videoButton }) {
         >
           {activeTab === "Profile" && (
             <IconButton>
-              <PersonIcon fontSize="large" />
+              <PersonIcon style={{ color: "black" }} fontSize="large" />
             </IconButton>
           )}
           {activeTab === "Matches" && (
@@ -47,7 +48,7 @@ function Header({ videoButton }) {
           )}
           {activeTab === "Chat" && (
             <IconButton>
-              <ChatIcon fontSize="large" />
+              <ChatIcon style={{ color: "#f8de7e" }} fontSize="large" />
             </IconButton>
           )}
           {activeTab === "Setting" && (
@@ -67,27 +68,31 @@ function Header({ videoButton }) {
           )}
           {activeTab === "ChatTab" && (
             <IconButton>
-              <ChatIcon fontSize="large" />
+              <ChatIcon style={{ color: "#f8de7e" }} fontSize="large" />
             </IconButton>
           )}
           {activeTab === "Wink" && (
             <IconButton>
-              <PersonIcon fontSize="large" />
+              <PersonIcon style={{ color: "black" }} fontSize="large" />
             </IconButton>
           )}
-          {/* {activeTab === "Likes" && <Like />} */}
+          {activeTab === "Likes" && (
+            <IconButton>
+              <ThumbUpIcon className="DatePlannerIconColor" fontSize="large" />
+            </IconButton>
+          )}
         </Dropdown.Toggle>
 
         <Dropdown.Menu className="DropMenu">
           <Dropdown.Item onClick={switchToProfile}>
             <IconButton>
-              <PersonIcon fontSize="large" />
+              <PersonIcon style={{ color: "black" }} fontSize="large" />
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>Profile</p>
             </IconButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={switchToChat}>
             <IconButton>
-              <ChatIcon fontSize="large" />
+              <ChatIcon style={{ color: "#f8de7e" }} fontSize="large" />
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>Chat</p>
             </IconButton>
           </Dropdown.Item>
@@ -111,9 +116,19 @@ function Header({ videoButton }) {
               </p>
             </IconButton>
           </Dropdown.Item>
+          <Dropdown.Item onClick={switchToLikes}>
+            <IconButton>
+              <ThumbUpIcon className="DatePlannerIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Like</p>
+            </IconButton>
+          </Dropdown.Item>
           <Dropdown.Item onClick={switchToSetting}>
             <IconButton>
-              <SettingsIcon className="settingsIconColor" fontSize="large" />
+              <SettingsIcon
+                style={{ color: "gray" }}
+                className="settingsIconColor"
+                fontSize="large"
+              />
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>Settings</p>
             </IconButton>
           </Dropdown.Item>
@@ -132,7 +147,7 @@ function Header({ videoButton }) {
           <VideocamIcon fontSize="large" />
         </IconButton>
       ) : (
-        <div></div>
+        <div style={{ width: "55px" }}></div>
       )}
     </div>
   );

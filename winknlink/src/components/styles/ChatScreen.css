@@ -1,7 +1,7 @@
 .chatScreenText {
   margin-left: 10px;
-  background-color: lightgrey;
-  padding: 15px;
+  background-color: #2e8b57;
+  padding: 10px;
   border-radius: 20px;
 }
 
@@ -19,7 +19,7 @@
 
 .chatScreenTextUser {
   margin-left: auto;
-  background-color: #29b3cd;
+  background-color: rgb(217, 57, 148);
   padding: 15px;
   border-radius: 20px;
 }
@@ -59,6 +59,7 @@
 
 .ChatMessageDiv {
   width: 100%;
+  min-height: 84vh;
   max-height: 86vh;
   overflow-x: hidden;
   overflow-y: scroll;

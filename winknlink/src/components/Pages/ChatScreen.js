@@ -137,13 +137,23 @@ function ChatScreen() {
                   alt={message.name}
                   src={message.image}
                 />
-                <p className="chatScreenText">{message.content}</p>
-                <p>{getTimeHandler(message)}</p>
+                <p className="chatScreenText">
+                  {message.content}
+                  <br></br>
+                  <span style={{ color: "white", fontSize: "12px" }}>
+                    {getTimeHandler(message)}
+                  </span>
+                </p>
               </div>
             ) : (
               <div className="chatScreenMessage">
-                <p className="chatScreenTextUser">{message.content}</p>
-                <p>{getTimeHandler(message)}</p>
+                <p className="chatScreenTextUser">
+                  {message.content}
+                  <br></br>
+                  <span style={{ color: "white", fontSize: "12px" }}>
+                    {getTimeHandler(message)}
+                  </span>
+                </p>
               </div>
             )
           )}

@@ -396,6 +396,7 @@ export default function Settings() {
           </ol>
           <FormControl sx={{ minWidth: 200 }} size="small">
             <Select
+              displayEmpty
               labelId="demo-select-small"
               id="demo-select-small"
               value={month}
@@ -403,6 +404,7 @@ export default function Settings() {
               onChange={(e) => handleMonth(e.target.value)}
               displayEmpty
             >
+              <MenuItem value="">Select Plan</MenuItem>
               <MenuItem value="1">1 Month (₹60)</MenuItem>
               <MenuItem value="3">3 Month (₹170)</MenuItem>
               <MenuItem value="6">6 Month (₹330)</MenuItem>
