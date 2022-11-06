@@ -149,33 +149,41 @@ function ChatScreen() {
           )}
         </div>
 
-        <form className="ChatScreenInput" onSubmit={(e) => e.preventDefault()}>
-          <div className="emoji">
-            <h2
-              onClick={() => setEmojiBtn(!emojiBtn)}
-              style={{ cursor: "pointer" }}
-            >
-              &#128512;
-            </h2>
-            {emojiBtn ? (
-              <EmojiPicker
-                style={{ position: "fixed" }}
-                onEmojiClick={emojiClickHandler}
-                searchDisabled={true}
-              />
-            ) : null}
-            <input
-              className="ChatScreenInputField"
-              placeholder="Type a message..."
-              type="text"
-              onChange={typingHandler}
-              value={newMessage}
-            />
-            <Button className="ChatScreenButton" onClick={sendMessage}>
-              SEND
-            </Button>
+        <div className="row MessageDiv">
+          <div className="col-auto">
+            <div className="emoji">
+              <h2
+                onClick={() => setEmojiBtn(!emojiBtn)}
+                style={{ cursor: "pointer" }}
+              >
+                &#128512;
+              </h2>
+              {emojiBtn ? (
+                <EmojiPicker
+                  onEmojiClick={emojiClickHandler}
+                  searchDisabled={true}
+                />
+              ) : null}
+            </div>
           </div>
-        </form>
+          <div className="col">
+            <form
+              className="ChatScreenInput"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                className="ChatScreenInputField"
+                placeholder="Type a message..."
+                type="text"
+                onChange={typingHandler}
+                value={newMessage}
+              />
+              <Button className="ChatScreenButton" onClick={sendMessage}>
+                SEND
+              </Button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

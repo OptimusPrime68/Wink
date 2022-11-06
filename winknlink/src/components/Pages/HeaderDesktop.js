@@ -35,13 +35,18 @@ function HeaderDesktop() {
 
   return (
     <div className="HeaderWinkDesktop">
-      <IconButton onClick={handleOpen}>
-        <VideocamIcon fontSize="large" />
-      </IconButton>
-      <IconButton onClick={switchToChat}>
-        <ChatIcon fontSize="large" />
-      </IconButton>
-
+      <div className="row ">
+        <div className="col">
+          <IconButton onClick={switchToChat}>
+            <ChatIcon fontSize="large" />
+          </IconButton>
+        </div>
+        <div className="col-auto">
+          <IconButton onClick={handleOpen} style={{ float: "right" }}>
+            <VideocamIcon fontSize="large" />
+          </IconButton>
+        </div>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
