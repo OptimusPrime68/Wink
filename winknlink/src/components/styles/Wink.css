@@ -1,7 +1,7 @@
 .Winkcard {
   position: relative;
   width: 600px;
-  padding: 20px;
+  /* padding: 20px; */
   max-width: 85vw;
   height: 50vh;
   border-radius: 20px;
@@ -14,6 +14,7 @@
   position: absolute;
   bottom: 10px;
   color: white;
+  margin-left: 10px;
 }
 
 .ProfieCards {
@@ -25,4 +26,12 @@
 
 .swipe {
   position: absolute;
+}
+
+.TinderImage {
+  max-width: 85vw;
+  height: 50vh;
+  width: 600px;
+  z-index: -1;
+  border-radius: 20px;
 }

@@ -7,6 +7,7 @@ import Dropzone from "./Dropzone";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BottomDrawer from "./BottomDrawer";
+import "../styles/Newsfeed.css";
 
 const style = {
   position: "relative",
@@ -32,16 +33,7 @@ function Newsfeed() {
     <div style={{ textAlign: "center" }}>
       <Header />
       <h1>News Feed</h1>
-      <div
-        style={{
-          border: "1px solid black",
-          borderRadius: "10px",
-          padding: "10px",
-          maxWidth: "500px",
-          margin: "auto",
-          marginTop: "50px",
-        }}
-      >
+      <div className="newsDiv">
         <h6>Post Something...</h6>
         <div
           className="row"
@@ -55,6 +47,12 @@ function Newsfeed() {
             Add new post
           </Button>
         </div>
+      </div>
+      <div className="PostDiv">
+        <h3>Caption</h3>
+        <br />
+        <img src="/person.svg" />
+        <h4>Time</h4>
       </div>
       <Modal
         open={open}
