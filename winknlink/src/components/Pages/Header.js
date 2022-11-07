@@ -96,12 +96,6 @@ function Header({ videoButton }) {
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>Chat</p>
             </IconButton>
           </Dropdown.Item>
-          <Dropdown.Item onClick={switchToMacthes}>
-            <IconButton>
-              <GroupIcon className="matchIconColor" fontSize="large" />
-              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Matches</p>
-            </IconButton>
-          </Dropdown.Item>
           <Dropdown.Item onClick={switchToNewsfeed}>
             <IconButton>
               <NewspaperIcon className="newsFeedIconColor" fontSize="large" />
@@ -114,6 +108,12 @@ function Header({ videoButton }) {
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>
                 Date Planner
               </p>
+            </IconButton>
+          </Dropdown.Item>
+          <Dropdown.Item onClick={switchToMacthes}>
+            <IconButton>
+              <GroupIcon className="matchIconColor" fontSize="large" />
+              <p style={{ fontSize: "20px", marginLeft: "10px" }}>Matches</p>
             </IconButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={switchToLikes}>
@@ -140,10 +140,11 @@ function Header({ videoButton }) {
         alt="logo"
         className="headerLogo"
         onClick={switchToWink}
+        style={{ cursor: "pointer" }}
       />
 
       {videoButton ? (
-        <IconButton>
+        <IconButton style={{ color: "#d0f0c0" }}>
           <VideocamIcon fontSize="large" />
         </IconButton>
       ) : (

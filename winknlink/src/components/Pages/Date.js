@@ -40,6 +40,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Like from "./Like";
 import SosIcon from "@mui/icons-material/Sos";
 import { useGeolocated } from "react-geolocated";
+import Modal from "react-bootstrap/Modal";
 
 export default function Date(props) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -124,12 +125,12 @@ export default function Date(props) {
   }, []);
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
-  useGeolocated({
-    positionOptions: {
-      enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-  });
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
   console.log(coords);
 
   const logOut = () => {
@@ -191,62 +192,54 @@ export default function Date(props) {
       });
   };
 
-  const handleSos = async () =>{
-
-
-    if(!isGeolocationAvailable)
-    {
+  const handleSos = async () => {
+    if (!isGeolocationAvailable) {
       toast.warn("Enable Location");
       return;
     }
 
-    if(!isGeolocationEnabled)
-    {
+    if (!isGeolocationEnabled) {
       toast.warn("Enable Location");
       return;
     }
-    if(!coords)
-    {
+    if (!coords) {
       toast.warn("Enable Location");
       return;
     }
-
 
     var coordinates = [];
     if (coords) coordinates = [coords.longitude, coords.latitude];
 
+    axios
+      .post("http://localhost:4000/api/messages", {
+        message: user.name,
+        latitude: coordinates[0],
+        longitude: coordinates[1],
+        to: "+919305250754",
+      })
+      .then(function (response) {
+        toast.success("SMS Sent");
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
 
     axios
-    .post("http://localhost:4000/api/messages", {
-
-       message:user.name,
-       latitude:coordinates[0],
-       longitude:coordinates[1],
-       to:"+919305250754"
-     
-    })
-    .then(function (response) {
-      toast.success("SMS Sent");
-      
-    })
-    .catch(function (error) {
-      console.log(error.message);
-    });
-
-    axios
-    .post("http://localhost:4000/api/call", {
-      
-    })
-    .then(function (response) {
-      toast.success("Call Made");
-      
-    })
-    .catch(function (error) {
-      console.log(error.message);
-    }); 
+      .post("http://localhost:4000/api/call", {})
+      .then(function (response) {
+        toast.success("Call Made");
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
 
     console.log("h");
-  }
+  };
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -293,17 +286,6 @@ export default function Date(props) {
                   <ListItemText primary="Profile" />
                 </ListItemButton>
               </ListItem>
-              <ListItem key="Matches" disablePadding>
-                <ListItemButton
-                  onClick={switchToMacthes}
-                  selected={selectedIndex === 1}
-                >
-                  <ListItemIcon>
-                    <GroupIcon className="matchIconColor" />
-                  </ListItemIcon>
-                  <ListItemText primary="Matches" />
-                </ListItemButton>
-              </ListItem>
               <ListItem key="Chats" disablePadding>
                 <ListItemButton
                   onClick={switchToChat}
@@ -313,6 +295,17 @@ export default function Date(props) {
                     <ForumIcon style={{ color: "#f8de7e" }} />
                   </ListItemIcon>
                   <ListItemText primary="Chats" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Newdfeed" disablePadding>
+                <ListItemButton
+                  onClick={switchToNewsfeed}
+                  selected={selectedIndex === 6}
+                >
+                  <ListItemIcon>
+                    <NewspaperIcon className="newsFeedIconColor" />
+                  </ListItemIcon>
+                  <ListItemText primary="News Feed" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="DatePlanner" disablePadding>
@@ -326,6 +319,18 @@ export default function Date(props) {
                   <ListItemText primary="Date Planner" />
                 </ListItemButton>
               </ListItem>
+              <ListItem key="Matches" disablePadding>
+                <ListItemButton
+                  onClick={switchToMacthes}
+                  selected={selectedIndex === 1}
+                >
+                  <ListItemIcon>
+                    <GroupIcon className="matchIconColor" />
+                  </ListItemIcon>
+                  <ListItemText primary="Matches" />
+                </ListItemButton>
+              </ListItem>
+
               <ListItem key="Newdfeed" disablePadding>
                 <ListItemButton
                   onClick={switchToLikes}
@@ -335,18 +340,6 @@ export default function Date(props) {
                     <ThumbUpIcon className="DatePlannerIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="Likes" />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem key="Newdfeed" disablePadding>
-                <ListItemButton
-                  onClick={switchToNewsfeed}
-                  selected={selectedIndex === 6}
-                >
-                  <ListItemIcon>
-                    <NewspaperIcon className="newsFeedIconColor" />
-                  </ListItemIcon>
-                  <ListItemText primary="News Feed" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Setting" disablePadding>
@@ -373,7 +366,7 @@ export default function Date(props) {
             <List>
               <ListItem disablePadding style={{ backgroundColor: "red" }}>
                 <ListItemButton onClick={handleSos}>
-                  <ListItemIcon >
+                  <ListItemIcon>
                     <SosIcon style={{ color: "white" }} />
                   </ListItemIcon>
                   <ListItemText primary="SOS" />
@@ -387,10 +380,7 @@ export default function Date(props) {
                   <ListItemIcon>
                     <DeleteIcon style={{ color: "red" }} />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Delete Account"
-                    onClick={handleAccountDelete}
-                  />
+                  <ListItemText primary="Delete Account" onClick={handleShow} />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -410,6 +400,18 @@ export default function Date(props) {
           </div>
         </DateContext.Provider>
       </div>
+      <Modal show={show} onHide={handleClose} centered backdrop="static">
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>Are you sure you want to delete your account!</Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center" }}>
+          <Button variant="outline-danger" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="outline-success" onClick={handleAccountDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

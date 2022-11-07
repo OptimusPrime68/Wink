@@ -30,6 +30,7 @@ import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
 import io from "socket.io-client";
+
 const ENDPOINT = "http://localhost:4000";
 var socket;
 
@@ -51,9 +52,6 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-
-
-
 
   var swipe = [];
   socket = io(ENDPOINT);
@@ -95,18 +93,16 @@ function Wink() {
     });
 
   useEffect(() => {
-
     setLoading(true);
 
     axios
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
         console.log(response.data);
-        response.data.forEach(function ({x,cpy}) {
-
-          [x,cpy] = [cpy,x];
+        response.data.forEach(function ({ x, cpy }) {
+          [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
-          console.log(cpy,x);
+          console.log(cpy, x);
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -119,7 +115,7 @@ function Wink() {
                     dob: x.dob,
                     email: x.email,
                     image: url,
-                    dist:cpy,
+                    dist: cpy,
                   };
 
                   if (email != x.email) setPeople((prev) => [...prev, local]);
@@ -127,35 +123,24 @@ function Wink() {
               });
             });
           });
-          
-         
-         
         });
       })
       .catch((error) => {
         console.log(error);
         toast.warn(error.response.data.message);
       });
-    
   }, []);
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
-    if(direction == "down")
-    {
-       return;
-    }
-    else if (direction == "left") {
+    if (direction == "down") {
+      return;
+    } else if (direction == "left") {
       toast.success(name + " Removed");
-    } else if(direction == "right"){
-
-      handleRight(email,toemail);
-     
-    }
-    else if(direction == "up")
-    {
-      
-       handleUp(email,toemail);
+    } else if (direction == "right") {
+      handleRight(email, toemail);
+    } else if (direction == "up") {
+      handleUp(email, toemail);
     }
   };
 
@@ -163,73 +148,63 @@ function Wink() {
     console.log(myIdentifier + " left the screen");
   };
 
-  const onCardUpScreen = (myIdentifier) =>{
+  const onCardUpScreen = (myIdentifier) => {
     console.log(myIdentifier);
-  }
+  };
 
   // const [show, setShow] = useState(false);
 
   // const handleClose = () => setShow(false);
   // const handleShow = () => setShow(true);
 
-  const [id,setId] = useState();
+  const [id, setId] = useState();
   const [open, setOpen] = React.useState(false);
-  function handleOpen (e) {
-    setId(e)
+  function handleOpen(e) {
+    setId(e);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
 
+  const handleRight = async (email, toemail) => {
+    axios
+      .post("http://localhost:4000/api/make-match", {
+        fromemail: email,
+        toemail: toemail,
+      })
+      .then(function (response) {
+        toast.success("Like Sent");
+        socket.emit("match", { fromemail: email, toemail: toemail });
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+  };
 
-  const handleRight = async (email,toemail) =>{
+  const handleUp = async (email, toemail) => {
+    if (user.user == "free") {
+      toast.warn("Purchase Subscription to Send Super Likes");
+      return;
+    }
 
     axios
-    .post("http://localhost:4000/api/make-match", {
-      fromemail: email,
-      toemail: toemail,
-    })
-    .then(function (response) {
-      toast.success("Like Sent");
-      socket.emit("match",{fromemail:email,toemail:toemail});
-    })
-    .catch(function (error) {
-      console.log(error.message);
-    });
-
-  }
-
-  const handleUp = async (email,toemail)=>{
-
-
-    if(user.user == "free")
-      {
-        toast.warn("Purchase Subscription to Send Super Likes");
-        return;
-      }
-
-      axios
       .post("http://localhost:4000/api/make-super-like", {
         from: email,
         to: toemail,
       })
       .then(function (response) {
         toast.success("Super Like Sent");
-        
       })
       .catch(function (error) {
         console.log(error.message);
       });
-
-  }
-
-
+  };
 
   const swipes = async () => {
     console.log("aa");
     // if (canSwipe && currentIndex < db.length) {
     //   await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     // }
-  }
+  };
 
   // increase current index and show card
   const goBack = async () => {
@@ -238,7 +213,7 @@ function Wink() {
     // const newIndex = currentIndex + 1
     // updateCurrentIndex(newIndex)
     // await childRefs[newIndex].current.restoreCard()
-  }
+  };
 
   console.log(people);
 
@@ -253,44 +228,48 @@ function Wink() {
     <div className="DateMainDiv">
       <Header />
 
-     
       <div className="ProfieCards">
         {people.map((person) => (
-          <TinderCard
-            className="swipe"
-            key={person.email}
-            preventSwipe={swipe}
-            onSwipe={(dir) => swiped(dir, person.name, person.email)}
-            onCardLeftScreen={onCardLeftScreen}
-            onCardUpScreen={onCardUpScreen}
-          >
-            <div
-              style={{ backgroundImage: `url(${person.image})` }}
-              className="Winkcard"
+          <>
+            <TinderCard
+              className="swipe"
+              key={person.email}
+              preventSwipe={swipe}
+              onSwipe={(dir) => swiped(dir, person.name, person.email)}
+              onCardLeftScreen={onCardLeftScreen}
+              onCardUpScreen={onCardUpScreen}
             >
-              <img
-                onLoad={handleLoad}
-                src={person.image}
-                alt="Image"
-                className="TinderImage"
-              />
-              <h3>
-                {person.name}{" "} 
+              <div
+                style={{ backgroundImage: `url(${person.image})` }}
+                className="Winkcard"
+              >
+                <img
+                  onLoad={handleLoad}
+                  src={person.image}
+                  alt="Image"
+                  className="TinderImage"
+                />
+                <h3>
+                  {person.name} <br></br>
+                  <p style={{ fontSize: "15px", marginTop: "5px" }}>
+                    {parseInt(person.dist / 1000) + "KM"}
+                  </p>
+                </h3>
                 <IconButton
-                  style={{ color: "#fbab7e" }}
+                  className="WinkProfileIcon"
                   onClick={() => handleOpen(person.email)}
                 >
-                  
-                  <PersonPinSharpIcon fontSize="large" />
-                  {parseInt(person.dist/1000)+"KM Away"}
+                  <PersonPinSharpIcon
+                    style={{ color: "white" }}
+                    fontSize="large"
+                  />
                 </IconButton>
-              </h3>
-            </div>
-          </TinderCard>
+              </div>
+            </TinderCard>
+          </>
         ))}
 
         <SwipeButtons swipe={swipes} goBack={goBack} />
-   
       </div>
 
       <Modal

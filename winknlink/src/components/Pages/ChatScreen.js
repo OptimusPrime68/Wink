@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Header from "./Header";
 import "../styles/ChatScreen.css";
 import { Avatar, Button } from "@mui/material";
@@ -69,7 +69,6 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
-
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
@@ -119,6 +118,12 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div>
       <Header videoButton="/" />
@@ -140,7 +145,7 @@ function ChatScreen() {
                 <p className="chatScreenText">
                   {message.content}
                   <br></br>
-                  <span style={{ color: "white", fontSize: "12px" }}>
+                  <span style={{ color: "grey", fontSize: "12px" }}>
                     {getTimeHandler(message)}
                   </span>
                 </p>
@@ -157,6 +162,7 @@ function ChatScreen() {
               </div>
             )
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="row MessageDiv">
