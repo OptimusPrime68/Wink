@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import axios from "axios";
@@ -55,6 +55,8 @@ function Matches() {
       .then(function (response) {
         console.log(response.data);
 
+        if (response.data.length == 0) setLoading(false);
+
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
           console.log(x);
@@ -104,11 +106,10 @@ function Matches() {
 
   const counter = useRef(0);
   const handleLoad = () => {
-    console.log("Image Loading")
+    console.log("Image Loading");
     counter.current += 1;
     if (counter.current >= people.length) setLoading(false);
   };
-
 
   return (
     <div className="DateMainDiv">

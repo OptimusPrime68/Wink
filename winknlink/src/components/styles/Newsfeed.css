@@ -1,5 +1,5 @@
 .newsDiv {
-  border: 1px solid black;
+  background-color: #f9f9f9;
   border-radius: 10px;
   padding: 10px;
   max-width: 500px;
@@ -8,7 +8,7 @@
 }
 
 .PostDiv {
-  border: 1px solid black;
+  background-color: #f9f9f9;
   border-radius: 10px;
   padding: 10px;
   max-width: 500px;
@@ -17,23 +17,35 @@
 }
 
 .CaptionDiv {
-  float: left;
+  text-align: justify;
+  margin-top: 10px;
+  padding: 10px;
 }
 
 .PostImgDiv {
   height: 300px;
-  margin: auto;
+  margin-left: 0px !important;
   width: 100%;
 }
 
 .PostImg {
   margin: auto;
   height: 300px;
-  width: 300px;
+  border-radius: 50px;
 }
 
-.PostDiv > h4 {
+.DateH4 {
   text-align: right;
   bottom: 10px;
-  color: #cdcdcd;
+  color: #949494;
+  margin-right: 0px !important;
+  margin-top: 5px !important;
+  font-size: 15px !important;
+}
+
+.AvatarDiv {
+  height: 50px;
+  width: 50px;
+  margin-bottom: 30px;
+  margin-left: 20px;
 }

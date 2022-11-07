@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import Header from "./Header";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BottomDrawer from "./BottomDrawer";
 import "../styles/Newsfeed.css";
@@ -21,8 +21,10 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { storage } from "../../firebase";
-import { useState ,useRef } from "react";
+import { useState, useRef } from "react";
 import Loader from "./Loader";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Heart from "react-heart";
 import { toast } from "react-toastify";
 
 const style = {
@@ -42,27 +44,21 @@ const style = {
 
 function Newsfeed() {
   const [open, setOpen] = React.useState(false);
-  const [post,setPost] = React.useState([]);
+  const [post, setPost] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
   const [profile,setProfile] = useState(0);
 
-
   const counter = useRef(0);
   const handleLoad = () => {
-    console.log("Image Loading")
+    console.log("Image Loading");
     counter.current += 1;
     if (counter.current >= post.length) setLoading(false);
   };
 
-
-
-
-  useEffect(()=>{
-
-
+  useEffect(() => {
     setLoading(true);
   axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
 
@@ -99,7 +95,6 @@ function Newsfeed() {
                          
             
           });
-        });
       })
       .catch((error) => console.log(error));
 
@@ -116,6 +111,7 @@ function Newsfeed() {
     }).catch((error)=>{
       console.log(error);
     })
+  })
   },[])
 
   console.log(post);
@@ -157,10 +153,11 @@ function Newsfeed() {
 
   }
 
+  const [active, setActive] = useState(false);
 
   return (
     <div style={{ textAlign: "center" }}>
-      {loading ? <Loader />:<></>}
+      {loading ? <Loader /> : <></>}
       <Header />
       <h1>News Feed</h1>
       <div className="newsDiv">
@@ -178,32 +175,74 @@ function Newsfeed() {
           </Button>
         </div>
       </div>
-      
-      
-      {post && post.map((e)=>{
 
-        console.log(e.authorId._id,profile);
-
-         return (
-         <div className="PostDiv">
-        <div className="col CaptionDiv">
-          <h3>{e.content}</h3>
-        </div>
-        {e.files && e.files.map((url)=>{
+      {post &&
+        post.map((e) => {
           return (
-            <div className="row PostImgDiv">
-            <img className="PostImg" src={url} onLoad={handleLoad} /> 
-           </div>
-          )
-        })}
-        {e.authorId._id == profile ? <button onClick={()=>{handleDelete(e)}}>Delete</button>:<></>}
-        <h4>{new Date(e.createdAt).toDateString() +" " + new Date(e.createdAt).toLocaleTimeString()}</h4>
-      </div>
-         )
-      })
-     
+            <div className="PostDiv">
+              <div className="row">
+                <div className="col AvatarDiv">
+                  <div className="row mb-1">
+                    <div className="col-auto">
+                      <Avatar sx={{ width: 45, height: 45 }} />
+                    </div>
+                    <div
+                      className="col-auto"
+                      style={{
+                        float: "left",
+                        marginLeft: "-13px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Name
+                    </div>
+                  </div>
+                  <div className="row DateH4">
+                    <p>
+                      {new Date(e.createdAt).toDateString() +
+                        " " +
+                        new Date(e.createdAt).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="col DelDiv">
+                  <DeleteIcon
+                    fontSize="large"
+                    style={{
+                      color: "#e32636",
+                      float: "right",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
 
-      }
+              {e.files &&
+                e.files.map((url) => {
+                  return (
+                    <div className="row PostImgDiv">
+                      <img className="PostImg" src={url} onLoad={handleLoad} />
+                    </div>
+                  );
+                })}
+
+              <div
+                style={{
+                  height: "30px",
+                  width: "30px",
+                  marginLeft: "15px",
+                  marginTop: "15px",
+                }}
+              >
+                <Heart isActive={active} onClick={() => setActive(!active)} />
+              </div>
+
+              <div className="col CaptionDiv">
+                <p>{e.content}</p>
+              </div>
+            </div>
+          );
+        })}
 
       <Modal
         open={open}

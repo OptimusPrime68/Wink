@@ -359,13 +359,13 @@ textarea {
 }
 
 #gender {
-  border: 1px solid black;
+  border: 1px solid #fbab7e;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -373,11 +373,11 @@ textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #fbab7e;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #ff9f68;
 }
 
 #photoDel {

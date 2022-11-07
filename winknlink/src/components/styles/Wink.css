@@ -12,7 +12,7 @@
 
 .Winkcard > h3 {
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
   color: white;
   margin-left: 10px;
 }
@@ -34,4 +34,12 @@
   width: 600px;
   z-index: -1;
   border-radius: 20px;
+}
+
+.WinkProfileIcon {
+  position: absolute;
+  bottom: 70px;
+  float: right;
+  margin-right: 10px !important;
+  background-color: rgb(217, 57, 148) !important;
 }
