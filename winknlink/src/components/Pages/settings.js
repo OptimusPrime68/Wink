@@ -402,7 +402,6 @@ export default function Settings() {
               value={month}
               label="Subscription"
               onChange={(e) => handleMonth(e.target.value)}
-              displayEmpty
             >
               <MenuItem value="">Select Plan</MenuItem>
               <MenuItem value="1">1 Month (₹60)</MenuItem>
