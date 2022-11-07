@@ -5,8 +5,11 @@ const {getMatch,makeMatch} = require("../controller/match");
 
 
 
+// Route to find all Matches of user
 router.post("/all-match",profileCheck,getMatch);
 
+
+// Route to send a Match Request
 router.post("/make-match",profileCheck,makeMatch);
 
 

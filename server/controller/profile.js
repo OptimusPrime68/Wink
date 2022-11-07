@@ -4,7 +4,7 @@ const getDistance = require('geolib');
 const geolib = require('geolib');
 const { default: dist } = require('react-datepicker');
 
-
+// FUNCTION to update Profile
 exports.updateProfile=(req,res)=>{
     
 
@@ -67,7 +67,7 @@ exports.updateProfile=(req,res)=>{
 
 }
 
-
+// FUNCTION TO FETCH USER PROFILE
 exports.fetchProfile=(req,res)=>{
     
     console.log(req.body);
@@ -92,6 +92,7 @@ exports.fetchProfile=(req,res)=>{
 
 }
 
+//FUNCTION TO FETCH USER PROFILE ID FROM EMAIL
 exports.fetchProfileId = (req,res)=>{
     console.log(req.body);
     Profile.findOne({email:req.body.email},function(error,r){
@@ -102,9 +103,10 @@ exports.fetchProfileId = (req,res)=>{
     })
 }
 
+//FUNCTION TO FETCH ALL PROFILE TO SHOW
 exports.allProfile=(req,res)=>{
 
-    console.log(req.body);
+ 
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
@@ -127,10 +129,9 @@ exports.allProfile=(req,res)=>{
         
 
         Profile.find(
-            {gender:preference,$and:[{age:{$gt:age[0]}},{age:{$lt:age[1]}}]},
+            {gender:preference,$and:[{age:{$gt:age[0]}},{age:{$lt:age[1]}}],email:{$ne:email}}).exec(
             function (err,success) {
                 if(err) return res.status(400).json({id : "No Profile Found"});
-
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 

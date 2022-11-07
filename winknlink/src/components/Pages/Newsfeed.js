@@ -10,7 +10,7 @@ import "../styles/Newsfeed.css";
 import DropzonePost from "./DropzonePost";
 import { useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector} from "react-redux";
 import {
   ref,
   uploadBytes,
@@ -20,7 +20,8 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { storage } from "../../firebase";
-import { getStorage } from "firebase/storage";
+import { useState ,useRef } from "react";
+import Loader from "./Loader";
 
 const style = {
   position: "relative",
@@ -42,13 +43,24 @@ function Newsfeed() {
   const [post,setPost] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [loading,setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
+
+
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading")
+    counter.current += 1;
+    if (counter.current >= post.length) setLoading(false);
+  };
+
 
 
 
   useEffect(()=>{
 
 
+    setLoading(true);
   axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
 
       const id = data.data.id;
@@ -107,6 +119,7 @@ function Newsfeed() {
 
   return (
     <div style={{ textAlign: "center" }}>
+      {loading ? <Loader />:<></>}
       <Header />
       <h1>News Feed</h1>
       <div className="newsDiv">
@@ -136,7 +149,7 @@ function Newsfeed() {
         {e.files && e.files.map((url)=>{
           return (
             <div className="row PostImgDiv">
-            <img className="PostImg" src={url} /> 
+            <img className="PostImg" src={url} onLoad={handleLoad} /> 
            </div>
           )
         })}

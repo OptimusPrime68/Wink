@@ -3,8 +3,9 @@ const Post= require('../models/post')
 const Profile = require('../models/profile');
 const Match= require('../models/match')
 var mongoose = require('mongoose');
-// profile 6363cfa66b9c72a61f76c99d 6363d0b06b9c72a61f77ebd2 6363d1546b9c72a61f789b67 
-// name   Katrina Kirti Sirin Kajal
+
+
+// FUNCTION TO CREATE POST
 exports.makePost=(req,res)=>{
 
     const {content,authorid} = req.body;
@@ -23,6 +24,7 @@ exports.makePost=(req,res)=>{
     })
 }
 
+// FUNCTION TO GET AUTHOR OF POST
 exports.getAuthor = async (req,res)=>{
 
 
@@ -35,6 +37,7 @@ exports.getAuthor = async (req,res)=>{
     })
 }
 
+// FUNCTION TO GET ALL POST ALONG WITH PROFILE DETAILS
 exports.getAllPost = async (req,res)=>{
 
     console.log(req.body);

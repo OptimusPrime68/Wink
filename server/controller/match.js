@@ -1,7 +1,7 @@
 const Match= require('../models/match')
 
 
-
+// FUNCTION TO MAKE MATCH
 exports.makeMatch=(req,res)=>{
 
 
@@ -23,7 +23,7 @@ exports.makeMatch=(req,res)=>{
         }
     )
 }
-
+// FUNCTION TO GET MATCH
 exports.getMatch= async (req,res)=>{
 
     const email = req.body.email;

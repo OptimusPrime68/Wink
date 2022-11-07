@@ -3,12 +3,13 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const Subscription = require("../models/subscription");
 
+// FUNCTION TO CREATE ORDER
 exports.makeOrder= async (req,res)=>{
 
     try {
 		const instance = new Razorpay({
-			key_id: "rzp_test_yWZnCopCzsa76e",
-			key_secret: "bOSh6ZnB20VKAmgXpPWbhvXG",
+			key_id: process.env.RAZORPAY_KEY_ID,
+			key_secret: process.env.RAZORPAY_SECRET_ID,
 		});
 
 		const options = {
@@ -31,7 +32,7 @@ exports.makeOrder= async (req,res)=>{
 
 }
 
-
+// FUNCTION TO MAKE PAYMENT
 exports.makePayment=async (req,res)=>{
 
     console.log(req.body);
@@ -45,7 +46,7 @@ exports.makePayment=async (req,res)=>{
 
 		const sign = razorpay_order_id + "|" + razorpay_payment_id;
 		const expectedSign = crypto
-			.createHmac("sha256", "bOSh6ZnB20VKAmgXpPWbhvXG")
+			.createHmac("sha256", process.env.RAZORPAY_HASH_KEY)
 			.update(sign.toString())
 			.digest("hex");
 

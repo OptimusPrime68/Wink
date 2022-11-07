@@ -4,7 +4,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Card from "@mui/material/Card";
 import { CardMedia } from "@mui/material";
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useRef} from 'react';
 import axios from 'axios';
 import {useSelector} from 'react-redux'
 import {
@@ -18,7 +18,7 @@ import {
 import { storage } from "../../firebase";
 import { getStorage } from "firebase/storage";
 import {toast} from 'react-toastify'
-
+import Loader from "./Loader";
 
 
 
@@ -30,10 +30,12 @@ function Like() {
   let { user } = useSelector((state) => ({ ...state }));
   const [like,setLike] = useState([]);
   const [superLike,setSuperLike] = useState([]);
+  const [loading,setLoading] = useState(false);
 
 
   useEffect(()=>{
 
+    setLoading(true);
     axios.post("http://localhost:4000/api/get-super-like",{email:user.email}).then((r)=>{
       
       r.data.m.map((e)=>{
@@ -99,13 +101,20 @@ function Like() {
 
 
 
-  console.log(superLike)
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading")
+    counter.current += 1;
+    if (counter.current >= like.length) setLoading(false);
+  };
+
 
 
 
   return (
     <div>
       <Header />
+      {loading ? <Loader /> : <></>}
       <div>
         <Tabs
           defaultActiveKey="Likes"
@@ -123,6 +132,7 @@ function Like() {
                   <CardMedia
                     component="img"
                     image={e.image}
+                    onLoad = {handleLoad}
                     alt="Profile Image"
                     className="profileDivImage"
                     style={{
@@ -147,6 +157,7 @@ function Like() {
               <div className="matchDiv col mb-3">
               <Card style={{ width: "200px", textAlign: "center" }}>
                 <CardMedia
+                  onLoad = {handleLoad}
                   component="img"
                   image={e.image}
                   alt="Profile Image"

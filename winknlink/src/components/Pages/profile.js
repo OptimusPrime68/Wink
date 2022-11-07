@@ -324,7 +324,7 @@ export default function Profile() {
 
   const uploadVideo = (e) => {
     e.preventDefault();
-    console.log(videoUpload);
+    setLoading(true);
     if (videoUpload) {
       let r = (Math.random() + 1).toString(36).substring(7);
       const VideoRef = ref(storage, `${email}/video/${r}`);
@@ -332,6 +332,7 @@ export default function Profile() {
       uploadBytes(VideoRef, videoUpload)
         .then(() => {
           toast.success("Video Uploaded");
+          setLoading(false);
         })
         .catch((err) => {
           toast.error(err.message);
@@ -348,6 +349,7 @@ export default function Profile() {
   };
 
   const loadPhoto = async () => {
+    setLoading(true);
     setImageList([]);
     listAll(imageListRef)
       .then((response) => {
@@ -364,6 +366,15 @@ export default function Profile() {
   const imageLoaded = () => {
     console.log("Loading IMages");
   };
+
+
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading")
+    counter.current += 1;
+    if (counter.current >= imageList.length) setLoading(false);
+  };
+
 
   return (
     <div>
@@ -619,6 +630,7 @@ export default function Profile() {
                             <Card.Img
                               className="PhotoPreviewSection"
                               variant="top"
+                              onLoad={handleLoad}
                               src={url}
                             />
                             <Card.Body style={{ textAlign: "center" }}>
