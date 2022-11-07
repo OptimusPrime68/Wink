@@ -10,6 +10,7 @@ import "../styles/Newsfeed.css";
 import DropzonePost from "./DropzonePost";
 import { useEffect } from "react";
 import axios from "axios";
+import { getStorage } from "firebase/storage";
 import { useSelector} from "react-redux";
 import {
   ref,
@@ -22,6 +23,7 @@ import {
 import { storage } from "../../firebase";
 import { useState ,useRef } from "react";
 import Loader from "./Loader";
+import { toast } from "react-toastify";
 
 const style = {
   position: "relative",
@@ -45,6 +47,7 @@ function Newsfeed() {
   const handleClose = () => setOpen(false);
   const [loading,setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
+  const [profile,setProfile] = useState(0);
 
 
   const counter = useRef(0);
@@ -64,14 +67,18 @@ function Newsfeed() {
   axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
 
       const id = data.data.id;
-       
-    axios.post("http://localhost:4000/api/get-all-post",{authorid:id,email:user.email}).then((data)=>{
+      setProfile(id);
+      
+     
+
+     axios.post("http://localhost:4000/api/get-all-post",{authorid:id,email:user.email}).then((data)=>{
       
       data.data.map((e)=>{
       const id = e._id;
       const ex = e.authorId.email;
       const imageListRef = ref(storage, `${ex}/post/${id}`);
       e['files'] = [];
+      console.log(e);
       setPost((prev) => [...prev, e]);
       listAll(imageListRef)
       .then((response) => {
@@ -109,12 +116,46 @@ function Newsfeed() {
     }).catch((error)=>{
       console.log(error);
     })
-
-
-
   },[])
 
   console.log(post);
+
+
+  const handleDelete = async (e)=>{
+
+    
+
+    axios.post("http://localhost:4000/api/delete-post",{postId:e._id}).then((data)=>{
+
+    console.log(data);
+    toast.success("Post Deleted");
+
+
+    const storage = getStorage();
+    e.files.map((file)=>{
+
+    const desertRef = ref(storage, file);
+    deleteObject(desertRef)
+      .then((s) => {
+      
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    })
+
+
+
+    setPost(post.filter((a) => a !== e));
+
+
+    }).catch((err)=>{
+      toast.error(err.message);
+    })
+
+
+  }
 
 
   return (
@@ -141,6 +182,8 @@ function Newsfeed() {
       
       {post && post.map((e)=>{
 
+        console.log(e.authorId._id,profile);
+
          return (
          <div className="PostDiv">
         <div className="col CaptionDiv">
@@ -153,7 +196,7 @@ function Newsfeed() {
            </div>
           )
         })}
-       
+        {e.authorId._id == profile ? <button onClick={()=>{handleDelete(e)}}>Delete</button>:<></>}
         <h4>{new Date(e.createdAt).toDateString() +" " + new Date(e.createdAt).toLocaleTimeString()}</h4>
       </div>
          )
