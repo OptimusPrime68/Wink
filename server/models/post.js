@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema;
-
+// SCHEMA FOR USER POSTS
 const postSchema = new mongoose.Schema({
     content:{
         type:String,

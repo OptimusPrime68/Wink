@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema;
 
+// SCHEMA FOR SUPER LIKE
 const superLikeSchema = new mongoose.Schema({
     from:{
         type:String,

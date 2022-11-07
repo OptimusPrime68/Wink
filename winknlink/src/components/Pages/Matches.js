@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext,useRef } from "react";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import axios from "axios";
@@ -13,7 +13,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CircleLoader from "react-spinners/CircleLoader";
+import Loader from "./Loader";
 import Header from "./Header";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -23,6 +23,7 @@ import { CardMedia } from "@mui/material";
 import { DateContext } from "./DateContext";
 import "../styles/Matches.css";
 import io from "socket.io-client";
+import { exists } from "i18next";
 const ENDPOINT = "http://localhost:4000";
 var socket;
 
@@ -57,7 +58,6 @@ function Matches() {
         response.data.forEach(function (x) {
           var imageListRef = ref(storage, `${x}`);
           console.log(x);
-
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
               getDownloadURL(item).then((url) => {
@@ -91,8 +91,6 @@ function Matches() {
             .catch((err) => console.log(err));
         });
       });
-
-    setLoading(false);
   }, []);
 
   const swiped = (direction, name, toemail) => {
@@ -103,6 +101,14 @@ function Matches() {
       toast.success("Open Chat Box");
     }
   };
+
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading")
+    counter.current += 1;
+    if (counter.current >= people.length) setLoading(false);
+  };
+
 
   return (
     <div className="DateMainDiv">
@@ -115,6 +121,7 @@ function Matches() {
                 component="img"
                 image={person.image}
                 alt="Profile Image"
+                onLoad={handleLoad}
                 className="profileDivImage"
               />
               <CardContent>
@@ -146,7 +153,7 @@ function Matches() {
           </TinderCard>
         ))}
       </div> */}
-      {loading && <CircleLoader color="#f70177" />}
+      {loading && <Loader />}
     </div>
   );
 }
