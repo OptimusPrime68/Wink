@@ -24,6 +24,45 @@ import { useState, useRef } from "react";
 import Loader from "./Loader";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Heart from "react-heart";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+import { makeStyles } from "@mui/styles";
+import CardMedia from "@mui/material/CardMedia";
+import SwiperCore, {
+  Keyboard,
+  Scrollbar,
+  Pagination,
+  Navigation,
+} from "swiper/core";
+import ts_1 from "../../ImagesCarousel/person1.jfif";
+// import ts_2 from "../../ImagesCarousel/person2.jfif";
+// import ts_3 from "../../ImagesCarousel/person3.jfif";
+// import ts_4 from "../../ImagesCarousel/person4.jpg";
+// import ts_5 from "../../ImagesCarousel/person5.jfif";
+
+const useStyles = makeStyles({
+  media: {
+    height: 0,
+    paddingTop: "100%",
+  },
+  swiperContainer: {
+    paddingBottom: "3rem",
+    "& .swiper-pagination-bullet": {
+      background: "blue",
+    },
+    "& .swiper-button-next:after": {
+      fontSize: "2rem !important",
+    },
+    "& .swiper-button-prev:after": {
+      fontSize: "2rem !important",
+    },
+  },
+});
+
+SwiperCore.use([Keyboard, Scrollbar, Pagination, Navigation]);
+
+const images = [ts_1];
 
 const style = {
   position: "relative",
@@ -108,6 +147,8 @@ function Newsfeed() {
 
   const [active, setActive] = useState(false);
 
+  const { media, swiperContainer } = useStyles();
+
   return (
     <div style={{ textAlign: "center" }}>
       {loading ? <Loader /> : <></>}
@@ -170,14 +211,25 @@ function Newsfeed() {
                 </div>
               </div>
 
-              {e.files &&
-                e.files.map((url) => {
-                  return (
-                    <div className="row PostImgDiv">
-                      <img className="PostImg" src={url} onLoad={handleLoad} />
-                    </div>
-                  );
-                })}
+              <div className="row PostImgDiv">
+                <Swiper
+                  grabCursor
+                  keyboard={{ enabled: true }}
+                  pagination={{ clickable: true }}
+                  navigation
+                  className={swiperContainer}
+                >
+                  {e.files.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <CardMedia
+                        className="PostImg"
+                        image={image}
+                        onLoad={handleLoad}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
 
               <div
                 style={{
