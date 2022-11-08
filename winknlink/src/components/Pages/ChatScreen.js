@@ -55,9 +55,7 @@ function ChatScreen() {
         `http://localhost:4000/api/chat/message/${selectedChat._id}`
       );
       console.log(data);
-      var s = data[0].createdAt;
-      var dt = new Date(s);
-      console.log(dt.getHours(), dt.getMinutes());
+      console.log(selectedChat)
       setMessages(data);
       setLoading(false);
 
@@ -118,6 +116,11 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
+  const otherUserIdHandler = ()=>{
+        // currUser,IdtoCall
+        if(selectedChat.users[0].email===email) return [selectedChat.users[0]._id,selectedChat.users[1]._id];
+        else return [selectedChat.users[1]._id,selectedChat.users[0]._id]
+  }
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -127,7 +130,7 @@ function ChatScreen() {
   return (
     <div>
       <Header videoButton="/" />
-      <HeaderDesktop />
+      <HeaderDesktop users={otherUserIdHandler()}/>
       <div className="chatScreen">
         <div className="ChatMessageDiv">
           <p className="chatScreenTimeStamp">

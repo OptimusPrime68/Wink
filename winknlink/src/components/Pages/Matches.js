@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import axios from "axios";
 import { storage } from "../../firebase";
@@ -23,7 +22,6 @@ import { CardMedia } from "@mui/material";
 import { DateContext } from "./DateContext";
 import * as Realm from 'realm-web'
 import "../styles/Matches.css";
-import io from "socket.io-client";
 import { exists } from "i18next";
 
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import Pusher from 'pusher-js'
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";

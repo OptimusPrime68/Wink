@@ -17,7 +17,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { storage } from "../../firebase";
-import { getStorage } from "firebase/storage";
 import ReactPlayer from "react-player";
 
 function MatchProfile({ id }) {

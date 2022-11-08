@@ -27,6 +27,17 @@ import Heart from "react-heart";
 import { toast } from "react-toastify";
 
 import { useDispatch,useSelector } from "react-redux";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import CardMedia from "@mui/material/CardMedia";
+import SwiperCore, {
+  Keyboard,
+  Scrollbar,
+  Pagination,
+  Navigation,
+} from "swiper/core";
+
+SwiperCore.use([Keyboard, Scrollbar, Pagination, Navigation]);
 
 const style = {
   position: "relative",
@@ -270,14 +281,25 @@ function Newsfeed() {
                 </div>
               </div>
 
-              {e.files &&
-                e.files.map((url) => {
-                  return (
-                    <div className="row PostImgDiv">
-                      <img className="PostImg" src={url} onLoad={handleLoad} />
-                    </div>
-                  );
-                })}
+              <div className="row PostImgDiv">
+                <Swiper
+                  grabCursor
+                  keyboard={{ enabled: true }}
+                  pagination={{ clickable: true }}
+                  navigation
+                  className=""
+                >
+                  {e.files.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <CardMedia
+                        className="PostImg"
+                        image={image}
+                        onLoad={handleLoad}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
 
               <div
                 style={{

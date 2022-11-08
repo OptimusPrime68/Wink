@@ -92,7 +92,7 @@ function Header({ videoButton }) {
           </Dropdown.Item>
           <Dropdown.Item onClick={switchToChat}>
             <IconButton>
-              <ChatIcon style={{ color: "#f8de7e" }} fontSize="large" />
+              <ChatIcon style={{ color: "#F99D31" }} fontSize="large" />
               <p style={{ fontSize: "20px", marginLeft: "10px" }}>Chat</p>
             </IconButton>
           </Dropdown.Item>
@@ -144,7 +144,7 @@ function Header({ videoButton }) {
       />
 
       {videoButton ? (
-        <IconButton style={{ color: "#d0f0c0" }}>
+        <IconButton style={{ color: "#385E0F" }}>
           <VideocamIcon fontSize="large" />
         </IconButton>
       ) : (

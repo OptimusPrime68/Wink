@@ -23,7 +23,7 @@ const style = {
   overflowY: "scroll",
 };
 
-function HeaderDesktop() {
+function HeaderDesktop({ users }) {
   const { switchToChat } = useContext(DateContext);
   const {
     name,
@@ -48,11 +48,14 @@ function HeaderDesktop() {
 
   useEffect(() => {
     setName(email);
-    // setIdToCall()
+    // console.log(users)
+    setIdToCall(users[1]);
+    // setMe(users[0])
   }, []);
 
   const [open, setOpen] = useState(false);
   function handleOpen(e) {
+    callUser(idToCall);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
@@ -61,14 +64,14 @@ function HeaderDesktop() {
     <div className="HeaderWinkDesktop">
       <div className="row ">
         <div className="col">
-          <IconButton onClick={switchToChat} style={{ color: "#f8de7e" }}>
+          <IconButton onClick={switchToChat} style={{ color: "#F99D31" }}>
             <ChatIcon fontSize="large" />
           </IconButton>
         </div>
         <div className="col-auto">
           <IconButton
             onClick={handleOpen}
-            style={{ float: "right", color: "#d0f0c0" }}
+            style={{ float: "right", color: "#385E0F" }}
           >
             <VideocamIcon fontSize="large" />
           </IconButton>
