@@ -1,6 +1,9 @@
 const Match= require('../models/match')
 
 
+
+
+
 // FUNCTION TO MAKE MATCH
 exports.makeMatch=(req,res)=>{
 
@@ -19,9 +22,13 @@ exports.makeMatch=(req,res)=>{
             console.log(err);
             console.log(success);
             if(err) return res.status(400).json({err});
+           
             return res.status(201).json(success);
         }
     )
+
+   
+    
 }
 // FUNCTION TO GET MATCH
 exports.getMatch= async (req,res)=>{

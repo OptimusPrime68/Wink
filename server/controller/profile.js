@@ -1,6 +1,6 @@
 const Profile = require('../models/profile')
 const getDistance = require('geolib');
-
+var mongoose = require('mongoose');
 const geolib = require('geolib');
 const { default: dist } = require('react-datepicker');
 
@@ -92,13 +92,16 @@ exports.fetchProfile=(req,res)=>{
 
 }
 
+
+
+
 //FUNCTION TO FETCH USER PROFILE ID FROM EMAIL
 exports.fetchProfileId = (req,res)=>{
     console.log(req.body);
     Profile.findOne({email:req.body.email},function(error,r){
         if(error) res.status(400).json({error:error.message});
         console.log(r);
-        if(r && r.name != null) res.status(200).json({id:r._id});
+        if(r && r.name != null) res.status(200).json({id:r});
         else res.status(400).json({message:"Update Your Profile First"});
     })
 }

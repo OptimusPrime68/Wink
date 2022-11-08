@@ -21,17 +21,21 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
 import { DateContext } from "./DateContext";
+import * as Realm from 'realm-web'
 import "../styles/Matches.css";
 import io from "socket.io-client";
 import { exists } from "i18next";
-const ENDPOINT = "http://localhost:4000";
-var socket;
+
 
 function Matches() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
   const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
+
+   
+
+  const app = new Realm.App({id: "application-1-xqzti"})
 
   var email = "";
 
@@ -44,8 +48,20 @@ function Matches() {
   if (user) email = user.email;
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("match", "hello");
+   
+    async function getData () {
+      try{
+    	const user = await app.logIn(Realm.Credentials.anonymous())
+      const data =await user.functions.getAllData();
+      console.log("REST",data);
+      }
+      catch(err){console.log(err)}
+      
+
+    }
+
+    getData();
+
   }, []);
 
   useEffect(() => {

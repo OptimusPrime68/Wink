@@ -55,16 +55,61 @@ exports.getAllPost = async (req,res)=>{
         var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
         if(count){
         const d = await Profile.findOne({email:localEmail[i].matchTo});
-        const result =await  Post.find({authorId:d._id},{},{sort:"-createdAt"}).populate("authorId");
+        const result =await  Post.find({authorId:d._id},{},{sort:"-createdAt"}).populate("likes").populate("authorId");
         ans = ans.concat(result);
         }
     }
 
 
     var idx = mongoose.Types.ObjectId(req.body.authorid);
-    const d = await  Post.find({authorId:idx},{},{sort:"-createdAt"}).populate("authorId");
+    const d = await  Post.find({authorId:idx},{},{sort:"-createdAt"}).populate("likes").populate("authorId");
     ans = ans.concat(d);
     console.log(ans);
     res.status(200).json(ans);
 }
 
+
+exports.deletePost = async (req,res)=>{
+    const id = req.body.postId;
+
+    console.log(id);
+    try{
+    const a =await Post.deleteOne({_id:mongoose.Types.ObjectId(id)});
+    res.status(200).json({message:a});
+    }
+    catch(err){
+    res.status(400).json({message:err});
+    }
+       
+   
+}
+
+exports.updateLike = async(req,res)=>{
+
+    const {user,post} = req.body;
+
+    const cnt = await Post.find({_id:mongoose.Types.ObjectId(post),likes:{$in:[user]}}).count();
+
+    if(cnt == 0)
+    {
+        try{
+        await Post.findOneAndUpdate({_id:mongoose.Types.ObjectId(post)},{$push:{likes:user}});
+        }catch(err){
+           res.status(400).json({message:err.message});
+        }
+    }
+    else{
+
+
+        try{
+            await Post.findOneAndUpdate({_id:mongoose.Types.ObjectId(post)},{$pull:{likes:{$in:[user]}}});
+            }catch(err){
+                res.status(400).json({message:err.message});
+            }
+
+    }
+
+    res.status(200).json({message:"success"});
+
+
+}

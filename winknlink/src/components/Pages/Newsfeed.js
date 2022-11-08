@@ -11,7 +11,6 @@ import DropzonePost from "./DropzonePost";
 import { useEffect } from "react";
 import axios from "axios";
 import { getStorage } from "firebase/storage";
-import { useSelector} from "react-redux";
 import {
   ref,
   uploadBytes,
@@ -26,6 +25,8 @@ import Loader from "./Loader";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Heart from "react-heart";
 import { toast } from "react-toastify";
+
+import { useDispatch,useSelector } from "react-redux";
 
 const style = {
   position: "relative",
@@ -49,7 +50,11 @@ function Newsfeed() {
   const handleClose = () => setOpen(false);
   const [loading, setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
+  const [profileD,setProfileD] = useState({});
   const [profile,setProfile] = useState(0);
+  const [flag,setFlag] = useState(true);
+  const dispatch = useDispatch();
+
 
   const counter = useRef(0);
   const handleLoad = () => {
@@ -62,59 +67,62 @@ function Newsfeed() {
     setLoading(true);
   axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
 
-      const id = data.data.id;
+     
+
+      console.log(data.data);
+      const id = data.data.id._id;
+      console.log(id);
       setProfile(id);
+      setProfileD(data.data.id);
       
      
 
      axios.post("http://localhost:4000/api/get-all-post",{authorid:id,email:user.email}).then((data)=>{
-      
+  
+      console.log(data);
+
+      if(data.data.length == 0)
+      setLoading(false);
+
       data.data.map((e)=>{
+
+
+
       const id = e._id;
       const ex = e.authorId.email;
       const imageListRef = ref(storage, `${ex}/post/${id}`);
       e['files'] = [];
-      console.log(e);
       setPost((prev) => [...prev, e]);
       listAll(imageListRef)
       .then((response) => {
+        console.log(e.content,response);
+
+        if(response.items.length == 0)
+        setLoading(false);
+      
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
             
+            setLoading(false);
+      
 
            setPost(current=>current.map(obj=>{
+
             
              if(obj == e){
              obj.files = [...obj.files,url]; 
-             console.log(obj);
              }
              return obj;
-          
              
            }))
-                         
-            
-          });
-      })
-      .catch((error) => console.log(error));
-
-
-  
-     
-       })
-
-
-
-    }).catch((error)=>{
-      console.log(error);
-    })  
-    }).catch((error)=>{
+          })
+      })})
+    })}).catch((error)=>{
       console.log(error);
     })
-  })
+  }).catch((error)=>console.log(error));
   },[])
 
-  console.log(post);
 
 
   const handleDelete = async (e)=>{
@@ -123,7 +131,6 @@ function Newsfeed() {
 
     axios.post("http://localhost:4000/api/delete-post",{postId:e._id}).then((data)=>{
 
-    console.log(data);
     toast.success("Post Deleted");
 
 
@@ -152,6 +159,49 @@ function Newsfeed() {
 
 
   }
+
+  const handleLike = async (e,post,user) =>{
+    
+
+    try{
+     const d =await  axios.post("http://localhost:4000/api/update-like",{post,user});
+     if( e.likes.some(obj=>obj._id == profile))
+     {
+
+       for(var i = 0;i<e.likes.length;i++)
+       {
+        if (Object.values(e.likes[i]).indexOf(profile) > -1) {
+          e.likes.splice(i,1);
+       }
+       }
+     }
+     else{
+     
+      
+
+      e.likes.push(profileD);
+  
+
+     }
+     setFlag(!flag);
+     
+    }catch(err){
+      console.log(err);
+      toast.error(err.message);
+    }
+
+
+    
+
+  }
+
+
+  const showLike = (arr)=>{
+    console.log("Hover");
+    for(var i = 0;i<arr.length;i++)
+    console.log(arr[i].name);
+  }
+
 
   const [active, setActive] = useState(false);
 
@@ -194,7 +244,7 @@ function Newsfeed() {
                         marginTop: "10px",
                       }}
                     >
-                      Name
+                      {e.authorId.name}
                     </div>
                   </div>
                   <div className="row DateH4">
@@ -206,14 +256,17 @@ function Newsfeed() {
                   </div>
                 </div>
                 <div className="col DelDiv">
-                  <DeleteIcon
+
+                {e.authorId._id == profile ? <DeleteIcon
+                    onClick={()=>{handleDelete(e)}}
                     fontSize="large"
                     style={{
                       color: "#e32636",
                       float: "right",
                       cursor: "pointer",
                     }}
-                  />
+                  />:<></>}
+                  
                 </div>
               </div>
 
@@ -234,7 +287,15 @@ function Newsfeed() {
                   marginTop: "15px",
                 }}
               >
-                <Heart isActive={active} onClick={() => setActive(!active)} />
+              
+              {e.likes.length} <Heart isActive={flag ? e.likes.some(obj=>obj._id == profile)?true:false:e.likes.some(obj=>obj._id == profile)?true:false} onClick={()=>{handleLike(e,e._id,profile)}}
+              
+              
+              
+
+              />
+              <button onMouseEnter={()=>showLike(e.likes)}></button>
+                
               </div>
 
               <div className="col CaptionDiv">

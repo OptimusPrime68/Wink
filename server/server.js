@@ -29,6 +29,7 @@ mongoose
 
 
 
+
 const port = process.env.PORT || 8000;
 const server = app.listen(port,()=> console.log(`server is running ${port}`));
 
@@ -69,10 +70,6 @@ io.on("connection",(socket)=>{
   })
 
 
-  socket.on('match',(data)=>{
-    console.log("DATA",data);
-    socket.emit('match-to',data);
-  })
  
 })
 
