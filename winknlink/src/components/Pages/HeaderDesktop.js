@@ -23,29 +23,31 @@ const style = {
   overflowY: "scroll",
 };
 
-function HeaderDesktop() {
+function HeaderDesktop({users}) {
   const { switchToChat } = useContext(DateContext);
   const { name, callAccepted, myVideo, userVideo, callEnded, stream, call,
-  answerCall,me,setName, leaveCall, callUser,setStream } = useContext(SocketContext);
+  answerCall,me,setMe,setName, leaveCall, callUser,setStream } = useContext(SocketContext);
 
   const [idToCall, setIdToCall] = useState('');
   const navigate = useNavigate();
   const email=localStorage.getItem("email");
   const id=localStorage.getItem("id")
 
-  useEffect(() => {
+  useEffect(() => { 
     setName(email);
-    // setIdToCall()
-    
+    // console.log(users)
+    setIdToCall(users[1])
+    // setMe(users[0])
   }, [])
   
 
   const [open, setOpen] = useState(false);
   function handleOpen(e) {
+    callUser(idToCall);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
-
+  
   return (
     <div className="HeaderWinkDesktop">
       <div className="row ">
@@ -71,9 +73,9 @@ function HeaderDesktop() {
         
         <Box sx={style}>
         <h2>video player</h2>
-        {stream && (
+        
             <video playsInline muted ref={myVideo} autoPlay  />
-         )}
+        
 
         {callAccepted && !callEnded && (
               <video playsInline ref={userVideo} autoPlay  />
