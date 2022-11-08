@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Setting from "./settings";
 import Wink from "./Wink";
-import BottomDrawer from "./BottomDrawer";
 import Matches from "./Matches";
 import { DateContext } from "./DateContext";
 import ChatPage from "./ChatPage";
@@ -292,7 +291,7 @@ export default function Date(props) {
                   selected={selectedIndex === 2}
                 >
                   <ListItemIcon>
-                    <ForumIcon style={{ color: "#f8de7e" }} />
+                    <ForumIcon style={{ color: "#F99D31" }} />
                   </ListItemIcon>
                   <ListItemText primary="Chats" />
                 </ListItemButton>

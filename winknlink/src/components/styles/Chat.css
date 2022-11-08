@@ -6,8 +6,9 @@
   height: 70px;
   border-bottom: 1px solid #f9f9f9;
   margin-bottom: 4px;
-  background-color: #f9f9f9;
+  background-color: #ffebe5;
   border-radius: 10px;
+  margin-top: 5px;
 }
 
 .chatDetails {
