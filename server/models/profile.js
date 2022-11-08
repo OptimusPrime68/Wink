@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema;
-
+// SCHEMA FOR USER PROFILE
 const profileSchema = new mongoose.Schema({
     email:{
         type:String,

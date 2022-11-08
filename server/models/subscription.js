@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema;
-
+//SCHEMA FOR SAVING SUBSCRIPTIONS RECORD
 const subscriptionSchema = new mongoose.Schema({
     email:{
         type:String,

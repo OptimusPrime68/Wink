@@ -3,6 +3,7 @@ const Profile = require('../models/profile');
 const Subscription = require('../models/subscription');
 const Match = require("../models/match");
 
+// FUNCTION TO LOGIN USER
 exports.login=(req,res)=>{
     
     const {email,password} = req.credential;
@@ -30,6 +31,7 @@ exports.login=(req,res)=>{
     });
 }
 
+// FUNCTION TO SIGN UP USER
 exports.signup=(req,res)=>{
     
    const {email,password} = req.credential;
@@ -58,12 +60,12 @@ exports.signup=(req,res)=>{
 
 
 
-
+// FUNCTION TO GET DIFFERENCE IN DATE TO GET DAYS
 function datediff(first, second) {        
     return Math.round((second - first) / (1000 * 60 * 60 * 24));
 }
 
-
+// FUNCTION TO GET IF USER IS FREE OR PREMIUM
 exports.getUserType= async (req,res)=>{
 
 
@@ -91,7 +93,7 @@ exports.getUserType= async (req,res)=>{
     res.status(200).json({user:"free"});
 }
 
-
+// FUNCTION TO DELETE ACCOUNT
 exports.deleteAccount = async (req,res)=>{
     const email = req.body.email;
 
@@ -114,7 +116,7 @@ exports.deleteAccount = async (req,res)=>{
     return res.status(400).json({message:"Some Error Occured"});
 }
 
-
+// FUNCTION TO AUTHENTICATE USER USING GOOGLE
 exports.googleLogin= async (req,res)=>{
     
     const {email} = req.credential;

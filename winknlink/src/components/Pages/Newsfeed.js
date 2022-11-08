@@ -3,11 +3,66 @@ import { Button } from "react-bootstrap";
 import Header from "./Header";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BottomDrawer from "./BottomDrawer";
 import "../styles/Newsfeed.css";
 import DropzonePost from "./DropzonePost";
+import { useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { useState, useRef } from "react";
+import Loader from "./Loader";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Heart from "react-heart";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+import { makeStyles } from "@mui/styles";
+import CardMedia from "@mui/material/CardMedia";
+import SwiperCore, {
+  Keyboard,
+  Scrollbar,
+  Pagination,
+  Navigation,
+} from "swiper/core";
+import ts_1 from "../../ImagesCarousel/person1.jfif";
+// import ts_2 from "../../ImagesCarousel/person2.jfif";
+// import ts_3 from "../../ImagesCarousel/person3.jfif";
+// import ts_4 from "../../ImagesCarousel/person4.jpg";
+// import ts_5 from "../../ImagesCarousel/person5.jfif";
+
+const useStyles = makeStyles({
+  media: {
+    height: 0,
+    paddingTop: "100%",
+  },
+  swiperContainer: {
+    paddingBottom: "3rem",
+    "& .swiper-pagination-bullet": {
+      background: "blue",
+    },
+    "& .swiper-button-next:after": {
+      fontSize: "2rem !important",
+    },
+    "& .swiper-button-prev:after": {
+      fontSize: "2rem !important",
+    },
+  },
+});
+
+SwiperCore.use([Keyboard, Scrollbar, Pagination, Navigation]);
+
+const images = [ts_1];
 
 const style = {
   position: "relative",
@@ -26,11 +81,77 @@ const style = {
 
 function Newsfeed() {
   const [open, setOpen] = React.useState(false);
+  const [post, setPost] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [loading, setLoading] = useState(false);
+  let { user } = useSelector((state) => ({ ...state }));
+
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading");
+    counter.current += 1;
+    if (counter.current >= post.length) setLoading(false);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .post("http://localhost:4000/api/get-profile-id", { email: user.email })
+      .then((data) => {
+        const id = data.data.id;
+
+        axios
+          .post("http://localhost:4000/api/get-all-post", {
+            authorid: id,
+            email: user.email,
+          })
+          .then((data) => {
+            if (data.data.length == 0) setLoading(false);
+
+            data.data.map((e) => {
+              const id = e._id;
+              const ex = e.authorId.email;
+              const imageListRef = ref(storage, `${ex}/post/${id}`);
+              e["files"] = [];
+              setPost((prev) => [...prev, e]);
+              listAll(imageListRef)
+                .then((response) => {
+                  response.items.forEach((item) => {
+                    getDownloadURL(item).then((url) => {
+                      setPost((current) =>
+                        current.map((obj) => {
+                          if (obj == e) {
+                            obj.files = [...obj.files, url];
+                            console.log(obj);
+                          }
+                          return obj;
+                        })
+                      );
+                    });
+                  });
+                })
+                .catch((error) => console.log(error));
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  console.log(post);
+
+  const [active, setActive] = useState(false);
+
+  const { media, swiperContainer } = useStyles();
 
   return (
     <div style={{ textAlign: "center" }}>
+      {loading ? <Loader /> : <></>}
       <Header />
       <h1>News Feed</h1>
       <div className="newsDiv">
@@ -48,15 +169,86 @@ function Newsfeed() {
           </Button>
         </div>
       </div>
-      <div className="PostDiv">
-        <div className="col CaptionDiv">
-          <h3>Caption</h3>
-        </div>
-        <div className="row PostImgDiv">
-          <img className="PostImg" src="/person.svg" />
-        </div>
-        <h4>Time</h4>
-      </div>
+
+      {post &&
+        post.map((e) => {
+          return (
+            <div className="PostDiv">
+              <div className="row">
+                <div className="col AvatarDiv">
+                  <div className="row mb-1">
+                    <div className="col-auto">
+                      <Avatar sx={{ width: 45, height: 45 }} />
+                    </div>
+                    <div
+                      className="col-auto"
+                      style={{
+                        float: "left",
+                        marginLeft: "-13px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Name
+                    </div>
+                  </div>
+                  <div className="row DateH4">
+                    <p>
+                      {new Date(e.createdAt).toDateString() +
+                        " " +
+                        new Date(e.createdAt).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="col DelDiv">
+                  <DeleteIcon
+                    fontSize="large"
+                    style={{
+                      color: "#e32636",
+                      float: "right",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="row PostImgDiv">
+                <Swiper
+                  grabCursor
+                  keyboard={{ enabled: true }}
+                  pagination={{ clickable: true }}
+                  navigation
+                  className={swiperContainer}
+                >
+                  {e.files.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <CardMedia
+                        className="PostImg"
+                        image={image}
+                        onLoad={handleLoad}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+
+              <div
+                style={{
+                  height: "30px",
+                  width: "30px",
+                  marginLeft: "15px",
+                  marginTop: "15px",
+                }}
+              >
+                <Heart isActive={active} onClick={() => setActive(!active)} />
+              </div>
+
+              <div className="col CaptionDiv">
+                <p>{e.content}</p>
+              </div>
+            </div>
+          );
+        })}
+
       <Modal
         open={open}
         onClose={handleClose}

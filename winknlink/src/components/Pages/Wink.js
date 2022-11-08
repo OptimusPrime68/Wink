@@ -30,6 +30,7 @@ import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
 import io from "socket.io-client";
+
 const ENDPOINT = "http://localhost:4000";
 var socket;
 
@@ -51,6 +52,7 @@ const style = {
 function Wink() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
+
   var swipe = [];
   socket = io(ENDPOINT);
 
@@ -96,8 +98,11 @@ function Wink() {
     axios
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
-        response.data.forEach(function (x) {
+        console.log(response.data);
+        response.data.forEach(function ({ x, cpy }) {
+          [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
+          console.log(cpy, x);
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -110,6 +115,7 @@ function Wink() {
                     dob: x.dob,
                     email: x.email,
                     image: url,
+                    dist: cpy,
                   };
 
                   if (email != x.email) setPeople((prev) => [...prev, local]);
@@ -117,8 +123,6 @@ function Wink() {
               });
             });
           });
-
-          const uniqueNames = Array.from(new Set(people));
         });
       })
       .catch((error) => {
@@ -129,38 +133,14 @@ function Wink() {
 
   const swiped = (direction, name, toemail) => {
     console.log(toemail);
-    if (direction == "left") {
+    if (direction == "down") {
+      return;
+    } else if (direction == "left") {
       toast.success(name + " Removed");
     } else if (direction == "right") {
-      axios
-        .post("http://localhost:4000/api/make-match", {
-          fromemail: email,
-          toemail: toemail,
-        })
-        .then(function (response) {
-          toast.success("Like Sent");
-          socket.emit("match", { fromemail: email, toemail: toemail });
-        })
-        .catch(function (error) {
-          console.log(error.message);
-        });
+      handleRight(email, toemail);
     } else if (direction == "up") {
-      if (user.user == "free") {
-        toast.warn("Purchase Subscription to Send Super Likes");
-        return;
-      }
-
-      axios
-        .post("http://localhost:4000/api/make-super-like", {
-          from: email,
-          to: toemail,
-        })
-        .then(function (response) {
-          toast.success("Super Like Sent");
-        })
-        .catch(function (error) {
-          console.log(error.message);
-        });
+      handleUp(email, toemail);
     }
   };
 
@@ -185,6 +165,56 @@ function Wink() {
   }
   const handleClose = () => setOpen(false);
 
+  const handleRight = async (email, toemail) => {
+    axios
+      .post("http://localhost:4000/api/make-match", {
+        fromemail: email,
+        toemail: toemail,
+      })
+      .then(function (response) {
+        toast.success("Like Sent");
+        socket.emit("match", { fromemail: email, toemail: toemail });
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+  };
+
+  const handleUp = async (email, toemail) => {
+    if (user.user == "free") {
+      toast.warn("Purchase Subscription to Send Super Likes");
+      return;
+    }
+
+    axios
+      .post("http://localhost:4000/api/make-super-like", {
+        from: email,
+        to: toemail,
+      })
+      .then(function (response) {
+        toast.success("Super Like Sent");
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+  };
+
+  const swipes = async () => {
+    console.log("aa");
+    // if (canSwipe && currentIndex < db.length) {
+    //   await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
+    // }
+  };
+
+  // increase current index and show card
+  const goBack = async () => {
+    console.log("hh");
+    // if (!canGoBack) return
+    // const newIndex = currentIndex + 1
+    // updateCurrentIndex(newIndex)
+    // await childRefs[newIndex].current.restoreCard()
+  };
+
   console.log(people);
 
   const counter = useRef(0);
@@ -197,40 +227,49 @@ function Wink() {
   return (
     <div className="DateMainDiv">
       <Header />
+
       <div className="ProfieCards">
         {people.map((person) => (
-          <TinderCard
-            className="swipe"
-            key={person.email}
-            preventSwipe={swipe}
-            onSwipe={(dir) => swiped(dir, person.name, person.email)}
-            onCardLeftScreen={onCardLeftScreen}
-            onCardUpScreen={onCardUpScreen}
-          >
-            <div
-              style={{ backgroundImage: `url(${person.image})` }}
-              className="Winkcard"
+          <>
+            <TinderCard
+              className="swipe"
+              key={person.email}
+              preventSwipe={swipe}
+              onSwipe={(dir) => swiped(dir, person.name, person.email)}
+              onCardLeftScreen={onCardLeftScreen}
+              onCardUpScreen={onCardUpScreen}
             >
-              <img
-                onLoad={handleLoad}
-                src={person.image}
-                alt="Image"
-                className="TinderImage"
-              />
-              <h3>
-                {person.name}{" "}
+              <div
+                style={{ backgroundImage: `url(${person.image})` }}
+                className="Winkcard"
+              >
+                <img
+                  onLoad={handleLoad}
+                  src={person.image}
+                  alt="Image"
+                  className="TinderImage"
+                />
+                <h3>
+                  {person.name} <br></br>
+                  <p style={{ fontSize: "15px", marginTop: "5px" }}>
+                    {parseInt(person.dist / 1000) + "KM"}
+                  </p>
+                </h3>
                 <IconButton
-                  style={{ color: "#fbab7e" }}
+                  className="WinkProfileIcon"
                   onClick={() => handleOpen(person.email)}
                 >
-                  <PersonPinSharpIcon fontSize="large" />
+                  <PersonPinSharpIcon
+                    style={{ color: "white" }}
+                    fontSize="large"
+                  />
                 </IconButton>
-              </h3>
-            </div>
-          </TinderCard>
+              </div>
+            </TinderCard>
+          </>
         ))}
 
-        <SwipeButtons />
+        <SwipeButtons swipe={swipes} goBack={goBack} />
       </div>
 
       <Modal

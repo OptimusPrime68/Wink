@@ -15,6 +15,7 @@ import Header from "./Header";
 import { Button } from "react-bootstrap";
 import BottomDrawer from "./BottomDrawer";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const locales = {
   "en-US": require("date-fns/locale/en-US"),
@@ -28,6 +29,8 @@ const localizer = dateFnsLocalizer({
 });
 
 const events = [];
+
+
 
 const Photo = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -62,6 +65,30 @@ const Photo = () => {
   const [allEvents, setAllEvents] = useState(events);
 
   const handleAddEvent = async (e) => {
+
+    if(newEvent.title == '')
+    {
+      toast.warn("Insert Title");
+      return;
+    }
+    if(newEvent.to == '')
+    {
+      toast.warn("Select User");
+      return;
+    }
+    
+    if(newEvent.start == '')
+    {
+      toast.warn("Select Start Date");
+      return;
+    }
+    
+    if(newEvent.end == '')
+    {
+      toast.warn("Select End Date");
+      return;
+    }
+    
     console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
     axios.post("http://localhost:4000/api/make-date", { newEvent });
@@ -168,6 +195,25 @@ const Photo = () => {
         />
         <Calendar
           localizer={localizer}
+          eventPropGetter={
+            (event, start, end, isSelected) => {
+              let newStyle = {
+                backgroundColor: "#fbab7e",
+                color: 'white',
+                borderRadius: "2px",
+                border: "none"
+              };
+        
+              if (event.isMine){
+                newStyle.backgroundColor = "lightgreen"
+              }
+        
+              return {
+                className: "",
+                style: newStyle
+              };
+            }
+          }
           events={allEvents}
           onKeyPressEvent={handleDeleteEvent}
           startAccessor="start"

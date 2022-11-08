@@ -38,22 +38,58 @@ import Newsfeed from "./Newsfeed";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Like from "./Like";
+import SosIcon from "@mui/icons-material/Sos";
+import { useGeolocated } from "react-geolocated";
+import Modal from "react-bootstrap/Modal";
 
 export default function Date(props) {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   const drawerWidth = 240;
 
   const [activeTab, setActiveTab] = useState("Profile");
   const [page, setPage] = useState("profile");
 
-  const switchToWink = () => setActiveTab("Wink");
-  const switchToProfile = () => setActiveTab("Profile");
-  const switchToMacthes = () => setActiveTab("Matches");
-  const switchToChat = () => setActiveTab("Chat");
-  const switchToSetting = () => setActiveTab("Setting");
-  const switchToChatTab = () => setActiveTab("ChatTab");
-  const switchToDatePlanner = () => setActiveTab("DatePlanner");
-  const switchToNewsfeed = () => setActiveTab("Newsfeed");
-  const switchToLikes = () => setActiveTab("Likes");
+  const switchToWink = () => {
+    setSelectedIndex(7);
+    setActiveTab("Wink");
+  };
+  const switchToProfile = () => {
+    setSelectedIndex(0);
+    setActiveTab("Profile");
+  };
+  const switchToMacthes = () => {
+    setSelectedIndex(1);
+    setActiveTab("Matches");
+  };
+  const switchToChat = () => {
+    setSelectedIndex(2);
+    setActiveTab("Chat");
+  };
+  const switchToSetting = () => {
+    setSelectedIndex(3);
+    setActiveTab("Setting");
+  };
+  const switchToChatTab = () => {
+    setSelectedIndex(2);
+    setActiveTab("ChatTab");
+  };
+  const switchToDatePlanner = () => {
+    setSelectedIndex(4);
+    setActiveTab("DatePlanner");
+  };
+  const switchToNewsfeed = () => {
+    setSelectedIndex(6);
+    setActiveTab("Newsfeed");
+  };
+  const switchToLikes = () => {
+    setSelectedIndex(5);
+    setActiveTab("Likes");
+  };
 
   const [selectedChat, setSelectedChat] = useState();
   const [vdo, setVdo] = useState(false);
@@ -88,6 +124,15 @@ export default function Date(props) {
     if (user == null) navigate("/");
   }, []);
 
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
+  console.log(coords);
+
   const logOut = () => {
     const auth = getAuth();
     signOut(auth)
@@ -98,6 +143,7 @@ export default function Date(props) {
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
         window.localStorage.removeItem("user");
+        window.localStorage.removeItem("profileId");
 
         console.log("hello");
         dispatch({
@@ -124,6 +170,7 @@ export default function Date(props) {
         window.localStorage.removeItem("user");
         window.localStorage.removeItem("name");
         window.localStorage.removeItem("image");
+
         axios
           .post("http://localhost:4000/api/delete-account", {
             email: user.email,
@@ -145,6 +192,55 @@ export default function Date(props) {
       });
   };
 
+  const handleSos = async () => {
+    if (!isGeolocationAvailable) {
+      toast.warn("Enable Location");
+      return;
+    }
+
+    if (!isGeolocationEnabled) {
+      toast.warn("Enable Location");
+      return;
+    }
+    if (!coords) {
+      toast.warn("Enable Location");
+      return;
+    }
+
+    var coordinates = [];
+    if (coords) coordinates = [coords.longitude, coords.latitude];
+
+    axios
+      .post("http://localhost:4000/api/messages", {
+        message: user.name,
+        latitude: coordinates[0],
+        longitude: coordinates[1],
+        to: "+919305250754",
+      })
+      .then(function (response) {
+        toast.success("SMS Sent");
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+    axios
+      .post("http://localhost:4000/api/call", {})
+      .then(function (response) {
+        toast.success("Call Made");
+      })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+
+    console.log("h");
+  };
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <>
       <div id="dateMainDiv">
@@ -161,8 +257,12 @@ export default function Date(props) {
             variant="permanent"
             anchor="left"
           >
-            <Toolbar>
-              <IconButton onClick={switchToWink} className="sideDivHeaderIcon">
+            <Toolbar style={{ backgroundColor: "#fbab7e" }}>
+              <IconButton
+                selected={selectedIndex === 7}
+                onClick={switchToWink}
+                className="sideDivHeaderIcon"
+              >
                 <Typography
                   variant="h6"
                   component="div"
@@ -176,68 +276,100 @@ export default function Date(props) {
             <Divider />
             <List>
               <ListItem key="Profile" disablePadding>
-                <ListItemButton onClick={switchToProfile}>
+                <ListItemButton
+                  onClick={switchToProfile}
+                  selected={selectedIndex === 0}
+                >
                   <ListItemIcon>
-                    <PersonIcon />
+                    <PersonIcon style={{ color: "black" }} />
                   </ListItemIcon>
                   <ListItemText primary="Profile" />
                 </ListItemButton>
               </ListItem>
-              <ListItem key="Matches" disablePadding>
-                <ListItemButton onClick={switchToMacthes}>
-                  <ListItemIcon>
-                    <GroupIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Matches" />
-                </ListItemButton>
-              </ListItem>
               <ListItem key="Chats" disablePadding>
-                <ListItemButton onClick={switchToChat}>
+                <ListItemButton
+                  onClick={switchToChat}
+                  selected={selectedIndex === 2}
+                >
                   <ListItemIcon>
-                    <ForumIcon />
+                    <ForumIcon style={{ color: "#f8de7e" }} />
                   </ListItemIcon>
                   <ListItemText primary="Chats" />
                 </ListItemButton>
               </ListItem>
-              <ListItem key="Setting" disablePadding>
-                <ListItemButton onClick={switchToSetting}>
+              <ListItem key="Newdfeed" disablePadding>
+                <ListItemButton
+                  onClick={switchToNewsfeed}
+                  selected={selectedIndex === 6}
+                >
                   <ListItemIcon>
-                    <SettingsIcon />
+                    <NewspaperIcon className="newsFeedIconColor" />
                   </ListItemIcon>
-                  <ListItemText primary="Settings" />
+                  <ListItemText primary="News Feed" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="DatePlanner" disablePadding>
-                <ListItemButton onClick={switchToDatePlanner}>
+                <ListItemButton
+                  onClick={switchToDatePlanner}
+                  selected={selectedIndex === 4}
+                >
                   <ListItemIcon>
-                    <BookIcon />
+                    <BookIcon className="DatePlannerIconColor" />
                   </ListItemIcon>
                   <ListItemText primary="Date Planner" />
                 </ListItemButton>
               </ListItem>
-              <ListItem key="Newdfeed" disablePadding>
-                <ListItemButton onClick={switchToLikes}>
+              <ListItem key="Matches" disablePadding>
+                <ListItemButton
+                  onClick={switchToMacthes}
+                  selected={selectedIndex === 1}
+                >
                   <ListItemIcon>
-                    <ThumbUpIcon />
+                    <GroupIcon className="matchIconColor" />
                   </ListItemIcon>
-                  <ListItemText primary="Likes" />
+                  <ListItemText primary="Matches" />
                 </ListItemButton>
               </ListItem>
 
               <ListItem key="Newdfeed" disablePadding>
-                <ListItemButton onClick={switchToNewsfeed}>
+                <ListItemButton
+                  onClick={switchToLikes}
+                  selected={selectedIndex === 5}
+                >
                   <ListItemIcon>
-                    <NewspaperIcon />
+                    <ThumbUpIcon className="DatePlannerIconColor" />
                   </ListItemIcon>
-                  <ListItemText primary="News Feed" />
+                  <ListItemText primary="Likes" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem key="Setting" disablePadding>
+                <ListItemButton
+                  onClick={switchToSetting}
+                  selected={selectedIndex === 3}
+                >
+                  <ListItemIcon>
+                    <SettingsIcon style={{ color: "gray" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
                 </ListItemButton>
               </ListItem>
               <ListItem key="Logout" disablePadding>
                 <ListItemButton onClick={logOut}>
                   <ListItemIcon>
-                    <PowerSettingsNewIcon />
+                    <PowerSettingsNewIcon style={{ color: "red" }} />
                   </ListItemIcon>
                   <ListItemText primary="Logout" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItem disablePadding style={{ backgroundColor: "red" }}>
+                <ListItemButton onClick={handleSos}>
+                  <ListItemIcon>
+                    <SosIcon style={{ color: "white" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="SOS" />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -246,12 +378,9 @@ export default function Date(props) {
               <ListItem key="Delete" disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <DeleteIcon />
+                    <DeleteIcon style={{ color: "red" }} />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Delete Account"
-                    onClick={handleAccountDelete}
-                  />
+                  <ListItemText primary="Delete Account" onClick={handleShow} />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -271,6 +400,18 @@ export default function Date(props) {
           </div>
         </DateContext.Provider>
       </div>
+      <Modal show={show} onHide={handleClose} centered backdrop="static">
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>Are you sure you want to delete your account!</Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center" }}>
+          <Button variant="outline-danger" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="outline-success" onClick={handleAccountDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

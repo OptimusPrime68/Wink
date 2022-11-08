@@ -71,6 +71,8 @@ function MatchProfile({ id }) {
   console.log(imageList);
   console.log("Video List", videoList);
 
+  const [key, setKey] = useState("photo");
+
   return (
     <div>
       <div className="py-5 h-100">
@@ -103,15 +105,15 @@ function MatchProfile({ id }) {
                     <br />
                     {data ? data.age : ""}
                     <br />
-                    {data ? data.hobbies : ""}
+                    {data ? data.hobbies + " " : " "}
                   </p>
                 </div>
                 <Tabs
-                  variant="pills"
                   fill
-                  defaultActiveKey="photo"
-                  id="uncontrolled-tab-example"
+                  id="MatchProfileTabDiv"
                   className="mb-3"
+                  activeKey={key}
+                  onSelect={(k) => setKey(k)}
                 >
                   <Tab eventKey="photo" title="Photos">
                     <div className="row">

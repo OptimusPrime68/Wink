@@ -27,7 +27,7 @@ export default function Home() {
   let { user } = useSelector((state) => ({ ...state }));
   const navigate = useNavigate();
 
-  if (user) navigate("/wink");
+  if (user){  console.log("HOME",user); navigate("/wink");}
 
   let dispatch = useDispatch();
 

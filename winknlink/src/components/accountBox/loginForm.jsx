@@ -20,16 +20,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import CircleLoader from "react-spinners/CircleLoader";
-import {
-  ref,
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  list,
-  deleteObject,
-} from "firebase/storage";
-import { storage } from "../../firebase";
+
 import Loader from "../Pages/Loader";
 
 export function LoginForm(props) {
@@ -62,7 +53,7 @@ export function LoginForm(props) {
 
   const login = (email, password, e, login) => {
     let userType = "free";
-    let image = "";
+
     let name = "";
     axios
       .post("http://localhost:4000/api/is-premium", { email })

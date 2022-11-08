@@ -4,7 +4,7 @@ const getDistance = require('geolib');
 const geolib = require('geolib');
 const { default: dist } = require('react-datepicker');
 
-
+// FUNCTION to update Profile
 exports.updateProfile=(req,res)=>{
     
 
@@ -67,7 +67,7 @@ exports.updateProfile=(req,res)=>{
 
 }
 
-
+// FUNCTION TO FETCH USER PROFILE
 exports.fetchProfile=(req,res)=>{
     
     // console.log(req.body);
@@ -92,16 +92,34 @@ exports.fetchProfile=(req,res)=>{
 
 }
 
+//FUNCTION TO FETCH USER PROFILE ID FROM EMAIL
+exports.fetchProfileId = (req,res)=>{
+    console.log(req.body);
+    Profile.findOne({email:req.body.email},function(error,r){
+        if(error) res.status(400).json({error:error.message});
+        console.log(r);
+        if(r && r.name != null) res.status(200).json({id:r._id});
+        else res.status(400).json({message:"Update Your Profile First"});
+    })
+}
 
+//FUNCTION TO FETCH ALL PROFILE TO SHOW
 exports.allProfile=(req,res)=>{
 
+<<<<<<< HEAD
     // console.log(req.body);
+=======
+ 
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
 
+<<<<<<< HEAD
     // console.log(req.body);
 
+=======
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     Profile.findOne({email},function(err,result){
 
         
@@ -116,28 +134,43 @@ exports.allProfile=(req,res)=>{
         lat = result.location.coordinates[1];
         var dist = result.distance;
 
+<<<<<<< HEAD
         // console.log("dist",dist);
 
+=======
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
         
         
 
         Profile.find(
-            {gender:preference,$and:[{age:{$gt:age[0]}},{age:{$lt:age[1]}}]},
+            {gender:preference,$and:[{age:{$gt:age[0]}},{age:{$lt:age[1]}}],email:{$ne:email}}).exec(
             function (err,success) {
                 if(err) return res.status(400).json({id : "No Profile Found"});
-
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 
+<<<<<<< HEAD
                     // console.log(success[i].name,geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}))
+=======
+                    const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
-                    if(geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}) <= dist)
+                    if(x <= dist)
                     {
-                          arr.push(success[i]);
+                         
+                        
+                          var cpy = success[i];
+                          arr.push({x,cpy});
                     }
+<<<<<<< HEAD
                     // console.log(arr);
+=======
+                    
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
                 }
+
+                console.log(arr);
                 
                 return res.status(201).json(arr);
             }

@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useDropzone } from "react-dropzone";
 import "../styles/DropzonePost.css";
-// import {
-//   ref,
-//   uploadBytes,
-//   listAll,
-//   getDownloadURL,
-//   list,
-//   deleteObject,
-// } from "firebase/storage";
-// import { storage } from "../../firebase";
-// import { getStorage } from "firebase/storage";
-// import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios'
+import {toast} from 'react-toastify'
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  list,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { getStorage } from "firebase/storage";
+ import { useSelector, useDispatch } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
 // import { Navigate, useNavigate } from "react-router-dom";
 
@@ -22,6 +25,7 @@ const thumbsContainer = {
   flexWrap: "wrap",
   marginTop: 16,
 };
+
 
 const thumb = {
   display: "inline-flex",
@@ -47,8 +51,22 @@ const img = {
   height: "100%",
 };
 
-const DropzonePost = (props) => {
+
+const DropzonePost = () => {
   const [files, setFiles] = useState([]);
+
+  const [caption,setCaption] = useState();
+
+  let { user } = useSelector((state) => ({ ...state }))
+  const navigate  = useNavigate();
+  if(user == null) Navigate("/");
+
+
+
+
+
+
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -87,23 +105,59 @@ const DropzonePost = (props) => {
     </div>
   ));
 
-  //   const upload = () => {
-  //     files.map((e) => {
-  //       let r = (Math.random() + 1).toString(36).substring(7);
+    const upload =  async () => {
 
-  //       const imageRef = ref(storage, `${user.email}/${r}`);
-  //       console.log(imageRef);
-  //       uploadBytes(imageRef, e)
-  //         .then(() => {
-  //           toast.success("Image Uploaded");
-  //           setFiles([]);
-  //           console.log(e);
-  //         })
-  //         .catch((err) => {
-  //           toast.error(err.message);
-  //         });
-  //     });
-  //   };
+
+
+      try{
+      axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
+
+      const id = data.data.id;
+
+      axios.post("http://localhost:4000/api/make-post",{content:caption,authorid:id}).then((r)=>{
+
+      const record = r.data;
+      console.log(record);
+      var x = files.length;
+      files.map((e) => {
+        let r = (Math.random() + 1).toString(36).substring(7);
+        const imageRef = ref(storage, `${user.email}/post/${record._id}/${r}`);
+        console.log(imageRef);
+        uploadBytes(imageRef, e)
+          .then(() => {
+            setFiles(files.filter((a) => a !== e))
+            x--;
+            if(x == 0){
+            toast.success("Post Created");
+            }
+            else
+            toast.success(x+ " Files Remaining");
+          })
+          .catch((err) => {
+            toast.error(err.message);
+          });
+      });
+
+     
+      
+ 
+      }).catch((error)=>{
+        console.log(error);
+      });
+     }).catch((err)=>{
+       console.log(err);
+     });
+     }
+      catch(err){
+        console.log(err);
+        toast.error(err.message);
+      }
+    };
+
+
+
+
+
 
   return (
     <>
@@ -111,6 +165,7 @@ const DropzonePost = (props) => {
         <Form.Control
           as="textarea"
           rows={3}
+          onChange = {(e)=>setCaption(e.target.value)}
           placeholder="Caption..."
           style={{ width: "300px", margin: "auto" }}
         />
@@ -130,7 +185,7 @@ const DropzonePost = (props) => {
         <button
           className="SettingButton"
           type="button"
-          //   onClick={upload}
+            onClick={upload}
           style={{ width: "max-content", marginTop: "10px" }}
         >
           Upload Post

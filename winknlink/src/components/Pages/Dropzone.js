@@ -14,6 +14,7 @@ import { getStorage } from "firebase/storage";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate } from "react-router-dom";
+import Loader from './Loader'
 
 const thumbsContainer = {
   display: "flex",
@@ -48,6 +49,7 @@ const img = {
 
 const Dropzone = (props) => {
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -87,7 +89,9 @@ const Dropzone = (props) => {
   ));
 
   const upload = () => {
+    
     files.map((e) => {
+      setLoading(true);
       let r = (Math.random() + 1).toString(36).substring(7);
 
       const imageRef = ref(storage, `${user.email}/${r}`);
@@ -95,6 +99,7 @@ const Dropzone = (props) => {
       uploadBytes(imageRef, e)
         .then(() => {
           toast.success("Image Uploaded");
+          setLoading(false);
           setFiles([]);
           console.log(e);
         })
@@ -106,6 +111,7 @@ const Dropzone = (props) => {
 
   return (
     <>
+     {loading ? <Loader /> : <></>}
       <div style={{ textAlign: "center" }}>
         <section className="container">
           <div {...getRootProps({ className: "mainDropzone" })}>

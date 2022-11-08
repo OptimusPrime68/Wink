@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Header from "./Header";
 import "../styles/ChatScreen.css";
 import { Avatar, Button } from "@mui/material";
@@ -67,7 +67,6 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
-
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
@@ -117,11 +116,19 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
+<<<<<<< HEAD
   const otherUserIdHandler = ()=>{
         // currUser,IdtoCall
         if(selectedChat.users[0].email===email) return [selectedChat.users[0]._id,selectedChat.users[1]._id];
         else return [selectedChat.users[1]._id,selectedChat.users[0]._id]
   }
+=======
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
   return (
     <div>
@@ -141,16 +148,27 @@ function ChatScreen() {
                   alt={message.name}
                   src={message.image}
                 />
-                <p className="chatScreenText">{message.content}</p>
-                <p>{getTimeHandler(message)}</p>
+                <p className="chatScreenText">
+                  {message.content}
+                  <br></br>
+                  <span style={{ color: "grey", fontSize: "12px" }}>
+                    {getTimeHandler(message)}
+                  </span>
+                </p>
               </div>
             ) : (
               <div className="chatScreenMessage">
-                <p className="chatScreenTextUser">{message.content}</p>
-                <p>{getTimeHandler(message)}</p>
+                <p className="chatScreenTextUser">
+                  {message.content}
+                  <br></br>
+                  <span style={{ color: "white", fontSize: "12px" }}>
+                    {getTimeHandler(message)}
+                  </span>
+                </p>
               </div>
             )
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="row MessageDiv">

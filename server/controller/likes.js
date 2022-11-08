@@ -3,7 +3,7 @@ const SuperLike = require('../models/superLike')
 const Profile = require('../models/profile');
 const Match = require('../models/match')
 
-
+// FUNCTION TO GET ALL LIKES OF USER
 exports.getLike = async (req,res)=>{
    
     const data =await Match.find({matchTo:req.body.email});
@@ -19,6 +19,7 @@ exports.getLike = async (req,res)=>{
     return res.status(200).json({m:result});
 }
 
+// FUNCTION TO SEND SUPER LIKE
 exports.makeSuperLike = async (req,res)=>{
     const superLike = new SuperLike(req.body);
     superLike.save(function(err,result){
@@ -30,6 +31,7 @@ exports.makeSuperLike = async (req,res)=>{
     
 }
 
+// FUNCTION TO SEND SUPER LIKE
 exports.getSuperLike = async (req,res)=> {
 
     const data =await SuperLike.find({to:req.body.email});

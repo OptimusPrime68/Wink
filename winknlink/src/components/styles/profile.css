@@ -65,8 +65,8 @@
 }
 
 .tabordion input[name="sections"]:checked + label {
-  border-right: 3px solid #81481e;
-  color: #81481e;
+  border-right: 3px solid #fbab7e;
+  color: #fbab7e;
   font-weight: bold;
 }
 
@@ -272,7 +272,7 @@ textarea {
   font-weight: 800;
   letter-spacing: 1px;
   outline: 0;
-  background: #81481e;
+  background: #fbab7e;
   width: 200px;
   border: 0;
   padding: 15px;
@@ -287,7 +287,7 @@ textarea {
 .SettingButton:hover,
 .SettingButton:active,
 .SettingButton:focus {
-  background: #9b7b4e;
+  background: #ffbb94;
 }
 
 @media (max-width: 600px) {
@@ -346,7 +346,7 @@ textarea {
   }
 
   .tabordion input[name="sections"]:checked + label {
-    border-bottom: 3px solid #81481e;
+    border-bottom: 3px solid #fbab7e;
     border-right: none;
   }
 
@@ -359,13 +359,13 @@ textarea {
 }
 
 #gender {
-  border: 1px solid black;
+  border: 1px solid #fbab7e;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -373,11 +373,11 @@ textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #fbab7e;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #ff9f68;
 }
 
 #photoDel {

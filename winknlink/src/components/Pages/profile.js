@@ -21,12 +21,12 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
-import Loader from "../Pages/Loader";
 import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
 import { useRef } from "react";
 import BottomDrawer from "./BottomDrawer";
+import Loader from "./Loader";
 
 export default function Profile() {
   var email = "";
@@ -120,6 +120,7 @@ export default function Profile() {
 
   useEffect(() => {
     setLoading(true);
+
     var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
@@ -169,6 +170,7 @@ export default function Profile() {
         });
       })
       .catch((error) => console.log(error));
+
     setLoading(false);
   }, []);
 
@@ -322,7 +324,7 @@ export default function Profile() {
 
   const uploadVideo = (e) => {
     e.preventDefault();
-    console.log(videoUpload);
+    setLoading(true);
     if (videoUpload) {
       let r = (Math.random() + 1).toString(36).substring(7);
       const VideoRef = ref(storage, `${email}/video/${r}`);
@@ -330,6 +332,7 @@ export default function Profile() {
       uploadBytes(VideoRef, videoUpload)
         .then(() => {
           toast.success("Video Uploaded");
+          setLoading(false);
         })
         .catch((err) => {
           toast.error(err.message);
@@ -346,6 +349,7 @@ export default function Profile() {
   };
 
   const loadPhoto = async () => {
+    setLoading(true);
     setImageList([]);
     listAll(imageListRef)
       .then((response) => {
@@ -357,11 +361,26 @@ export default function Profile() {
       })
       .catch((error) => console.log(error));
   };
+  console.log("Loading", loading);
+
+  const imageLoaded = () => {
+    console.log("Loading IMages");
+  };
+
+
+  const counter = useRef(0);
+  const handleLoad = () => {
+    console.log("Image Loading")
+    counter.current += 1;
+    if (counter.current >= imageList.length) setLoading(false);
+  };
+
 
   return (
     <div>
       <Header />
 
+      {loading ? <Loader /> : <></>}
       <div className="sttngs">
         <h2>{t("Profile")}</h2>
         <div className="tabordion">
@@ -384,6 +403,7 @@ export default function Profile() {
                   <div
                     className="m-auto"
                     id="profile-upload"
+                    onLoad={imageLoaded}
                     style={{ backgroundImage: `url(${profileImageList[0]})` }}
                   >
                     <div className="hvr-profile-img">
@@ -553,13 +573,6 @@ export default function Profile() {
             </article>
           </section>
           <section id="section2">
-            <input
-              style={{ visibility: "hidden" }}
-              className="t"
-              type="radio"
-              name="sections"
-              id="option2"
-            />
             <input className="t" type="radio" name="sections" id="option2" />
             <label for="option2" className="trr">
               {" "}
@@ -617,6 +630,7 @@ export default function Profile() {
                             <Card.Img
                               className="PhotoPreviewSection"
                               variant="top"
+                              onLoad={handleLoad}
                               src={url}
                             />
                             <Card.Body style={{ textAlign: "center" }}>

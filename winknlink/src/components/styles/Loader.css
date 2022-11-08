@@ -2,13 +2,13 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  z-index: 1;
+  z-index: 10;
   width: 120px;
   height: 120px;
   margin: -76px 0 0 -76px;
-  border: 16px solid #f3f3f3;
+  border: 6px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #fbab7e;
+  border-top: 6px solid #fbab7e;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
