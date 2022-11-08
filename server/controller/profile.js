@@ -106,20 +106,11 @@ exports.fetchProfileId = (req,res)=>{
 //FUNCTION TO FETCH ALL PROFILE TO SHOW
 exports.allProfile=(req,res)=>{
 
-<<<<<<< HEAD
-    // console.log(req.body);
-=======
  
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
 
-<<<<<<< HEAD
-    // console.log(req.body);
-
-=======
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     Profile.findOne({email},function(err,result){
 
         
@@ -134,11 +125,6 @@ exports.allProfile=(req,res)=>{
         lat = result.location.coordinates[1];
         var dist = result.distance;
 
-<<<<<<< HEAD
-        // console.log("dist",dist);
-
-=======
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
         
         
 
@@ -149,11 +135,7 @@ exports.allProfile=(req,res)=>{
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 
-<<<<<<< HEAD
-                    // console.log(success[i].name,geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}))
-=======
                     const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
                     if(x <= dist)
                     {
@@ -162,11 +144,7 @@ exports.allProfile=(req,res)=>{
                           var cpy = success[i];
                           arr.push({x,cpy});
                     }
-<<<<<<< HEAD
-                    // console.log(arr);
-=======
                     
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
                 }
 

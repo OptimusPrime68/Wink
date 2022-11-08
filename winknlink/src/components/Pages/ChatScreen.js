@@ -116,19 +116,16 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
-<<<<<<< HEAD
   const otherUserIdHandler = ()=>{
         // currUser,IdtoCall
         if(selectedChat.users[0].email===email) return [selectedChat.users[0]._id,selectedChat.users[1]._id];
         else return [selectedChat.users[1]._id,selectedChat.users[0]._id]
   }
-=======
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
->>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
   return (
     <div>
