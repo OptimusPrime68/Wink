@@ -2,6 +2,9 @@ const User = require('../models/user');
 const Profile = require('../models/profile');
 const Subscription = require('../models/subscription');
 const Match = require("../models/match");
+const bcrypt = require("bcrypt");
+const SuperLike = require("../models/superLike");
+const Post = require("../models/post");
 
 // FUNCTION TO LOGIN USER
 exports.login=(req,res)=>{
@@ -11,7 +14,7 @@ exports.login=(req,res)=>{
 
 
 
-    User.countDocuments({email,password}, function (err, count){ 
+    User.countDocuments({email}, function (err, count){ 
         if(count>0){
                 
            User.findOne({email,password}, function(err, userFromDB) {
@@ -19,10 +22,9 @@ exports.login=(req,res)=>{
 
                        res.status(200).json({id:userFromDB._id});
                 } else {
-                    res.status(400).json({id : ""});
+                    res.status(400).json({Error:"Wrong Password"});
                 }
             });
-           
        
         }
         else{
@@ -102,6 +104,10 @@ exports.deleteAccount = async (req,res)=>{
     const matches = await Match.deleteMany({matchFrom:email});
     const matchesto = await Match.deleteMany({matchTo:email});
     const subs = await Subscription.deleteMany({email});
+    await SuperLike.deleteMany({from:email});
+    await SuperLike.deleteMany({to:email});
+    await Date.deleteMany({from:email});
+    await Date.deleteMany({to:email});
 
     console.log(data);
     console.log(record);
@@ -120,20 +126,15 @@ exports.deleteAccount = async (req,res)=>{
 exports.googleLogin= async (req,res)=>{
     
     const {email} = req.credential;
-
-
     const data = await User.findOne({email});
-
     if(data)
     {
          res.status(200).json({data});
          return;
     }
-
-
-          const user = new User({
+    const user = new User({
               email,password:"AQWScdss#@$0onn$2gf4$@54"
-          });
+    });
 
           user.save(function(err,result){
             console.log(result);  

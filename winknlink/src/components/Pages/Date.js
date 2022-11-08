@@ -136,13 +136,7 @@ export default function Date(props) {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        window.localStorage.removeItem("email");
-        window.localStorage.removeItem("token");
-        window.localStorage.removeItem("id");
-        window.localStorage.removeItem("name");
-        window.localStorage.removeItem("image");
-        window.localStorage.removeItem("user");
-        window.localStorage.removeItem("profileId");
+        window.localStorage.clear();
 
         console.log("hello");
         dispatch({
@@ -164,11 +158,7 @@ export default function Date(props) {
 
     deleteUser(user)
       .then(() => {
-        window.localStorage.removeItem("email");
-        window.localStorage.removeItem("id");
-        window.localStorage.removeItem("user");
-        window.localStorage.removeItem("name");
-        window.localStorage.removeItem("image");
+        window.localStorage.clear();
 
         axios
           .post("http://localhost:4000/api/delete-account", {
