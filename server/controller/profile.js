@@ -13,14 +13,14 @@ exports.updateProfile=(req,res)=>{
     const email = req.body.email;
     var x  = 0;
 
-    console.log(req.body);
+    // console.log(req.body);
 
     
     
     for(const key in headerObject){
     var field = `${key}`;
     var value =  `${headerObject[key]}`;   
-    console.log(value);
+    // console.log(value);
     if(field != 'location' && field != 'agePreference' && field != 'accept' && field != 'host' && field != 'connection' &&field != 'user-agent' && field != 'postman-token' && field != 'accept-encoding' && field != 'content-type' && field != 'content-length' && field != 'hobbies')
     update[field] = value;
     else if(field == 'agePreference')
@@ -29,7 +29,7 @@ exports.updateProfile=(req,res)=>{
         headerObject.agePreference.forEach(function(item) {
            update[field].push(item);
           });
-          console.log(update[field]);
+        //   console.log(update[field]);
     }
     else if(field == 'hobbies')
     {
@@ -48,7 +48,7 @@ exports.updateProfile=(req,res)=>{
     }
     }
     
-    console.log(update);
+    // console.log(update);
     
 
     Profile.findOneAndUpdate(
@@ -56,7 +56,7 @@ exports.updateProfile=(req,res)=>{
         {$set:update},{upsert:true,new:true},
         function (err,success) {
 
-            console.log(err);
+            // console.log(err);
 
             if(err) return res.status(400).json({err});
             else { console.log(success); return res.status(200).json(success);}
@@ -70,7 +70,7 @@ exports.updateProfile=(req,res)=>{
 // FUNCTION TO FETCH USER PROFILE
 exports.fetchProfile=(req,res)=>{
     
-    console.log(req.body);
+    // console.log(req.body);
 
     const email = req.body.email;
 
@@ -78,12 +78,12 @@ exports.fetchProfile=(req,res)=>{
         {email},
         function (err,success) {
 
-            console.log(success);
+            // console.log(success);
 
             
             if(err || success == null) return res.status(200).json({id : "Update Your Profile"});
             
-            console.log(success);
+            // console.log(success);
             return res.status(200).json(success);
         }
     )
@@ -106,11 +106,20 @@ exports.fetchProfileId = (req,res)=>{
 //FUNCTION TO FETCH ALL PROFILE TO SHOW
 exports.allProfile=(req,res)=>{
 
+<<<<<<< HEAD
+    // console.log(req.body);
+=======
  
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
 
+<<<<<<< HEAD
+    // console.log(req.body);
+
+=======
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
     Profile.findOne({email},function(err,result){
 
         
@@ -125,6 +134,11 @@ exports.allProfile=(req,res)=>{
         lat = result.location.coordinates[1];
         var dist = result.distance;
 
+<<<<<<< HEAD
+        // console.log("dist",dist);
+
+=======
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
         
         
 
@@ -135,7 +149,11 @@ exports.allProfile=(req,res)=>{
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 
+<<<<<<< HEAD
+                    // console.log(success[i].name,geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]}))
+=======
                     const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
                     if(x <= dist)
                     {
@@ -144,7 +162,11 @@ exports.allProfile=(req,res)=>{
                           var cpy = success[i];
                           arr.push({x,cpy});
                     }
+<<<<<<< HEAD
+                    // console.log(arr);
+=======
                     
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
                 }
 

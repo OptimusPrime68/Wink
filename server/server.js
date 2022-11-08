@@ -42,13 +42,14 @@ const io = require('socket.io')(server,{
 io.on("connection",(socket)=>{
   //console.log('connected to socket.io');
   
-  socket.on('setup', (id)=>{
-    console.log("in setup")
+  
+  socket.on("setup", (id)=>{
+    // console.log("in setup")
     socket.join(id);
     socket.emit('connected');
   })
   socket.on('join chat', (room)=>{
-    console.log("in room",room)
+    // console.log("in room",room)
     socket.join(room);
     socket.emit('user joined room');
   })
@@ -65,6 +66,22 @@ io.on("connection",(socket)=>{
 
       socket.in(user).emit("message recieved",newMessage);
     });
+
+ 
+  socket.emit("me", socket.id);
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	});
+
+	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+    console.log("calling")
+		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+	});
+
+	socket.on("answerCall", (data) => {
+    console.log("answer")
+		io.to(data.to).emit("callAccepted", data.signal)
+	});
 
   })
 

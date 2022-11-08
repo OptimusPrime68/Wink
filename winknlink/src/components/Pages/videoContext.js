@@ -13,43 +13,47 @@ const ContextProvider = ({ children }) => {
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
   const [me, setMe] = useState('');
+  const [isCalling, setIsCalling] = useState(false);
 
   const myVideo = useRef(null);
-  const userVideo = useRef();
-  const connectionRef = useRef();
+  const userVideo = useRef(null);
+  const connectionRef = useRef(null);
 
 
-  useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then((currentStream) => {
-      setStream(currentStream);
-      console.log(currentStream);
-      if(myVideo.current){
-        myVideo.current.srcObject = currentStream;
-        console.log("video working")
-      }
-    });
-  }, [])
+
   
   useEffect(() => {
-   
-    socket.on('me', (id) => setMe(id));
-
-    socket.on('callUser', ({ from, name: callerName, signal }) => {
+    console.log("calling effect")
+    socket.on("me",(id) =>{
+        setMe(id)
+        console.log(id)
+    });
+    socket.on("callUser", ({ from, name: callerName, signal }) => {
+      console.log("client callUser")
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
-  }, []);
+  },[isCalling]);
 
   const answerCall = () => {
     setCallAccepted(true);
 
-    const peer = new Peer({ initiator: false, trickle: false, stream });
-
-    peer.on('signal', (data) => {
-      socket.emit('answerCall', { signal: data, to: call.from });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then((currentStream) => {
+      setStream(currentStream);
+      console.log(currentStream);
+      if(userVideo.current){
+        userVideo.current.srcObject = currentStream;
+        console.log("video working")
+      }
     });
 
-    peer.on('stream', (currentStream) => {
+    const peer = new Peer({ initiator: false, trickle: false, stream });
+
+    peer.on("signal", (data) => {
+      socket.emit("answerCall", { signal: data, to: call.from });
+    });
+
+    peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
     });
 
@@ -59,31 +63,46 @@ const ContextProvider = ({ children }) => {
   };
 
   const callUser = (id) => {
-    const peer = new Peer({ initiator: true, trickle: false, stream });
-
-    peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
+    
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then((currentStream) => {
+      setStream(currentStream)
+      console.log(currentStream);
+      if(myVideo.current){
+        myVideo.current.srcObject = currentStream;
+        console.log("video working")
+      }
     });
 
-    peer.on('stream', (currentStream) => {
+    const peer = new Peer({ initiator: true, trickle: false, stream });
+    console.log(peer)
+    peer.on("signal", (data) => {
+      console.log("in signal",id,me)
+      setIsCalling(true);
+      socket.emit("callUser", { userToCall: id, signalData: data, from: me, name });
+    });
+
+    peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on('callAccepted', (signal) => {
+    socket.on("callAccepted", (signal) => {
       setCallAccepted(true);
-
       peer.signal(signal);
     });
 
     connectionRef.current = peer;
+   
   };
 
   const leaveCall = () => {
     setCallEnded(true);
-
+    stream.getTracks().forEach((track) => {
+        track.stop();
+      });
     connectionRef.current.destroy();
 
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
@@ -98,6 +117,7 @@ const ContextProvider = ({ children }) => {
       setName,
       callEnded,
       me,
+      setMe,
       callUser,
       leaveCall,
       answerCall,

@@ -56,9 +56,7 @@ function ChatScreen() {
         `http://localhost:4000/api/chat/message/${selectedChat._id}`
       );
       console.log(data);
-      var s = data[0].createdAt;
-      var dt = new Date(s);
-      console.log(dt.getHours(), dt.getMinutes());
+      console.log(selectedChat)
       setMessages(data);
       setLoading(false);
 
@@ -121,11 +119,19 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
+<<<<<<< HEAD
+  const otherUserIdHandler = ()=>{
+        // currUser,IdtoCall
+        if(selectedChat.users[0].email===email) return [selectedChat.users[0]._id,selectedChat.users[1]._id];
+        else return [selectedChat.users[1]._id,selectedChat.users[0]._id]
+  }
+=======
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+>>>>>>> ef347228d9a0077940dcb49438edd07da47143d8
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -136,7 +142,7 @@ function ChatScreen() {
   return (
     <div>
       <Header videoButton="/" />
-      <HeaderDesktop />
+      <HeaderDesktop users={otherUserIdHandler()}/>
       <div className="chatScreen">
         <div className="ChatMessageDiv">
           <p className="chatScreenTimeStamp">
