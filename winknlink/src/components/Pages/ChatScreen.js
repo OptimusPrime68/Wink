@@ -45,6 +45,7 @@ function ChatScreen() {
         setMessages([...messages, newMessageR]);
       }
     });
+    scrollToBottom();
   });
 
   const fetchMessages = async () => {
@@ -69,10 +70,12 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
+    scrollToBottom();
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
   const sendMessage = async (e) => {
+    scrollToBottom();
     console.log(newMessage);
     if (newMessage) {
       try {
@@ -122,6 +125,12 @@ function ChatScreen() {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
   };
 
   return (
@@ -193,6 +202,7 @@ function ChatScreen() {
                 type="text"
                 onChange={typingHandler}
                 value={newMessage}
+                onKeyPress={handleKeyPress}
               />
               <Button className="ChatScreenButton" onClick={sendMessage}>
                 SEND
