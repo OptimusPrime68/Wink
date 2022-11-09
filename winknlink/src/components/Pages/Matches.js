@@ -20,10 +20,27 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { CardMedia } from "@mui/material";
 import { DateContext } from "./DateContext";
-import * as Realm from 'realm-web'
+import * as Realm from "realm-web";
 import "../styles/Matches.css";
 import { exists } from "i18next";
+import MatchProfile from "./MatchProfile";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
+const style = {
+  position: "relative",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: 800,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  maxHeight: "80%",
+  overflowX: "hidden",
+  overflowY: "scroll",
+};
 
 function Matches() {
   const [people, setPeople] = useState([]);
@@ -31,9 +48,7 @@ function Matches() {
   const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
 
-   
-
-  const app = new Realm.App({id: "application-1-xqzti"})
+  const app = new Realm.App({ id: "application-1-xqzti" });
 
   var email = "";
 
@@ -46,20 +61,17 @@ function Matches() {
   if (user) email = user.email;
 
   useEffect(() => {
-   
-    async function getData () {
-      try{
-    	const user = await app.logIn(Realm.Credentials.anonymous())
-      const data =await user.functions.getAllData();
-      console.log("REST",data);
+    async function getData() {
+      try {
+        const user = await app.logIn(Realm.Credentials.anonymous());
+        const data = await user.functions.getAllData();
+        console.log("REST", data);
+      } catch (err) {
+        console.log(err);
       }
-      catch(err){console.log(err)}
-      
-
     }
 
     getData();
-
   }, []);
 
   useEffect(() => {
@@ -125,6 +137,14 @@ function Matches() {
     if (counter.current >= people.length) setLoading(false);
   };
 
+  const [id, setId] = useState();
+  const [open, setOpen] = React.useState(false);
+  function handleOpen(e) {
+    setId(e);
+    setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
+
   return (
     <div className="DateMainDiv">
       <Header />
@@ -143,8 +163,12 @@ function Matches() {
                 <h6>{person.email}</h6>
               </CardContent>
               <CardActions>
-                <Button style={{ margin: "auto" }} size="small">
-                  Chat
+                <Button
+                  style={{ margin: "auto" }}
+                  size="small"
+                  onClick={() => handleOpen(person.email)}
+                >
+                  Profile
                 </Button>
               </CardActions>
             </Card>
@@ -169,6 +193,20 @@ function Matches() {
         ))}
       </div> */}
       {loading && <Loader />}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        style={{ padding: "10px" }}
+      >
+        <Box sx={style}>
+          <MatchProfile id={id} />
+          <div style={{ textAlign: "center" }}>
+            <Button onClick={handleClose}>Close</Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }

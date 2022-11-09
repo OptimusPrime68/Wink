@@ -27,7 +27,10 @@ export default function Home() {
   let { user } = useSelector((state) => ({ ...state }));
   const navigate = useNavigate();
 
-  if (user){  console.log("HOME",user); navigate("/wink");}
+  if (user) {
+    console.log("HOME", user);
+    navigate("/wink");
+  }
 
   let dispatch = useDispatch();
 
@@ -52,35 +55,18 @@ export default function Home() {
               <Navbar.Brand href="#home">
                 <img src="/logo.png" alt="logo" height={64} width={64} />
               </Navbar.Brand>
-              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-              <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="me-auto navbar">
-                  <Nav.Link href="#home">
-                    <span className="navLink">{t("Home")}</span>
+              <Nav>
+                {!user && (
+                  <Nav.Link href="#" className="LogCen">
+                    <button
+                      className="LoginBut"
+                      onClick={() => handleShow("sm-down")}
+                    >
+                      <b>{t("Login")}</b>
+                    </button>
                   </Nav.Link>
-                  <Nav.Link href="#about">
-                    <span className="navLink">{t("About")}</span>
-                  </Nav.Link>
-                  <Nav.Link href="#features">
-                    <span className="navLink">{t("Features")}</span>
-                  </Nav.Link>
-                  <Nav.Link href="#contact">
-                    <span className="navLink">{t("Contact")}</span>
-                  </Nav.Link>
-                </Nav>
-                <Nav>
-                  {!user && (
-                    <Nav.Link href="#" className="LogCen">
-                      <button
-                        className="LoginBut"
-                        onClick={() => handleShow("sm-down")}
-                      >
-                        <b>{t("Login")}</b>
-                      </button>
-                    </Nav.Link>
-                  )}
-                </Nav>
-              </Navbar.Collapse>
+                )}
+              </Nav>
             </Container>
           </Navbar>
           <div className="textHome">
@@ -88,9 +74,6 @@ export default function Home() {
             <p>{t("Connect with people you haven't met yet")}</p>
           </div>
         </div>
-        <div id="about">{t("About")}</div>
-        <div id="features">{t("Features")}</div>
-        <div id="contact">{t("Contact")}</div>
       </div>
       <Modal
         className="LoginModal"

@@ -29,7 +29,6 @@ import Button from "@mui/material/Button";
 import MatchProfile from "./MatchProfile";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
 
@@ -53,6 +52,7 @@ function Wink() {
   const [loading, setLoading] = useState(false);
 
   var swipe = [];
+<<<<<<< HEAD
   var room = '';
 
 
@@ -60,6 +60,8 @@ function Wink() {
 
 
 
+=======
+>>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
 
   var email = "",
     dist = 100000000;
@@ -78,6 +80,7 @@ function Wink() {
     swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   socket = io(ENDPOINT);
   //   socket.on("connection");
@@ -90,6 +93,8 @@ function Wink() {
 
 
 
+=======
+>>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -107,7 +112,10 @@ function Wink() {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -149,9 +157,6 @@ function Wink() {
     }
   };
 
-
-
-
   // const [show, setShow] = useState(false);
 
   // const handleClose = () => setShow(false);
@@ -170,7 +175,10 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
+<<<<<<< HEAD
         token:user.token,
+=======
+>>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
       })
       .then(function (response) {
         toast.success("Like Sent");
@@ -200,7 +208,6 @@ function Wink() {
       });
   };
 
-
   const counter = useRef(0);
 
   const handleLoad = () => {
@@ -208,6 +215,7 @@ function Wink() {
     if (counter.current >= people.length) setLoading(false);
   };
 
+<<<<<<< HEAD
 
   const left = (e) => {
     setPeople(people.filter((a) => a !== e));
@@ -237,6 +245,8 @@ function Wink() {
 
 
 
+=======
+>>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
   return (
     <div className="DateMainDiv">
       <Header />

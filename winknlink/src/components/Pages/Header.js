@@ -9,7 +9,6 @@ import BookIcon from "@mui/icons-material/Book";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import Dropdown from "react-bootstrap/Dropdown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
@@ -143,13 +142,7 @@ function Header({ videoButton }) {
         style={{ cursor: "pointer" }}
       />
 
-      {videoButton ? (
-        <IconButton style={{ color: "#385E0F" }}>
-          <VideocamIcon fontSize="large" />
-        </IconButton>
-      ) : (
-        <div style={{ width: "55px" }}></div>
-      )}
+      <div style={{ width: "55px" }}></div>
     </div>
   );
 }
