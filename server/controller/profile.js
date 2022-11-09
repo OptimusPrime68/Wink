@@ -65,7 +65,7 @@ exports.updateProfile = (req, res) => {
 
       if (err) return res.status(400).json({ err });
       else {
-        console.log(success);
+       // console.log(success);
         return res.status(200).json(success);
       }
     }
@@ -111,7 +111,7 @@ const matchEmails =  async (email)=>{
   for(var i = 0;i<localEmail.length;i++){
       var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
       if(count){
-      console.log(localEmail[i].matchTo);
+     // console.log(localEmail[i].matchTo);
       finalEmail.push(localEmail[i].matchTo);
       }
  }
@@ -172,7 +172,7 @@ exports.allProfile= async (req,res)=>{
                               arr.push({x,cpy});
                         }
                         else{
-                          console.log(success[i].name,x);
+                          //console.log(success[i].name,x);
                         }
                         
     
@@ -185,7 +185,7 @@ exports.allProfile= async (req,res)=>{
                    
                 }
 
-        console.log(arr);
+       // console.log(arr);
 
         return res.status(201).json(arr);
       });

@@ -12,9 +12,6 @@ import { useDispatch } from "react-redux";
 import {useSelector} from "react-redux";
 import Plan from "./components/Pages/Plan";
 import ForgotPassword from './components/Pages/forgotPassword';
-import io from 'socket.io-client'
-const ENDPOINT = "http://localhost:4000";
-var socket;
 
 
 function App() {
@@ -22,15 +19,10 @@ function App() {
   const dispatch = useDispatch();
   let {user} = useSelector((state)=>({...state}));
 
-   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.on('match-to',(data)=>{
-      console.log(data);
-    })
 
-    console.log("Hello");
+
   
-  })
+  
   
   useEffect(()=>{
          const email = window.localStorage.getItem("email");

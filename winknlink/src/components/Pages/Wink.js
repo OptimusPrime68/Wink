@@ -1,4 +1,8 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
+import "../styles/swipeButtons.css";
+import Undo from "@mui/icons-material/Replay";
+import Like from "@mui/icons-material/Favorite";
+import Dislike from "@mui/icons-material/Close";
 import TinderCard from "react-tinder-card";
 import "../styles/Wink.css";
 import SwipeButtons from "./SwipeButtons";
@@ -29,7 +33,6 @@ import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
 
-
 const style = {
   position: "relative",
   top: "50%",
@@ -50,7 +53,13 @@ function Wink() {
   const [loading, setLoading] = useState(false);
 
   var swipe = [];
-  
+  var room = '';
+
+
+
+
+
+
 
   var email = "",
     dist = 100000000;
@@ -68,6 +77,16 @@ function Wink() {
     dist = user.distance;
     swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   socket.on("connection");
+  //   socket.on(email,(data)=>{
+  //     console.log("Yes Created");
+  //   })
+  // });
+
+
 
 
 
@@ -88,7 +107,7 @@ function Wink() {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
-     
+
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -151,14 +170,9 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
-
-
-
       })
       .then(function (response) {
         toast.success("Like Sent");
-
-
       })
       .catch(function (error) {
         console.log(error.message);
@@ -193,12 +207,35 @@ function Wink() {
   };
 
 
+  const left = (e) => {
+    setPeople(people.filter((a) => a !== e));
+    console.log("LEFT",e);
+  }
+
+
+  const right = async (e) => {
+
+    await handleRight(email,e.email);
+    setPeople(people.filter((a) => a !== e));
+    console.log("RIGHT");
+  }
+
+
+  const up = async (e) => {
+    if (user.user == "free") {
+      toast.warn("Purchase Subscription to Send Super Likes");
+      return;
+    }
+    await handleUp(email,e.email)
+    setPeople(people.filter((a) => a !== e));
+    console.log("UP");
+  }
+
 
 
   return (
     <div className="DateMainDiv">
       <Header />
-
       <div className="ProfieCards">
         {people.map((person) => (
           <>
@@ -207,7 +244,6 @@ function Wink() {
               key={person.email}
               preventSwipe={swipe}
               onSwipe={(dir) => swiped(dir, person.name, person.email)}
-             
             >
               <div
                 style={{ backgroundImage: `url(${person.image})` }}
@@ -236,10 +272,21 @@ function Wink() {
                 </IconButton>
               </div>
             </TinderCard>
+            <div className="swipeButtons">
+              <IconButton className="swipeDislike" onClick={()=>left(person)}>
+                <Dislike fontSize="large" />
+              </IconButton>
+              <IconButton className="swipeUndo" onClick={()=>up(person)}>
+                <Undo fontSize="large" />
+              </IconButton>
+              <IconButton className="swipeLike" onClick={()=>right(person)}>
+                <Like fontSize="large" />
+              </IconButton>
+            </div>
           </>
         ))}
 
-        <SwipeButtons />
+      
       </div>
 
       <Modal

@@ -9,14 +9,7 @@ import { useSelector } from "react-redux";
 import { storage } from "../../firebase";
 import { getStorage } from "firebase/storage";
 import { useTranslation } from "react-i18next";
-import {
-  ref,
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  list,
-  deleteObject,
-} from "firebase/storage";
+import { ref,uploadBytes,listAll,getDownloadURL,list,deleteObject} from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
