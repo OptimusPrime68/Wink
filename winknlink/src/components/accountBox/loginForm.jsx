@@ -125,7 +125,7 @@ export function LoginForm(props) {
     auth.signInWithPopup(facebookAuthProvider).then((result)=>{
 
       const user = result.user;
-      login(user._delegate.email,"jnnkj@#FE@RF#,43",user._delegate.token,"google-login");
+      login(user._delegate.email,"jnnkj@#FE@RF#,43",user._delegate.accessToken,"google-login");
     }).catch((error)=>{
       console.log(error);
 

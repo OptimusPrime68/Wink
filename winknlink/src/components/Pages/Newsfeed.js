@@ -59,6 +59,7 @@ function Newsfeed() {
   const [post, setPost] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [nameOfLike,setNameOfLike] = useState([]);
   const [loading, setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
   const [profileD, setProfileD] = useState({});
@@ -176,7 +177,9 @@ function Newsfeed() {
 
   const showLike = (arr) => {
     console.log("Hover");
-    for (var i = 0; i < arr.length; i++) console.log(arr[i].name);
+    var x = [];
+    for (var i = 0; i < arr.length; i++) x.push(arr[i].name + ' ');
+    setNameOfLike(x);
   };
 
   const [active, setActive] = useState(false);
@@ -210,7 +213,7 @@ function Newsfeed() {
                 <div className="col-auto AvatarDiv">
                   <div className="row mb-1">
                     <div className="col-auto">
-                      <Avatar sx={{ width: 45, height: 45 }} />
+                      <Avatar sx={{ width: 45, height: 45 }} src={e.authorId.image} />
                     </div>
                     <div
                       className="col-auto"
@@ -297,7 +300,7 @@ function Newsfeed() {
                     />
                   </div>
                 </div>
-                <Tooltip title="Names">
+                <Tooltip title={nameOfLike}>
                   <div
                     className="col-auto"
                     style={{

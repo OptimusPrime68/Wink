@@ -16,6 +16,8 @@ app.use(bodyParser.json({limit:"2mb"}));
 app.use(cors());
 
 
+
+
 fs.readdirSync('./routes').map((r)=> app.use("/api",require('./routes/' + r)));
 
 mongoose

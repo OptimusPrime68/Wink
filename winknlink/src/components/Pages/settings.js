@@ -13,8 +13,9 @@ import Header from "./Header";
 import Button from "@mui/material/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
-import BottomDrawer from "./BottomDrawer";
+import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
+
 import Multiselect from "multiselect-react-dropdown";
 
 function valuetext(value) {
@@ -66,6 +67,7 @@ const PrettoSlider = styled(Slider)({
 
 export default function Settings() {
   const [hobbies, setHobby] = useState([]);
+  const { t } = useTranslation(["home"]);
 
   const options = [
     { name: "Playing", id: 1 },
@@ -260,12 +262,12 @@ export default function Settings() {
     <div>
       <Header />
       <div className="settings">
-        <h2>Settings</h2>
+        <h2>{t("Settings")}</h2>
         <div className="tabSettings">
           <section id="sectionId">
             <div className="row p-3">
               <div className="col-md-6 mb-3">
-                <h4 className="Language">Language preference</h4>
+                <h4 className="Language">{t("Language preference")}</h4>
               </div>
               <div className="select col-md-6 mb-3">
                 <Language />
@@ -273,7 +275,7 @@ export default function Settings() {
             </div>
             <div className="row p-3">
               <div className="col-md-6 mb-3">
-                <h4 className="Language">Preference</h4>
+                <h4 className="Language">{t("Preference")}</h4>
               </div>
               <div className="col-md-6 mb-3">
                 <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
@@ -285,10 +287,10 @@ export default function Settings() {
                     onChange={(e) => handlePreference(e.target.value)}
                   >
                     <MenuItem value="">
-                      <em>Select Gender</em>
+                      <em>{t("Select Gender")}</em>
                     </MenuItem>
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
+                    <MenuItem value="male">{t("Male")}</MenuItem>
+                    <MenuItem value="female">{t("Female")}</MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -312,7 +314,7 @@ export default function Settings() {
             </div>
             <div className="row p-3">
               <div className="col-md-6 mb-3">
-                <h4 className="Language">Distance</h4>
+                <h4 className="Language">{t("Distance")}</h4>
               </div>
               <div className=" col-md-6 mb-3">
                 <PrettoSlider
@@ -328,7 +330,7 @@ export default function Settings() {
             </div>
             <div className="row p-3">
               <div className="col-md-6 mb-3">
-                <h4 className="Language">Subscription</h4>
+                <h4 className="Language">{t("Subscription")}</h4>
               </div>
               <div className="col-md-6 mb-3">
                 <div className="row">
@@ -343,8 +345,8 @@ export default function Settings() {
                         displayEmpty
                         disabled
                       >
-                        <MenuItem value="">Free</MenuItem>
-                        <MenuItem value="Premium">Premium</MenuItem>
+                        <MenuItem value="">{t("Free")}</MenuItem>
+                        <MenuItem value="Premium">{t("Premium")}</MenuItem>
                       </Select>
                     </FormControl>
                   </div>
@@ -360,7 +362,7 @@ export default function Settings() {
             </div>
             <div className="row p-3">
               <div className="col-md-6 mb-3">
-                <h4 className="Language">Hobby Preference</h4>
+                <h4 className="Language">{("Hobby Preference")}</h4>
               </div>
               <div className="col-md-6 mb-3">
                 <Multiselect
@@ -379,7 +381,7 @@ export default function Settings() {
                 type="button"
                 onClick={handleUpdate}
               >
-                Update
+                {t("Update")}
               </button>
             </div>
           </section>
@@ -387,12 +389,12 @@ export default function Settings() {
       </div>
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Premium Features</Modal.Title>
+          <Modal.Title>{t("Premium Features")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ol>
-            <li>Super Like</li>
-            <li>Undo</li>
+            <li>{t("Super Like")}</li>
+            <li>{t("Undo")}</li>
           </ol>
           <FormControl sx={{ minWidth: 200 }} size="small">
             <Select
@@ -403,20 +405,19 @@ export default function Settings() {
               label="Subscription"
               onChange={(e) => handleMonth(e.target.value)}
             >
-              <MenuItem value="">Select Plan</MenuItem>
-              <MenuItem value="1">1 Month (₹60)</MenuItem>
-              <MenuItem value="3">3 Month (₹170)</MenuItem>
-              <MenuItem value="6">6 Month (₹330)</MenuItem>
-              <MenuItem value="12">12 Month (₹650)</MenuItem>
+              <MenuItem value="">{t("Select Plan")}</MenuItem>
+              <MenuItem value="1">{t("1 Month (₹60)")}</MenuItem>
+              <MenuItem value="3">{t("3 Month (₹170)")}</MenuItem>
+              <MenuItem value="6">{t("6 Month (₹330)")}</MenuItem>
             </Select>
           </FormControl>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            {t("Close")}
           </Button>
           <Button variant="primary" onClick={handlePayment}>
-            Buy
+            {t("Buy")}
           </Button>
         </Modal.Footer>
       </Modal>

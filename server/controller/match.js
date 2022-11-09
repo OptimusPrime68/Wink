@@ -5,7 +5,7 @@ const Match= require('../models/match')
 
 
 // FUNCTION TO MAKE MATCH
-exports.makeMatch=(req,res)=>{
+exports.makeMatch= async (req,res)=>{
 
 
     const from_email = req.body.fromemail;
@@ -15,6 +15,12 @@ exports.makeMatch=(req,res)=>{
     var update = {};
     update["matchFrom"] = from_email;
     update["matchTo"] = to_email;
+
+    const x =await Match.count({matchFrom:from_email,matchTo:to_email});
+    if(x > 0)
+    return res.status(200).json({m:"Already Like Sent"});
+
+
     Match.findOneAndUpdate(
         {matchFrom:from_email,matchTo:to_email},
         {$set:update},{upsert:true,new:true},
@@ -26,12 +32,11 @@ exports.makeMatch=(req,res)=>{
             return res.status(201).json(success);
         }
     )
-
-   
-    
 }
 // FUNCTION TO GET MATCH
 exports.getMatch= async (req,res)=>{
+
+    console.log(req.headers);
 
     const email = req.body.email;
     var localEmail = [];

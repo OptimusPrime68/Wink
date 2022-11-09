@@ -16,7 +16,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { storage } from "../../firebase";
-import { getStorage } from "firebase/storage";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 
@@ -31,6 +30,10 @@ function Like() {
     axios
       .post("http://localhost:4000/api/get-super-like", { email: user.email })
       .then((r) => {
+
+        if(r.data.m.length == 0)
+        setLoading(false);
+
         r.data.m.map((e) => {
           const imageListRef = ref(storage, `${e.email}`);
           listAll(imageListRef)
@@ -53,6 +56,11 @@ function Like() {
       axios
         .post("http://localhost:4000/api/get-likes", { email: user.email })
         .then((r) => {
+
+
+        if(r.data.m.length == 0)
+        setLoading(false);
+
           r.data.m.map((e) => {
             const imageListRef = ref(storage, `${e.email}`);
             listAll(imageListRef)
@@ -74,13 +82,21 @@ function Like() {
   }, []);
 
   const handlePopUp = () => {
+    console.log("HH");
     if (user.user == "free") {
       toast.warn("Only for Premium User");
     }
   };
 
   const counter = useRef(0);
-  const handleLoad = () => {
+  const handleLoad1 = () => {
+    console.log("Image Loading");
+    counter.current += 1;
+    if (counter.current >= like.length) setLoading(false);
+  };
+
+  const counters = useRef(0);
+  const handleLoad2 = () => {
     console.log("Image Loading");
     counter.current += 1;
     if (counter.current >= like.length) setLoading(false);
@@ -92,35 +108,11 @@ function Like() {
       {loading ? <Loader /> : <></>}
       <div>
         <Tabs
-          defaultActiveKey="Likes"
+          defaultActiveKey="SuperLike"
           id="uncontrolled-tab-example"
           className="mb-3"
           fill
         >
-          <Tab eventKey="Likes" title="Likes" onClick={handlePopUp}>
-            <div className="row">
-              {like &&
-                like.map((e) => (
-                  <div className="matchDiv col mb-3">
-                    <Card style={{ width: "200px", textAlign: "center" }}>
-                      <CardMedia
-                        component="img"
-                        image={e.image}
-                        onLoad={handleLoad}
-                        alt="Profile Image"
-                        className="profileDivImage"
-                        style={{
-                          height: "200px",
-                          width: "200px",
-                          margin: "auto",
-                        }}
-                      />
-                      <p>{e.name}</p>
-                    </Card>
-                  </div>
-                ))}
-            </div>
-          </Tab>
           <Tab eventKey="SuperLike" title="Super Like">
             <div className="row">
               {superLike &&
@@ -128,7 +120,7 @@ function Like() {
                   <div className="matchDiv col mb-3">
                     <Card style={{ width: "200px", textAlign: "center" }}>
                       <CardMedia
-                        onLoad={handleLoad}
+                        onLoad={handleLoad2}
                         component="img"
                         image={e.image}
                         alt="Profile Image"
@@ -145,6 +137,31 @@ function Like() {
                 ))}
             </div>
           </Tab>
+          <Tab eventKey="Likes" title="Likes">
+            <div className="row"  onClick={handlePopUp}>
+              {like &&
+                like.map((e) => (
+                  <div className="matchDiv col mb-3">
+                    <Card style={{ width: "200px", textAlign: "center" }}>
+                      <CardMedia
+                        component="img"
+                        image={e.image}
+                        onLoad={handleLoad1}
+                        alt="Profile Image"
+                        className="profileDivImage"
+                        style={{
+                          height: "200px",
+                          width: "200px",
+                          margin: "auto",
+                        }}
+                      />
+                      <p>{e.name}</p>
+                    </Card>
+                  </div>
+                ))}
+            </div>
+          </Tab>
+          
         </Tabs>
       </div>
     </div>

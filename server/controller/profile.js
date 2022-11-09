@@ -2,6 +2,7 @@ const Profile = require('../models/profile')
 var mongoose = require('mongoose');
 const geolib = require('geolib');
 const getDistance = require("geolib");
+const Match = require("../models/match")
 
 // FUNCTION to update Profile
 exports.updateProfile = (req, res) => {
@@ -46,7 +47,11 @@ exports.updateProfile = (req, res) => {
       headerObject.location.forEach(function (item) {
         update["location"].coordinates.push(item);
       });
+    } else if(field == "image")
+    {
+      update["image"] =  req.body.image;
     }
+      
   }
 
   // console.log(update);
@@ -84,9 +89,6 @@ exports.fetchProfile = (req, res) => {
   });
 };
 
-
-
-
 //FUNCTION TO FETCH USER PROFILE ID FROM EMAIL
 exports.fetchProfileId = (req,res)=>{
     console.log(req.body);
@@ -98,14 +100,28 @@ exports.fetchProfileId = (req,res)=>{
     })
 }
 
+
+const makeMatch= async (from_email,to_email)=>{
+
+  const xx =await Match.countDocuments({matchFrom:from_email,matchTo:to_email}).exec();
+  const yy =await Match.countDocuments({matchTo:from_email,matchFrom:to_email}).exec();
+  return  xx>0 && yy>0?false:true;
+  
+  
+}
+
+
 //FUNCTION TO FETCH ALL PROFILE TO SHOW
-exports.allProfile=(req,res)=>{
+exports.allProfile= async (req,res)=>{
 
  
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
 
+   
+
+   
     Profile.findOne({email},function(err,result){
 
         
@@ -120,6 +136,7 @@ exports.allProfile=(req,res)=>{
         lat = result.location.coordinates[1];
         var dist = result.distance;
 
+      
         
         
 
@@ -130,17 +147,32 @@ exports.allProfile=(req,res)=>{
                 var arr = [];
                 for(var i = 0;i<success.length;i++){
 
-                    const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
 
-                    if(x <= dist)
-                    {
-                         
+                   
+
+                    const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
+                   
+                   
+                ;
+                        if(x <= dist)
+                        {
+                             
+                            
+                              var cpy = success[i];
+                              arr.push({x,cpy});
+                        }
+                        else{
+                          console.log(success[i].name,x);
+                        }
                         
-                          var cpy = success[i];
-                          arr.push({x,cpy});
-                    }
+    
+
+                      
+
+                    
                     
 
+                   
                 }
 
         console.log(arr);

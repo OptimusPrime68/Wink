@@ -15,7 +15,6 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CircleLoader from "react-spinners/CircleLoader";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import { DateContext } from "./DateContext";

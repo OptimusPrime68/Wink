@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authCheck, profileCheck } = require("../middlewares/auth");
+const { authCheck, profileCheck,loginCheck } = require("../middlewares/auth");
 const {
   login,
   signup,
@@ -12,7 +12,7 @@ const {
 
 
 // Route to Login
-router.post("/login", authCheck, login);
+router.post("/login", loginCheck, login);
 
 
 // Route to google login

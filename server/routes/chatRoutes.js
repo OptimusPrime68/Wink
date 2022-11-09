@@ -1,14 +1,15 @@
 const express = require("express");
 
-const {authCheck}  = require("../middlewares/auth");
+const {authCheck, profileCheck}  = require("../middlewares/auth");
 const {accessChat,
     fetchChats
 } = require("../controller/chatControllers");
+const profile = require("../models/profile");
 
 const router = express.Router();
 
-router.route("/chat").post(authCheck,accessChat)
-router.route("/chat/all").post(authCheck,fetchChats);
+router.route("/chat").post(profileCheck,accessChat)
+router.route("/chat/all").post(profileCheck,fetchChats);
 
 
 module.exports= router;

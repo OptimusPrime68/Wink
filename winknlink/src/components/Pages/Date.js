@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import "../styles/date.css";
 import Profile from "./profile";
+
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
@@ -43,6 +45,7 @@ import Modal from "react-bootstrap/Modal";
 
 export default function Date(props) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { t } = useTranslation(["home"]);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -391,13 +394,13 @@ export default function Date(props) {
       </div>
       <Modal show={show} onHide={handleClose} centered backdrop="static">
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>Are you sure you want to delete your account!</Modal.Body>
+        <Modal.Body>{t("Are you sure you want to delete your account!")}</Modal.Body>
         <Modal.Footer style={{ justifyContent: "center" }}>
           <Button variant="outline-danger" onClick={handleClose}>
-            No
+            {t("No")}
           </Button>
           <Button variant="outline-success" onClick={handleAccountDelete}>
-            Yes
+            {t("Yes")}
           </Button>
         </Modal.Footer>
       </Modal>

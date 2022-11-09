@@ -48,9 +48,7 @@ const profileSchema = new mongoose.Schema({
     distance:{
         type:Number,
         default:1000000
-    },profile:{
-        type:String,
-    },cloudinary_id:{
+    },image:{
         type:String,
     }
    },

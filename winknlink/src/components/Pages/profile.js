@@ -25,7 +25,6 @@ import { useDispatch } from "react-redux";
 import Dropzone from "./Dropzone";
 import ReactPlayer from "react-player";
 import { useRef } from "react";
-import BottomDrawer from "./BottomDrawer";
 import Loader from "./Loader";
 
 export default function Profile() {
@@ -71,6 +70,14 @@ export default function Profile() {
               response.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
                   if (url.includes("profile")) {
+                    try{
+                    axios
+                    .post("http://localhost:4000/api/update-profile", {
+                      email,image:url});
+                    }catch(err)
+                    {
+                      
+                    }
                     dispatch({
                       type: "LOGGED_IN_USER",
                       payload: {
@@ -395,7 +402,7 @@ export default function Profile() {
             />
             <label for="option1" className="trr">
               {" "}
-              Account
+              {t("Account")}
             </label>
             <article className="articleDiv">
               <div className="frm" style={{ textAlign: "center" }}>
@@ -430,13 +437,13 @@ export default function Profile() {
                     variant="outline-success"
                     onClick={uploadProfile}
                   >
-                    Upload
+                    {t("Upload")}
                   </Button>
                 </div>
 
                 <div className="tr">
                   <label className="label" for="input">
-                    NAME
+                  {t("Name")}
                   </label>
                   <input
                     value={name}
@@ -451,7 +458,7 @@ export default function Profile() {
                     for="address"
                     style={{ paddingTop: "10px" }}
                   >
-                    Date Of Birth
+                    {t("Date Of Birth")}
                   </label>
 
                   <input
@@ -464,7 +471,7 @@ export default function Profile() {
                 </div>
                 <br />
                 <label className="label" for="age">
-                  Age(Calculated by your DOB)
+                {t("Age(Calculated by your DOB)")}
                 </label>
                 <input
                   value={age}
@@ -474,7 +481,7 @@ export default function Profile() {
                   id="age"
                 />
                 <label className="label" for="inputemail">
-                  EMAIL
+                {t("Email")}
                 </label>
                 <div className="row">
                   <div className="col">
@@ -488,7 +495,7 @@ export default function Profile() {
                   </div>
                 </div>
                 <label className="label" for="phone">
-                  Phone Number
+                {t("Phone Number")}
                 </label>
                 <input
                   value={phone}
@@ -501,7 +508,7 @@ export default function Profile() {
                 <div className="row">
                   <div className="col-md-6">
                     <label className="label" for="gender">
-                      Gender
+                    {t("Gender")}
                     </label>
                   </div>
                   <div className="col-md-6">
@@ -510,9 +517,9 @@ export default function Profile() {
                       id="gender"
                       onChange={(e) => setGender(e.target.value)}
                     >
-                      <option value="gender">Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="gender">{t("Gender")}</option>
+                      <option value="male">{t("Male")}</option>
+                      <option value="female">{t("Female")}</option>
                     </select>
                   </div>
                 </div>
@@ -520,7 +527,7 @@ export default function Profile() {
                 <br />
 
                 <label className="label" for="gender">
-                  Address
+                {t("Address")}
                 </label>
                 <input
                   value={address}
@@ -531,7 +538,7 @@ export default function Profile() {
                 />
 
                 <label className="label" for="phone">
-                  Location coordinates
+                {t("Location Coordinates")}
                 </label>
                 {isGeolocationAvailable && isGeolocationEnabled && coords && (
                   <input
@@ -545,7 +552,7 @@ export default function Profile() {
                 <div className="row">
                   <div className="col-md-6" style={{ textAlign: "center" }}>
                     <label className="label" for="hobby">
-                      Hobbies
+                    {t("Hobbies")}
                     </label>
                   </div>
                   <div className="col-md-6">
@@ -567,7 +574,7 @@ export default function Profile() {
                   }}
                   onClick={update}
                 >
-                  Update profile
+                  {t("Update Profile")}
                 </button>
               </div>
             </article>
@@ -576,7 +583,7 @@ export default function Profile() {
             <input className="t" type="radio" name="sections" id="option2" />
             <label for="option2" className="trr">
               {" "}
-              Upload
+              {t("Upload")}
             </label>
             <article style={{ textAlign: "center" }} className="articleDiv">
               <div className="tr wwq">
@@ -607,14 +614,14 @@ export default function Profile() {
                 type="button"
                 onClick={uploadVideo}
               >
-                Upload Video
+                {t("Upload Video")}
               </button>
             </article>
           </section>
           <section id="section3">
             <input className="t" type="radio" name="sections" id="option3" />
             <label for="option3" className="trr" onClick={loadPhoto}>
-              Photos
+            {t("Photos")}
             </label>
             <article className="articleDiv">
               <div className="tr wwq">
@@ -640,7 +647,7 @@ export default function Profile() {
                                   handleDelete(url);
                                 }}
                               >
-                                Delete
+                                {t("Delete")}
                               </Button>
                             </Card.Body>
                           </Card>

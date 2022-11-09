@@ -6,6 +6,7 @@ const User = require("../models/user");
 
 const sendMessage = asyncHandler( async (req,res)=>{
 
+    console.log(req.body);
     const { content,chatId,email } = req.body;
     // we need the logged in user (from middleware)
     var currUser= await User.findOne({email});
@@ -38,6 +39,8 @@ const sendMessage = asyncHandler( async (req,res)=>{
 })
 
 const allMessages = asyncHandler(async (req,res)=>{
+
+    console.log(req.body);
     try{
         const messages = await Message.find({
             chat: req.params.chatId

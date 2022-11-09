@@ -7,8 +7,6 @@ exports.authCheck = async (req, res, next) => {
  
 
   try {
-
-
     bcrypt.hash(req.body.password,12,function(err,has){
       if(!err) {
       const email = req.body.email;
@@ -25,11 +23,31 @@ exports.authCheck = async (req, res, next) => {
   }
 };
 
-exports.profileCheck = (req, res, next) => {
-  console.log(req.body);
+
+exports.loginCheck = async (req, res, next) => {
+
+
+ 
+
   try {
-    next();
-  } catch (err) {
+    
+      const email = req.body.email;
+      const password = req.body.password;
+      req.credential = {
+        email,
+        password,
+      };
+      next();
+    }
+  
+   catch (err) {
     res.status(401).json({ err: "Invalid Request" });
   }
+};
+
+exports.profileCheck = (req, res, next) => {
+  console.log(req.body);
+ 
+    next();
+  
 };
