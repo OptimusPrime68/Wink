@@ -65,6 +65,10 @@ function Like() {
             const imageListRef = ref(storage, `${e.email}`);
             listAll(imageListRef)
               .then((response) => {
+
+                if(response.items.length == 0)
+                setLoading(false);
+
                 response.items.forEach((item) => {
                   getDownloadURL(item).then((url) => {
                     if (url.includes("profile")) {
@@ -113,7 +117,7 @@ function Like() {
           className="mb-3"
           fill
         >
-          <Tab eventKey="SuperLike" title="Super Like">
+          <Tab eventKey="SuperLike" title="Super Like" >
             <div className="row">
               {superLike &&
                 superLike.map((e) => (
@@ -138,7 +142,7 @@ function Like() {
             </div>
           </Tab>
           <Tab eventKey="Likes" title="Likes">
-            <div className="row"  onClick={handlePopUp}>
+            <div className="row">
               {like &&
                 like.map((e) => (
                   <div className="matchDiv col mb-3">

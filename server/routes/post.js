@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {makePost,getAuthor,getAllPost,deletePost,updateLike} = require("../controller/post");
+const {makePost,getAuthor,getAllPost,deletePost,updateLike,getPostById} = require("../controller/post");
 
 
 // Route to create Post
@@ -16,6 +16,8 @@ router.post("/get-all-post",getAllPost);
 router.post("/delete-post",deletePost);
 
 router.post("/update-like",updateLike)
+
+router.post("/get-post-by-id",getPostById)
 
 
 module.exports = router;

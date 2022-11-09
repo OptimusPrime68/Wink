@@ -182,6 +182,54 @@ function Newsfeed() {
     setNameOfLike(x);
   };
 
+  const onAddPost = (newPost) =>{
+    axios
+    .post("http://localhost:4000/api/get-post-by-id", {
+      newPost
+    })
+    .then((data) => {
+      console.log(data);
+
+      if (data.data.length == 0) setLoading(false);
+
+      console.log(data);
+
+      data.data.map((e) => {
+        const id = e._id;
+        const ex = e.authorId.email;
+        const imageListRef = ref(storage, `${ex}/post/${id}`);
+        e["files"] = [];
+        setPost((prev) => [e, ...prev]);
+        listAll(imageListRef).then((response) => {
+          console.log(e.content, response);
+
+          if (response.items.length == 0) setLoading(false);
+
+          response.items.forEach((item) => {
+            getDownloadURL(item).then((url) => {
+              setLoading(false);
+
+              setPost((current) =>
+                current.map((obj) => {
+                  if (obj == e) {
+                    obj.files = [...obj.files, url];
+                  }
+                  return obj;
+                })
+              );
+            });
+          });
+        });
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    
+
+  }
+
   const [active, setActive] = useState(false);
 
   return (
@@ -204,7 +252,6 @@ function Newsfeed() {
           </Button>
         </div>
       </div>
-
       {post &&
         post.map((e) => {
           return (
@@ -253,7 +300,7 @@ function Newsfeed() {
                 </div>
               </div>
 
-              <div className="row PostImgDiv">
+             {e.files.length != 0 &&  <div className="row PostImgDiv">
                 <Swiper
                   grabCursor
                   keyboard={{ enabled: true }}
@@ -261,7 +308,7 @@ function Newsfeed() {
                   navigation
                   className=""
                 >
-                  {e.files.map((image, index) => (
+                  {e.files && e.files.map((image, index) => (
                     <SwiperSlide key={index}>
                       <CardMedia
                         className="PostImg"
@@ -272,7 +319,7 @@ function Newsfeed() {
                     </SwiperSlide>
                   ))}
                 </Swiper>
-              </div>
+              </div>}
 
               <div className="row">
                 <div className="col-auto">
@@ -339,7 +386,7 @@ function Newsfeed() {
               </IconButton>
             </div>
           </div>
-          <DropzonePost />
+          <DropzonePost  onAddPosts={onAddPost} onClose={handleClose} />
         </Box>
       </Modal>
     </div>

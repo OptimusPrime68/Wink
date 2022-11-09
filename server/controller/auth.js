@@ -6,15 +6,12 @@ const bcrypt = require("bcrypt");
 const SuperLike = require("../models/superLike");
 const Post = require("../models/post");
 const Date = require("../models/date");
-
 // FUNCTION TO LOGIN USER
 exports.login=(req,res)=>{
     
     const {email,password} = req.credential;
 
     console.log(password);
-
-
 
 
     User.countDocuments({email}, function (err, count){ 
@@ -155,4 +152,32 @@ exports.googleLogin= async (req,res)=>{
           });
         
     
+}
+
+
+exports.forgotPassword = async (req,res)=>{
+
+    const {email,password} = req.credential;
+
+    console.log(email + password);
+
+ 
+    User.findOne({email},function(err,result){
+
+        if(result == null) res.status(400).json({message:"User Not Exists"});
+        else if(err) res.status(400).json({message:err.message});
+        else if(result.login != "email") res.status(400).json({message:"User Not Logged in by email"});
+        else{
+        User.findOneAndUpdate({email},{$set:{password:password}},function (err, results){
+         
+            if(err) res.status(400).json({message:err.message});
+            else res.status(200).json({message:"Password Change Successfully"});
+          
+         });
+        }
+
+    })
+ 
+  
+
 }

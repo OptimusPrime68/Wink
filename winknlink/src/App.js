@@ -11,6 +11,7 @@ import Date from "./components/Pages/Date";
 import { useDispatch } from "react-redux";
 import {useSelector} from "react-redux";
 import Plan from "./components/Pages/Plan";
+import ForgotPassword from './components/Pages/forgotPassword';
 import io from 'socket.io-client'
 import VideoCall from './components/Pages/VideoCall';
 const ENDPOINT = "http://localhost:4000";
@@ -84,7 +85,8 @@ function App() {
               <Route path="/Wink" element={<Date />}></Route> 
               <Route path="/buy-plan" element={<Plan />}></Route>
               <Route path="/photo-upload" element={<Photo />}></Route>
-              <Route path="/chatVideo" element={<VideoCall/>}></Route>
+              <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+              
 
             </Routes>
           </div>

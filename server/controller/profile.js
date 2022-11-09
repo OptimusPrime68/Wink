@@ -100,15 +100,26 @@ exports.fetchProfileId = (req,res)=>{
     })
 }
 
+const matchEmails =  async (email)=>{
 
-const makeMatch= async (from_email,to_email)=>{
+ 
 
-  const xx =await Match.countDocuments({matchFrom:from_email,matchTo:to_email}).exec();
-  const yy =await Match.countDocuments({matchTo:from_email,matchFrom:to_email}).exec();
-  return  xx>0 && yy>0?false:true;
-  
-  
+  var localEmail = [];
+  var finalEmail = [];
+
+  localEmail = await Match.find({matchFrom:email});
+  for(var i = 0;i<localEmail.length;i++){
+      var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
+      if(count){
+      console.log(localEmail[i].matchTo);
+      finalEmail.push(localEmail[i].matchTo);
+      }
+ }
+ return finalEmail;
 }
+
+
+
 
 
 //FUNCTION TO FETCH ALL PROFILE TO SHOW
@@ -118,6 +129,7 @@ exports.allProfile= async (req,res)=>{
     var preference = "";
     var age = [18,100];
     var email = req.body.email;
+    const finalEmail = await matchEmails(email);
 
    
 
@@ -148,13 +160,11 @@ exports.allProfile= async (req,res)=>{
                 for(var i = 0;i<success.length;i++){
 
 
-                   
-
                     const x = geolib.getDistance({latitude:lat,longitude:long},{latitude:success[i].location.coordinates[1],longitude:success[i].location.coordinates[0]});
                    
                    
                 ;
-                        if(x <= dist)
+                        if(x <= dist && finalEmail.includes(success[i].email) == false)
                         {
                              
                             
