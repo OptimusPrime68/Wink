@@ -7,6 +7,7 @@ const {
   getUserType,
   deleteAccount,
   googleLogin,
+  forgotPassword,
 } = require("../controller/auth");
 
 
@@ -30,5 +31,10 @@ router.post("/is-premium", getUserType);
 
 // Route to delete account
 router.post("/delete-account", deleteAccount);
+
+
+// Forgot Password API
+
+router.post("/forgot-password",authCheck,forgotPassword)
 
 module.exports = router;

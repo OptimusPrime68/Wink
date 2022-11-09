@@ -52,7 +52,7 @@ const img = {
 };
 
 
-const DropzonePost = () => {
+const DropzonePost = (props) => {
   const [files, setFiles] = useState([]);
 
   const [caption,setCaption] = useState();
@@ -119,9 +119,19 @@ const DropzonePost = () => {
       const record = r.data;
       console.log(record);
       var x = files.length;
+
+      if(files.length == 0)
+      {
+        toast.success("Post Created");
+        props.onAddPosts(r.data._id);
+        props.onClose();
+        return;
+      }
+
       files.map((e) => {
-        let r = (Math.random() + 1).toString(36).substring(7);
-        const imageRef = ref(storage, `${user.email}/post/${record._id}/${r}`);
+        console.log(e);
+        let rand = (Math.random() + 1).toString(36).substring(7);
+        const imageRef = ref(storage, `${user.email}/post/${record._id}/${rand}`);
         console.log(imageRef);
         uploadBytes(imageRef, e)
           .then(() => {
@@ -129,6 +139,8 @@ const DropzonePost = () => {
             x--;
             if(x == 0){
             toast.success("Post Created");
+            props.onClose();
+            props.onAddPosts(r.data._id);
             }
             else
             toast.success(x+ " Files Remaining");
@@ -138,6 +150,7 @@ const DropzonePost = () => {
           });
       });
 
+     
      
       
  

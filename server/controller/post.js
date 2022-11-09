@@ -113,3 +113,9 @@ exports.updateLike = async(req,res)=>{
 
 
 }
+
+exports.getPostById = async (req,res)=>{
+
+    const ans = await Post.find({_id:mongoose.Types.ObjectId(req.body.newPost)}).populate("authorId").populate("likes");
+    res.status(200).json(ans);
+}

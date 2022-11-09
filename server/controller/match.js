@@ -47,6 +47,9 @@ exports.getMatch= async (req,res)=>{
     for(var i = 0;i<localEmail.length;i++){
         var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
         if(count){
+
+            
+
         console.log(localEmail[i].matchTo);
         finalEmail.push(localEmail[i].matchTo);
         }

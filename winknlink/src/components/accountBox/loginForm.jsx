@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { facebookAuthProvider } from "../../firebase";
 import Loader from "../Pages/Loader";
 
+
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
   const { switchToForget } = useContext(AccountContext);
