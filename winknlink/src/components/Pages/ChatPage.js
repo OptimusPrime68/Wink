@@ -54,7 +54,7 @@ const ChatPage = () => {
   useEffect(() => {
     console.log("imside");
     fetchChats();
-  }, []);
+  });
 
   return (
     <div>

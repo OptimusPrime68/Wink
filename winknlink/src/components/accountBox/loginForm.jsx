@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { facebookAuthProvider } from "../../firebase";
 import Loader from "../Pages/Loader";
 
 export function LoginForm(props) {
@@ -43,7 +43,7 @@ export function LoginForm(props) {
     await auth
       .signInWithEmailAndPassword(email, password)
       .then((e) => {
-        login(email, password, e, "login");
+        login(email, password, e.user._delegate.accessToken, "login");
       })
       .catch((error) => {
         toast.error(error.message.slice(10));
@@ -51,7 +51,7 @@ export function LoginForm(props) {
     setLoading(false);
   };
 
-  const login = (email, password, e, login) => {
+  const login = (email, password, token, login) => {
     let userType = "free";
 
     let name = "";
@@ -73,18 +73,17 @@ export function LoginForm(props) {
       .post(`http://localhost:4000/api/${login}`, {
         email,
         password,
-        token:e.user._delegate.accessToken
+        token
       })
       .then(function (response) {
         var id = response.data.id;
-        const idTokenResult = e.user._delegate.accessToken;
+       
 
-        console.log("Token", idTokenResult);
         dispatch({
           type: "LOGGED_IN_USER",
           payload: {
             email: email,
-            token: idTokenResult,
+            token: token,
             id: id,
             user: userType,
             name: name,
@@ -92,7 +91,7 @@ export function LoginForm(props) {
         });
 
         window.localStorage.setItem("email", email);
-        window.localStorage.setItem("token", idTokenResult);
+        window.localStorage.setItem("token", token);
         window.localStorage.setItem("id", id);
 
         navigate("/wink");
@@ -117,6 +116,23 @@ export function LoginForm(props) {
       .catch((error) => console.log(error));
   };
 
+
+  const handleFacebookLogin = async (e) =>{
+
+
+   
+
+    auth.signInWithPopup(facebookAuthProvider).then((result)=>{
+
+      const user = result.user;
+      login(user._delegate.email,"jnnkj@#FE@RF#,43",user._delegate.accessToken,"google-login");
+    }).catch((error)=>{
+      console.log(error);
+
+    })
+
+  }
+
   return (
     <BoxContainer>
       <div
@@ -139,6 +155,7 @@ export function LoginForm(props) {
         />
         <FontAwesomeIcon
           style={{ cursor: "pointer" }}
+          onClick={handleFacebookLogin}
           icon={faFacebook}
           size="2x"
         />

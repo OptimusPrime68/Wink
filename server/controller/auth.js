@@ -2,32 +2,49 @@ const User = require('../models/user');
 const Profile = require('../models/profile');
 const Subscription = require('../models/subscription');
 const Match = require("../models/match");
+const bcrypt = require("bcrypt");
+const SuperLike = require("../models/superLike");
+const Post = require("../models/post");
+const Date = require("../models/date");
 
 // FUNCTION TO LOGIN USER
 exports.login=(req,res)=>{
     
     const {email,password} = req.credential;
 
+    console.log(password);
 
 
 
-    User.countDocuments({email,password}, function (err, count){ 
+
+    User.countDocuments({email}, function (err, count){ 
         if(count>0){
                 
-           User.findOne({email,password}, function(err, userFromDB) {
-                if(userFromDB){
+           User.findOne({email}, function(err, userFromDB) {
 
-                       res.status(200).json({id:userFromDB._id});
-                } else {
-                    res.status(400).json({id : ""});
+            console.log(userFromDB);
+            if(userFromDB && userFromDB.login != "email")  
+            res.status(400).json({Error:"Sign In With the Medium You Use For Signup"});
+             
+
+            bcrypt.compare(password, userFromDB.password, function(err, result) {
+
+                console.log("RESULT",result);
+                if (err){
+                    res.status(400).json({Error:"Wrong Password"});
                 }
-            });
-           
-       
-        }
-        else{
-            res.status(400).json({Error:"No User Exist"});
-        }
+                if (result) {
+                    res.status(200).json({id:userFromDB._id});
+                } else {
+                  // response is OutgoingMessage object that server response http request
+                  return res.status(400).json({Error: 'passwords do not match'});
+                }})
+
+               
+
+         })}else {
+             res.status(400).json({Error:"Wrong Password"});
+         }
     });
 }
 
@@ -102,6 +119,10 @@ exports.deleteAccount = async (req,res)=>{
     const matches = await Match.deleteMany({matchFrom:email});
     const matchesto = await Match.deleteMany({matchTo:email});
     const subs = await Subscription.deleteMany({email});
+    await SuperLike.deleteMany({from:email});
+    await SuperLike.deleteMany({to:email});
+    await Date.deleteMany({from:email});
+    await Date.deleteMany({to:email});
 
     console.log(data);
     console.log(record);
@@ -118,23 +139,16 @@ exports.deleteAccount = async (req,res)=>{
 
 // FUNCTION TO AUTHENTICATE USER USING GOOGLE
 exports.googleLogin= async (req,res)=>{
-    
     const {email} = req.credential;
-
-
     const data = await User.findOne({email});
-
     if(data)
     {
          res.status(200).json({data});
          return;
     }
-
-
-          const user = new User({
-              email,password:"AQWScdss#@$0onn$2gf4$@54"
-          });
-
+    const user = new User({
+              email,password:"AQWScdss#@$0onn$2gf4$@54",login:"google"
+    });
           user.save(function(err,result){
             console.log(result);  
             res.status(200).json({id : result._id});

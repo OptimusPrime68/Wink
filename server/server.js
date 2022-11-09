@@ -16,12 +16,15 @@ app.use(bodyParser.json({limit:"2mb"}));
 app.use(cors());
 
 
+
+
 fs.readdirSync('./routes').map((r)=> app.use("/api",require('./routes/' + r)));
 
 mongoose
   .connect(process.env.DATABASE, {})
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB Error => ", err));
+
 
 
 
@@ -114,10 +117,6 @@ io.on("connection",(socket)=>{
   })
 
 
-  socket.on('match',(data)=>{
-    console.log("DATA",data);
-    socket.emit('match-to',data);
-  })
  
 })
 

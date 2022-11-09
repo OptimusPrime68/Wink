@@ -48,6 +48,8 @@ const profileSchema = new mongoose.Schema({
     distance:{
         type:Number,
         default:1000000
+    },image:{
+        type:String,
     }
    },
     {timestamps:true}

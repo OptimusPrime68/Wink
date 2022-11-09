@@ -7,5 +7,47 @@
     "Submit":"Enviar",
     "Profile":"Perfil",
     "Go on your first date":"Ve a tu primera cita",
-    "Connect with people you haven't met yet":"Conéctate con personas que aún no conoces"
+    "Connect with people you haven't met yet":"Conéctate con personas que aún no conoces",
+    "Account":"Cuenta",
+    "Name":"Nombre",
+    "Date Of Birth":"Fecha de nacimiento",
+    "Age(Calculated by your DOB)":"Edad (Calculada por su fecha de nacimiento)",
+    "Email":"Correo electrónico",
+    "Phone Number":"Número de teléfono",
+    "Gender":"Género",
+    "Male":"Masculino",
+    "Female":"Femenino",
+    "Address":"Dirección",
+    "Location Coordinates":"Coordenadas de ubicación",
+    "Hobbies":"Aficiones",
+    "Update Profile":"Actualización del perfil",
+    "Upload":"Subir",
+    "Upload Video":"Subir vídeo",
+    "Photos":"Fotos",
+    "Delete":"Borrar",
+    "Yes":"Sí",
+    "No":"No",
+    "Are you sure you want to delete your account!":"¿Estás seguro de que quieres eliminar tu cuenta?",
+    "Settings":"Ajustes",
+    "Language preference":"Preferencia de idioma",
+    "Preference":"Preferencia",
+    "Distance":"Distancia",
+    "Subscription":"Suscripción",
+    "Free":"Libre",
+    "Premium":"De primera calidad",
+    "Premium Features":"Características premium",
+    "Super Like":"Super gusta",
+    "Undo":"Deshacer",
+    "Select Plan":"Seleccionar Plan",
+    "1 Month (₹60)":"1 mes (₹ 60)",
+    "3 Month (₹170)":"3 mes (₹ 180)",
+    "6 Month (₹330)":"6 mes (₹ 330)",
+    "Close":"Cerca",
+    "Buy":"Comprar",
+    "Already a Prime Member":"Ya soy miembro principal"
+
+
+
+
+
 }

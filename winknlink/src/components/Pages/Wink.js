@@ -15,7 +15,6 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CircleLoader from "react-spinners/CircleLoader";
 import Header from "./Header";
 import { useGeolocated } from "react-geolocated";
 import { DateContext } from "./DateContext";
@@ -29,10 +28,7 @@ import Modal from "@mui/material/Modal";
 import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
-import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:4000";
-var socket;
 
 const style = {
   position: "relative",
@@ -54,7 +50,7 @@ function Wink() {
   const [loading, setLoading] = useState(false);
 
   var swipe = [];
-  socket = io(ENDPOINT);
+  
 
   var email = "",
     dist = 100000000;
@@ -73,16 +69,7 @@ function Wink() {
     swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.on("match-to", (data) => {
-      console.log(data);
-      dispatch({
-        type: "NEW_MATCH",
-        payload: data,
-      });
-    });
-  });
+
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -98,11 +85,10 @@ function Wink() {
     axios
       .post("http://localhost:4000/api/all-profile", { email })
       .then(function (response) {
-        console.log(response.data);
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
-          console.log(cpy, x);
+     
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -144,13 +130,8 @@ function Wink() {
     }
   };
 
-  const onCardLeftScreen = (myIdentifier) => {
-    console.log(myIdentifier + " left the screen");
-  };
 
-  const onCardUpScreen = (myIdentifier) => {
-    console.log(myIdentifier);
-  };
+
 
   // const [show, setShow] = useState(false);
 
@@ -170,10 +151,14 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
+
+
+
       })
       .then(function (response) {
         toast.success("Like Sent");
-        socket.emit("match", { fromemail: email, toemail: toemail });
+
+
       })
       .catch(function (error) {
         console.log(error.message);
@@ -199,23 +184,6 @@ function Wink() {
       });
   };
 
-  const swipes = async () => {
-    console.log("aa");
-    // if (canSwipe && currentIndex < db.length) {
-    //   await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
-    // }
-  };
-
-  // increase current index and show card
-  const goBack = async () => {
-    console.log("hh");
-    // if (!canGoBack) return
-    // const newIndex = currentIndex + 1
-    // updateCurrentIndex(newIndex)
-    // await childRefs[newIndex].current.restoreCard()
-  };
-
-  console.log(people);
 
   const counter = useRef(0);
 
@@ -223,6 +191,9 @@ function Wink() {
     counter.current += 1;
     if (counter.current >= people.length) setLoading(false);
   };
+
+
+
 
   return (
     <div className="DateMainDiv">
@@ -236,8 +207,7 @@ function Wink() {
               key={person.email}
               preventSwipe={swipe}
               onSwipe={(dir) => swiped(dir, person.name, person.email)}
-              onCardLeftScreen={onCardLeftScreen}
-              onCardUpScreen={onCardUpScreen}
+             
             >
               <div
                 style={{ backgroundImage: `url(${person.image})` }}
@@ -269,7 +239,7 @@ function Wink() {
           </>
         ))}
 
-        <SwipeButtons swipe={swipes} goBack={goBack} />
+        <SwipeButtons />
       </div>
 
       <Modal

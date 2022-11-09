@@ -14,6 +14,10 @@ const Profile = require("../models/profile")
 // create new chat or open existing
 // start on its a match
 const accessChat = asyncHandler(async (req, res) => {
+
+  console.log(req.headers);
+
+
  // create chat with the userID provided
   const {fromemail,toemail} = req.body;
   // console.log(fromemail,toemail)
@@ -72,6 +76,7 @@ const accessChat = asyncHandler(async (req, res) => {
 });
 
 const fetchChats = asyncHandler(async (req, res) => {
+  console.log(req.headers);
     console.log("in fetchChats")
     const {email} = req.body;
     console.log(email)

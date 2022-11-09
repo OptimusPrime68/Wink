@@ -12,7 +12,12 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         require:true,
-    }},
+    },
+    login:{
+        type:String,
+        default:"email",
+    }}
+    ,
     {timestamps:true}
 );
 
