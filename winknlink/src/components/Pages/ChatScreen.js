@@ -45,6 +45,7 @@ function ChatScreen() {
         setMessages([...messages, newMessageR]);
       }
     });
+    scrollToBottom();
   });
 
   const fetchMessages = async () => {
@@ -55,7 +56,9 @@ function ChatScreen() {
         `http://localhost:4000/api/chat/message/${selectedChat._id}`
       );
       console.log(data);
-      console.log(selectedChat)
+      var s = data[0].createdAt;
+      var dt = new Date(s);
+      console.log(dt.getHours(), dt.getMinutes());
       setMessages(data);
       setLoading(false);
 
@@ -67,10 +70,12 @@ function ChatScreen() {
 
   useEffect(() => {
     fetchMessages();
+    scrollToBottom();
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
   const sendMessage = async (e) => {
+    scrollToBottom();
     console.log(newMessage);
     if (newMessage) {
       try {
@@ -116,11 +121,6 @@ function ChatScreen() {
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
 
-  const otherUserIdHandler = ()=>{
-        // currUser,IdtoCall
-        if(selectedChat.users[0].email===email) return [selectedChat.users[0]._id,selectedChat.users[1]._id];
-        else return [selectedChat.users[1]._id,selectedChat.users[0]._id]
-  }
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -130,7 +130,7 @@ function ChatScreen() {
   return (
     <div>
       <Header videoButton="/" />
-      <HeaderDesktop users={otherUserIdHandler()}/>
+      <HeaderDesktop />
       <div className="chatScreen">
         <div className="ChatMessageDiv">
           <p className="chatScreenTimeStamp">
@@ -196,6 +196,9 @@ function ChatScreen() {
                 type="text"
                 onChange={typingHandler}
                 value={newMessage}
+                onKeyDown={(e)=>{
+                  if(e.key=='Enter') sendMessage();
+                }}
               />
               <Button className="ChatScreenButton" onClick={sendMessage}>
                 SEND

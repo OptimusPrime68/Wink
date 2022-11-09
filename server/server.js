@@ -39,17 +39,33 @@ const io = require('socket.io')(server,{
   },
 });
 
+
+let users = [];
+
+const addUser = (userId, socketId) => {
+  console.log("adduser function");
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
+
 io.on("connection",(socket)=>{
-  //console.log('connected to socket.io');
+  console.log('connected to socket.io');
   
   
   socket.on("setup", (id)=>{
-    // console.log("in setup")
+    console.log("in setup")
     socket.join(id);
     socket.emit('connected');
   })
   socket.on('join chat', (room)=>{
-    // console.log("in room",room)
+    console.log("in room",room)
     socket.join(room);
     socket.emit('user joined room');
   })
@@ -67,21 +83,33 @@ io.on("connection",(socket)=>{
       socket.in(user).emit("message recieved",newMessage);
     });
 
- 
-  socket.emit("me", socket.id);
-	socket.on("disconnect", () => {
-		socket.broadcast.emit("callEnded")
-	});
+    socket.on("addUser", (userId) => {
+      console.log("add User function")
+      addUser(userId, socket.id);
+      io.emit("getUsers", users);
+    });
 
-	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
-    console.log("calling")
-		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
-	});
+    socket.emit("yourID", socket.id);;
+    socket.on("callUser", (data) => {
+      console.log(data.name);
+      io.to(data.userToCall).emit("hey", {
+        signal: data.signalData,
+        from: data.from,
+        name: data.name,
+      });
+    });
+    socket.on('disconnect', () => {
+    	removeUser(socket.id);
+    	io.emit("getUsers", users);
+    })
 
-	socket.on("answerCall", (data) => {
-    console.log("answer")
-		io.to(data.to).emit("callAccepted", data.signal)
-	});
+    socket.on("callUser", (data) => {
+        io.to(data.userToCall).emit('hey', {signal: data.signalData, from: data.from});
+    })
+
+    socket.on("acceptCall", (data) => {
+        io.to(data.to).emit('callAccepted', data.signal);
+    })
 
   })
 

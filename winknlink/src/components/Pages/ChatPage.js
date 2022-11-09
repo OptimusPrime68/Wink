@@ -14,7 +14,7 @@ const ChatPage = () => {
   const email = localStorage.getItem("email");
 
   const senderHandler = (users) => {
-    return users[0].email === email ? users[1].email : users[0].email;
+    return users[0]?.email === email ? users[1]?.email : users[0]?.email;
   };
 
   const latestmsgHandler = (msg) => {
