@@ -18,6 +18,25 @@ import {
 import { storage } from "../../firebase";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import MatchProfile from "./MatchProfile";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+
+const style = {
+  position: "relative",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: 800,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  maxHeight: "80%",
+  overflowX: "hidden",
+  overflowY: "scroll",
+};
 
 function Like() {
   let { user } = useSelector((state) => ({ ...state }));
@@ -25,14 +44,14 @@ function Like() {
   const [superLike, setSuperLike] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [likeState, setLikeState] = useState(true);
+
   useEffect(() => {
     setLoading(true);
     axios
       .post("http://localhost:4000/api/get-super-like", { email: user.email })
       .then((r) => {
-
-        if(r.data.m.length == 0)
-        setLoading(false);
+        if (r.data.m.length == 0) setLoading(false);
 
         r.data.m.map((e) => {
           const imageListRef = ref(storage, `${e.email}`);
@@ -56,18 +75,13 @@ function Like() {
       axios
         .post("http://localhost:4000/api/get-likes", { email: user.email })
         .then((r) => {
-
-
-        if(r.data.m.length == 0)
-        setLoading(false);
+          if (r.data.m.length == 0) setLoading(false);
 
           r.data.m.map((e) => {
             const imageListRef = ref(storage, `${e.email}`);
             listAll(imageListRef)
               .then((response) => {
-
-                if(response.items.length == 0)
-                setLoading(false);
+                if (response.items.length == 0) setLoading(false);
 
                 response.items.forEach((item) => {
                   getDownloadURL(item).then((url) => {
@@ -79,6 +93,7 @@ function Like() {
                 });
               })
               .catch((error) => console.log(error));
+            setLikeState(false);
           });
         })
         .catch((e) => console.log(e));
@@ -106,6 +121,14 @@ function Like() {
     if (counter.current >= like.length) setLoading(false);
   };
 
+  const [id, setId] = useState();
+  const [open, setOpen] = React.useState(false);
+  function handleOpen(e) {
+    setId(e);
+    setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
+
   return (
     <div>
       <Header />
@@ -117,12 +140,20 @@ function Like() {
           className="mb-3"
           fill
         >
-          <Tab eventKey="SuperLike" title="Super Like" >
+          <Tab eventKey="SuperLike" title="Super Like">
             <div className="row">
               {superLike &&
                 superLike.map((e) => (
                   <div className="matchDiv col mb-3">
-                    <Card style={{ width: "200px", textAlign: "center" }}>
+                    <Card
+                      style={{
+                        width: "200px",
+                        textAlign: "center",
+                        margin: "auto",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleOpen(e.email)}
+                    >
                       <CardMedia
                         onLoad={handleLoad2}
                         component="img"
@@ -141,12 +172,20 @@ function Like() {
                 ))}
             </div>
           </Tab>
-          <Tab eventKey="Likes" title="Likes">
+          <Tab eventKey="Likes" title="Likes" disabled={likeState}>
             <div className="row">
               {like &&
                 like.map((e) => (
                   <div className="matchDiv col mb-3">
-                    <Card style={{ width: "200px", textAlign: "center" }}>
+                    <Card
+                      style={{
+                        width: "200px",
+                        textAlign: "center",
+                        margin: "auto",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleOpen(e.email)}
+                    >
                       <CardMedia
                         component="img"
                         image={e.image}
@@ -165,8 +204,21 @@ function Like() {
                 ))}
             </div>
           </Tab>
-          
         </Tabs>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{ padding: "10px" }}
+        >
+          <Box sx={style}>
+            <MatchProfile id={id} />
+            <div style={{ textAlign: "center" }}>
+              <Button onClick={handleClose}>Close</Button>
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );

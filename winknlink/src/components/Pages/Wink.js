@@ -25,10 +25,8 @@ import Button from "@mui/material/Button";
 import MatchProfile from "./MatchProfile";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import BottomDrawer from "./BottomDrawer";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
-
 
 const style = {
   position: "relative",
@@ -50,7 +48,6 @@ function Wink() {
   const [loading, setLoading] = useState(false);
 
   var swipe = [];
-  
 
   var email = "",
     dist = 100000000;
@@ -69,8 +66,6 @@ function Wink() {
     swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
-
-
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -88,7 +83,6 @@ function Wink() {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
-     
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -130,9 +124,6 @@ function Wink() {
     }
   };
 
-
-
-
   // const [show, setShow] = useState(false);
 
   // const handleClose = () => setShow(false);
@@ -151,14 +142,9 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
-
-
-
       })
       .then(function (response) {
         toast.success("Like Sent");
-
-
       })
       .catch(function (error) {
         console.log(error.message);
@@ -184,16 +170,12 @@ function Wink() {
       });
   };
 
-
   const counter = useRef(0);
 
   const handleLoad = () => {
     counter.current += 1;
     if (counter.current >= people.length) setLoading(false);
   };
-
-
-
 
   return (
     <div className="DateMainDiv">
@@ -207,7 +189,6 @@ function Wink() {
               key={person.email}
               preventSwipe={swipe}
               onSwipe={(dir) => swiped(dir, person.name, person.email)}
-             
             >
               <div
                 style={{ backgroundImage: `url(${person.image})` }}

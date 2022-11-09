@@ -394,7 +394,9 @@ export default function Date(props) {
       </div>
       <Modal show={show} onHide={handleClose} centered backdrop="static">
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>{t("Are you sure you want to delete your account!")}</Modal.Body>
+        <Modal.Body>
+          {t("Are you sure you want to delete your account!")}
+        </Modal.Body>
         <Modal.Footer style={{ justifyContent: "center" }}>
           <Button variant="outline-danger" onClick={handleClose}>
             {t("No")}

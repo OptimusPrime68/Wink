@@ -163,25 +163,6 @@ function MatchProfile({ id }) {
                         })}
                     </div>
                   </Tab>
-                  <Tab eventKey="feed" title="Newsfeed">
-                    <div className="row">
-                      <div className="matchDiv col mb-3">
-                        <Card id="matchProfileImageDiv">
-                          <CardMedia
-                            component="img"
-                            image="/person.svg"
-                            alt="Profile Image"
-                            className="profileDivImage"
-                            style={{
-                              height: "200px",
-                              width: "200px",
-                              margin: "auto",
-                            }}
-                          />
-                        </Card>
-                      </div>
-                    </div>
-                  </Tab>
                 </Tabs>
               </CardContent>
             </Card>

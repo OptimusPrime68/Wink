@@ -88,3 +88,27 @@
     max-height: 81vh;
   }
 }
+
+.UserVideoDiv {
+  width: 100%;
+  height: fit-content;
+}
+
+.PartnerVideoDiv {
+  width: 100%;
+  height: fit-content;
+}
+
+.UserVideo {
+  height: fit-content;
+  width: 600px;
+  border: 5px solid #fbab7e;
+  border-radius: 15px;
+}
+
+.PartnerVideo {
+  height: fit-content;
+  width: 600px;
+  border: 5px solid #fbab7e;
+  border-radius: 15px;
+}
