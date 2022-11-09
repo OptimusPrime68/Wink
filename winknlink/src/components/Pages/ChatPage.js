@@ -31,6 +31,7 @@ const ChatPage = () => {
   const fetchChats = async () => {
     try {
       // fetch all chats
+      console.log("chats")
       axios
         .post("http://localhost:4000/api/chat/all", {
           email: email,
@@ -54,7 +55,7 @@ const ChatPage = () => {
   useEffect(() => {
     console.log("imside");
     fetchChats();
-  });
+  },[]);
 
   return (
     <div>

@@ -75,7 +75,6 @@ function ChatScreen() {
   }, [selectedChat]);
 
   const sendMessage = async (e) => {
-    scrollToBottom();
     console.log(newMessage);
     if (newMessage) {
       try {
@@ -99,6 +98,7 @@ function ChatScreen() {
         toast.error(err.message);
       }
     }
+    scrollToBottom();
   };
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -110,13 +110,13 @@ function ChatScreen() {
     setNewMessage((prev) => prev + emojiObj?.emoji);
   };
   const getTimeHandler = (timestamp) => {
-    var s = timestamp.createdAt;
+    var s = timestamp?.createdAt;
     var dt = new Date(s);
     return dt.getHours() + ":" + dt.getMinutes();
   };
 
   const getMatchedHandler = (timestamp) => {
-    var s = timestamp.createdAt;
+    var s = timestamp?.createdAt;
     var dt = new Date(s);
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
