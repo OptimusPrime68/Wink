@@ -4,7 +4,6 @@ import Peer from 'simple-peer';
 
 const SocketContext = createContext();
 
-const socket = io('http://localhost:4000');
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
@@ -18,20 +17,21 @@ const ContextProvider = ({ children }) => {
   const myVideo = useRef(null);
   const userVideo = useRef(null);
   const connectionRef = useRef(null);
-
+  const socket = useRef();
 
 
   
   useEffect(() => {
+    socket.current = io('http://localhost:4000');
     console.log("calling effect")
-    socket.on("me",(id) =>{
+    socket.current.on("me",(id) =>{
         setMe(id)
         console.log(id)
     });
-    socket.on("callUser", ({ from, name: callerName, signal }) => {
-      console.log("client callUser")
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
-    });
+      socket.current.on("callUser", ({ from, name: callerName, signal }) => {
+        console.log("client callUser")
+        setCall({ isReceivingCall: true, from, name: callerName, signal });
+      });
   },[isCalling]);
 
   const answerCall = () => {
@@ -50,7 +50,7 @@ const ContextProvider = ({ children }) => {
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
     peer.on("signal", (data) => {
-      socket.emit("answerCall", { signal: data, to: call.from });
+      socket.current.emit("answerCall", { signal: data, to: call.from });
     });
 
     peer.on("stream", (currentStream) => {
@@ -79,14 +79,14 @@ const ContextProvider = ({ children }) => {
     peer.on("signal", (data) => {
       console.log("in signal",id,me)
       setIsCalling(true);
-      socket.emit("callUser", { userToCall: id, signalData: data, from: me, name });
+      socket.current.emit("callUser", { userToCall: id, signalData: data, from: me, name });
     });
 
     peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on("callAccepted", (signal) => {
+    socket.current.on("callAccepted", (signal) => {
       setCallAccepted(true);
       peer.signal(signal);
     });

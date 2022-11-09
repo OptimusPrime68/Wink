@@ -17,9 +17,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 
   <Provider store = {store}>
-     <ContextProvider>
+     {/* <ContextProvider> */}
         <App />
-    </ContextProvider>
+    {/* </ContextProvider> */}
  
   </Provider>
 );
