@@ -52,16 +52,6 @@ function Wink() {
   const [loading, setLoading] = useState(false);
 
   var swipe = [];
-<<<<<<< HEAD
-  var room = '';
-
-
-
-
-
-
-=======
->>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
 
   var email = "",
     dist = 100000000;
@@ -80,21 +70,6 @@ function Wink() {
     swipe = user.user == "free" ? ["up", "down"] : ["down"];
   }
 
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  //   socket.on("connection");
-  //   socket.on(email,(data)=>{
-  //     console.log("Yes Created");
-  //   })
-  // });
-
-
-
-
-
-=======
->>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -112,10 +87,6 @@ function Wink() {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
-<<<<<<< HEAD
-
-=======
->>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
 
           listAll(imageListRef).then((response) => {
             response.items.forEach((item) => {
@@ -175,10 +146,7 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
-<<<<<<< HEAD
         token:user.token,
-=======
->>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
       })
       .then(function (response) {
         toast.success("Like Sent");
@@ -215,7 +183,6 @@ function Wink() {
     if (counter.current >= people.length) setLoading(false);
   };
 
-<<<<<<< HEAD
 
   const left = (e) => {
     setPeople(people.filter((a) => a !== e));
@@ -245,8 +212,6 @@ function Wink() {
 
 
 
-=======
->>>>>>> 54c0edb1fa6b819dd793e517cc12600bc69acedc
   return (
     <div className="DateMainDiv">
       <Header />
