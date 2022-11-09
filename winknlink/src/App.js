@@ -12,6 +12,13 @@ import { useDispatch } from "react-redux";
 import {useSelector} from "react-redux";
 import Plan from "./components/Pages/Plan";
 import ForgotPassword from './components/Pages/forgotPassword';
+<<<<<<< HEAD
+=======
+import io from 'socket.io-client'
+import VideoCall from './components/Pages/VideoCall';
+const ENDPOINT = "http://localhost:4000";
+var socket;
+>>>>>>> ff4168e865a60fd3c41b0e7d62de6feb47473851
 
 
 function App() {

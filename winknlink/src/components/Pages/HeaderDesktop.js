@@ -4,9 +4,10 @@ import "../styles/Header.css";
 import ChatIcon from "@mui/icons-material/Forum";
 import { IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import VideocamIcon from '@mui/icons-material/Videocam';
 
-function HeaderDesktop() {
+function HeaderDesktop({btn}) {
   const { switchToChat } = useContext(DateContext);
 
   const navigate = useNavigate();
@@ -16,6 +17,12 @@ function HeaderDesktop() {
       <IconButton onClick={switchToChat}>
         <ChatIcon fontSize="large" />
       </IconButton>
+      {/* <Link to='/chatVideo'> */}
+        <IconButton>
+          <VideocamIcon fontSize="large" />
+        </IconButton>
+      {/* </Link> */}
+      
     </div>
   );
 }

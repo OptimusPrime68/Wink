@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
+//
+import Peer from "simple-peer";
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
@@ -27,11 +29,119 @@ function ChatScreen() {
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
 
+  //video
+  const [yourID, setYourID] = useState("");
+  const [users, setUsers] = useState({});
+  const [stream, setStream] = useState();
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [caller, setCaller] = useState("");
+  const [callerSignal, setCallerSignal] = useState();
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [isCalling,setIsCalling] = useState(false);
+  const [makeReload, setmakeReload] = useState(false)
+
+  const userVideo = useRef();
+  const partnerVideo = useRef();
+  const socketNew = useRef();
+
   useEffect(() => {
     socket = io(ENDPOINT);
+    socketNew.current = io.connect("ws://localhost:8000");//new
+    // socketNew.current=socket;
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      setStream(stream);
+      if (userVideo.current) {
+        userVideo.current.srcObject = stream;
+      }
+    })
     socket.emit("setup", id);
     socket.on("connection", () => setSocketConnected(true));
-  }, []);
+
+    // //new
+    socketNew.current.on("yourID", (id) => {
+      setYourID(id);
+    })
+    socketNew.current.on("allUsers", (users) => {
+      setUsers(users);
+    })
+
+    socketNew.current.on("hey", (data) => {
+      setReceivingCall(true);
+      setCaller(data.from);
+      setCallerSignal(data.signal);
+    })
+  }, [isCalling,makeReload]);
+  //new methods
+  function callPeer(id) {
+    
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: stream,
+    });
+
+    peer.on("signal", data => {
+      socketNew.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
+    })
+
+    peer.on("stream", stream => {
+      if (partnerVideo.current) {
+        partnerVideo.current.srcObject = stream;
+      }
+    });
+
+    socketNew.current.on("callAccepted", signal => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    })
+    setIsCalling(true);
+
+  }
+  function acceptCall() {
+    setCallAccepted(true);
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    });
+    peer.on("signal", data => {
+      socketNew.current.emit("acceptCall", { signal: data, to: caller })
+    })
+
+    peer.on("stream", stream => {
+      partnerVideo.current.srcObject = stream;
+    });
+
+    peer.signal(callerSignal);
+    setIsCalling(true);
+  }
+  let UserVideo;
+  if (stream) {
+    UserVideo = (
+      <video playsInline muted ref={userVideo} autoPlay />
+    );
+  }
+
+  let PartnerVideo;
+  if (callAccepted) {
+    PartnerVideo = (
+      <video playsInline ref={partnerVideo} autoPlay />
+    );
+  }
+
+  let incomingCall;
+  if (receivingCall) {
+    incomingCall = (
+      <div>
+        <h1>{caller} is calling you</h1>
+        <button onClick={acceptCall}>Accept</button>
+       
+      </div>
+    )
+  }
+//end of new
+
+const [cameraBtn, setcameraBtn] = useState(false);
 
   useEffect(() => {
     socket.on("message recieved", (newMessageR) => {
@@ -46,7 +156,7 @@ function ChatScreen() {
       }
     });
     scrollToBottom();
-  });
+  },[messages]);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -60,11 +170,12 @@ function ChatScreen() {
       var dt = new Date(s);
       console.log(dt.getHours(), dt.getMinutes());
       setMessages(data);
-      setLoading(false);
+      setLoading(false)
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      toast.error(error.message);
+      console.log(error.message)
+      // toast.error(error.message);
     }
   };
 
@@ -126,12 +237,42 @@ function ChatScreen() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const callAllHandler = ()=>{
+    Object.keys(users).map(key => {
+      if(key!==yourID) callPeer(key)
+    })
+  }
+  const endCallHandler = ()=>{
+    setReceivingCall(false);
+    setIsCalling(false);
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    setCallAccepted(false);
+    setStream(null);
+    setmakeReload((prev)=>!prev);
+    console.log("inside end call")
+  }
 
   return (
     <div>
       <Header videoButton="/" />
-      <HeaderDesktop />
+      <HeaderDesktop btn={cameraBtn}/>
       <div className="chatScreen">
+        {receivingCall || isCalling  ? (<div>
+          {UserVideo}
+        {PartnerVideo}
+      
+        <div>
+      {!callAccepted &&  incomingCall 
+      // && ( <button onClick={()=>endCallHandler}>Reject</button>)
+      }
+      {/* {partnerVideo.current?  */}
+      <Button onClick={endCallHandler} >End Call</Button>
+       {/* :null} */}
+       </div>
+        </div>):
+        <div>
         <div className="ChatMessageDiv">
           <p className="chatScreenTimeStamp">
             You matched with Ellen on
@@ -203,9 +344,13 @@ function ChatScreen() {
               <Button className="ChatScreenButton" onClick={sendMessage}>
                 SEND
               </Button>
+              <Button className="ChatScreenButton" onClick={callAllHandler}>
+                video
+              </Button>
             </form>
           </div>
         </div>
+      </div>}
       </div>
     </div>
   );

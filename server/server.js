@@ -4,19 +4,11 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const fs = require("fs");
-
-
 require("dotenv").config();
-
 const app = express();
-
-
 app.use(morgan("dev"));
 app.use(bodyParser.json({limit:"2mb"}));
 app.use(cors());
-
-
-
 
 fs.readdirSync('./routes').map((r)=> app.use("/api",require('./routes/' + r)));
 
@@ -24,13 +16,6 @@ mongoose
   .connect(process.env.DATABASE, {})
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB Error => ", err));
-
-
-
-
-
-
-
 
 const port = process.env.PORT || 8000;
 const server = app.listen(port,()=> console.log(`server is running ${port}`));
@@ -42,21 +27,7 @@ const io = require('socket.io')(server,{
   },
 });
 
-
-let users = [];
-
-const addUser = (userId, socketId) => {
-  console.log("adduser function");
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
-
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-};
+const users = {};
 
 io.on("connection",(socket)=>{
   console.log('connected to socket.io with ',socket.id);
@@ -74,7 +45,7 @@ io.on("connection",(socket)=>{
 
   socket.on("new message",(newMessage)=>{
     var chat = newMessage.chat;
-    console.log(chat)
+    console.log("in chat",chat)
 
     if(!chat.users) return console.log('chat.users not defined')
 
@@ -85,30 +56,25 @@ io.on("connection",(socket)=>{
       socket.in(user).emit("message recieved",newMessage);
     });
 
-    socket.on("addUser", (userId) => {
-      console.log("add User function")
-      addUser(userId, socket.id);
-      io.emit("getUsers", users);
-    });
+    // socket.on("addUser", (userId) => {
+    //   console.log("add User function")
+    //   addUser(userId, socket.id);
+    //   io.emit("getUsers", users);
+    // });
 
-    socket.emit("yourID", socket.id);;
+    socket.emit("yourID", socket.id);
+    io.sockets.emit("allUsers", users);
+    socket.on('disconnect', () => {
+        delete users[socket.id];
+    })
     socket.on("callUser", (data) => {
-      console.log(data.name);
+      console.log("in calluser",data.name);
       io.to(data.userToCall).emit("hey", {
         signal: data.signalData,
         from: data.from,
         name: data.name,
       });
     });
-    socket.on('disconnect', () => {
-    	removeUser(socket.id);
-    	io.emit("getUsers", users);
-    })
-
-    socket.on("callUser", (data) => {
-        io.to(data.userToCall).emit('hey', {signal: data.signalData, from: data.from});
-    })
-
     socket.on("acceptCall", (data) => {
         io.to(data.to).emit('callAccepted', data.signal);
     })

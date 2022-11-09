@@ -23,7 +23,7 @@ const ChatPage = () => {
   const latestTimeHadler = (msg) => {
     console.log("change");
     if (msg.latestMessage) {
-      var dt = new Date(msg.latestMessage.createdAt);
+      var dt = new Date(msg.latestMessage?.createdAt);
       return dt.getHours() + ":" + dt.getMinutes();
     } else return "";
   };
