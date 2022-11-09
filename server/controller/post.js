@@ -46,7 +46,7 @@ exports.getAllPost = async (req,res)=>{
     var localEmail = [];
     var finalEmail = [];
 
-    localEmail = await Match.find({matchFrom:email});
+    localEmail = await Match.find({matchFrom:email},{},{sort:"-createdAt"});
   //  console.log(localEmail);
     var ans=[];
 

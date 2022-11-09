@@ -68,12 +68,12 @@ export function LoginForm(props) {
       .then(function (response) {
         var id = response.data.id;
         axios
-      .post("http://localhost:4000/api/is-premium", { email })
+      .post("http://localhost:4000/api/is-premium", { email,token })
       .then(function (res) {
         userType = res.data.user;
         window.localStorage.setItem("user", userType);
         axios
-        .post("http://localhost:4000/api/get-user-profile", { email })
+        .post("http://localhost:4000/api/get-user-profile", { email ,token})
         .then(function (res) {
           if (res.data && res.data.name) name = res.data.name;
           window.localStorage.setItem("name", name);
@@ -112,7 +112,7 @@ export function LoginForm(props) {
         login(
           result.user._delegate.email,
           "Xcnjbw24fdac@#2",
-          result,
+          result.user._delegate.accessToken,
           "google-login"
         );
       })

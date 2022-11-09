@@ -157,15 +157,16 @@ export default function Date(props) {
     toast.warning("We are Deleting Your Account!");
 
     const auth = getAuth();
-    const user = auth.currentUser;
+    const users = auth.currentUser;
 
-    deleteUser(user)
+    deleteUser(users)
       .then(() => {
         window.localStorage.clear();
 
         axios
           .post("http://localhost:4000/api/delete-account", {
             email: user.email,
+            token:user.token,
           })
           .then((e) => {
             dispatch({

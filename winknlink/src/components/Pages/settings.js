@@ -225,6 +225,7 @@ export default function Settings() {
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email: user.email,
+        token:user.token,
       })
       .then(function (response) {
         console.log("Response", response);
@@ -247,6 +248,7 @@ export default function Settings() {
         email: user.email,
         agePreference: valueAge,
         distance: value * 1000,
+        token:user.token,
       })
       .then(function (response) {
         toast.success("Updated");

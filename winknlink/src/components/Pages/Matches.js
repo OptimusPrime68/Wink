@@ -65,7 +65,7 @@ function Matches() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/all-match", { email })
+      .post("http://localhost:4000/api/all-match", { email,token:user.token})
       .then(function (response) {
         console.log(response.data);
 

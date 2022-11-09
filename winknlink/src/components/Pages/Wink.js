@@ -102,7 +102,7 @@ function Wink() {
     setLoading(true);
 
     axios
-      .post("http://localhost:4000/api/all-profile", { email })
+      .post("http://localhost:4000/api/all-profile", { email,token:user.token })
       .then(function (response) {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
@@ -170,6 +170,7 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
+        token:user.token,
       })
       .then(function (response) {
         toast.success("Like Sent");
@@ -189,6 +190,7 @@ function Wink() {
       .post("http://localhost:4000/api/make-super-like", {
         from: email,
         to: toemail,
+        token:user.token,
       })
       .then(function (response) {
         toast.success("Super Like Sent");
@@ -214,12 +216,10 @@ function Wink() {
 
 
   const right = async (e) => {
-
     await handleRight(email,e.email);
     setPeople(people.filter((a) => a !== e));
     console.log("RIGHT");
   }
-
 
   const up = async (e) => {
     if (user.user == "free") {
@@ -229,6 +229,10 @@ function Wink() {
     await handleUp(email,e.email)
     setPeople(people.filter((a) => a !== e));
     console.log("UP");
+  }
+
+  const undo = async (e) =>{
+    
   }
 
 

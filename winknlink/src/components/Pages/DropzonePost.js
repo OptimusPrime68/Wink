@@ -110,11 +110,11 @@ const DropzonePost = (props) => {
 
 
       try{
-      axios.post("http://localhost:4000/api/get-profile-id",{email:user.email}).then((data)=>{
+      axios.post("http://localhost:4000/api/get-profile-id",{email:user.email,token:user.token}).then((data)=>{
 
       const id = data.data.id;
 
-      axios.post("http://localhost:4000/api/make-post",{content:caption,authorid:id}).then((r)=>{
+      axios.post("http://localhost:4000/api/make-post",{content:caption,authorid:id,token:user.token}).then((r)=>{
 
       const record = r.data;
       console.log(record);

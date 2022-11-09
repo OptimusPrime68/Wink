@@ -40,14 +40,14 @@ const Photo = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:4000/api/get-date", { email })
+      .post("http://localhost:4000/api/get-date", { email,token:user.token })
       .then((r) => {
         setAllEvents(r.data.m);
       })
       .catch((c) => {});
 
     axios
-      .post("http://localhost:4000/api/all-match", { email })
+      .post("http://localhost:4000/api/all-match", { email,token:user.token })
       .then(function (response) {
         console.log(response.data);
         setPerson(response.data);
@@ -91,7 +91,7 @@ const Photo = () => {
     
     console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
-    axios.post("http://localhost:4000/api/make-date", { newEvent });
+    axios.post("http://localhost:4000/api/make-date", { newEvent,token:user.token });
   };
 
   const handleDeleteEvent = async (e, key) => {
@@ -99,7 +99,7 @@ const Photo = () => {
 
     if (key.key == "Delete") {
       console.log(e, key);
-      axios.post("http://localhost:4000/api/remove-date", { e });
+      axios.post("http://localhost:4000/api/remove-date", { e,token:user.token });
       setAllEvents(allEvents.filter((a) => a !== e));
     }
   };

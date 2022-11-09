@@ -66,7 +66,7 @@ export default function Profile() {
                     try{
                     axios
                     .post("http://localhost:4000/api/update-profile", {
-                      email,image:url});
+                      email,image:url, token:user.token});
                     }catch(err)
                     {
                       
@@ -124,7 +124,7 @@ export default function Profile() {
     var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
-        email,
+        email,token:user.token,
       })
       .then(function (response) {
         console.log("Response", response);
@@ -140,13 +140,7 @@ export default function Profile() {
           if (data.distance) dist = data.distance;
           toast.success("Profile Loaded");
           window.localStorage.setItem("distance", dist);
-        }
-      })
-      .catch(function (error) {
-        toast.warn("Update Your Profile");
-      });
-
-    listAll(imageListRef)
+          listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
@@ -160,7 +154,7 @@ export default function Profile() {
                   token: user.token,
                   id: user.id,
                   user: user.user,
-                  name: user.name,
+                  name: data.name,
                   image: url,
                   distance: dist,
                 },
@@ -170,6 +164,13 @@ export default function Profile() {
         });
       })
       .catch((error) => console.log(error));
+        }
+      })
+      .catch(function (error) {
+        toast.warn("Update Your Profile");
+      });
+
+    
 
     setLoading(false);
   }, []);
@@ -205,8 +206,8 @@ export default function Profile() {
         address,
         hobbies,
         location: coordinates,
-        preference: "male",
         age,
+        token:user.token,
       })
       .then(function (response) {
         dispatch({
@@ -216,7 +217,7 @@ export default function Profile() {
             token: user.token,
             id: user.id,
             user: user.user,
-            name,
+            name:name,
             image: user.image,
           },
         });

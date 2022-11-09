@@ -18,9 +18,11 @@ import {
 } from "firebase/storage";
 import { storage } from "../../firebase";
 import ReactPlayer from "react-player";
+import {useSelector} from "react-redux"
 
 function MatchProfile({ id }) {
   console.log(id);
+  let { user } = useSelector((state) => ({ ...state }));
 
   const [data, setData] = useState();
   const [imageList, setImageList] = useState([]);
@@ -31,6 +33,7 @@ function MatchProfile({ id }) {
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email: id,
+        token:user.token
       })
       .then((response) => {
         console.log(response);

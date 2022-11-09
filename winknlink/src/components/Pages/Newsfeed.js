@@ -77,7 +77,7 @@ function Newsfeed() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/get-profile-id", { email: user.email })
+      .post("http://localhost:4000/api/get-profile-id", { email: user.email,token:user.token })
       .then((data) => {
         console.log(data.data);
         const id = data.data.id._id;
@@ -89,6 +89,7 @@ function Newsfeed() {
           .post("http://localhost:4000/api/get-all-post", {
             authorid: id,
             email: user.email,
+            token:user.token,
           })
           .then((data) => {
             console.log(data);
@@ -185,7 +186,8 @@ function Newsfeed() {
   const onAddPost = (newPost) =>{
     axios
     .post("http://localhost:4000/api/get-post-by-id", {
-      newPost
+      newPost,
+      token:user.token,
     })
     .then((data) => {
       console.log(data);

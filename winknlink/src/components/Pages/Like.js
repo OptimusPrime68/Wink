@@ -28,7 +28,7 @@ function Like() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/get-super-like", { email: user.email })
+      .post("http://localhost:4000/api/get-super-like", { email: user.email,token:user.token })
       .then((r) => {
 
         if(r.data.m.length == 0)
@@ -54,7 +54,7 @@ function Like() {
 
     if (user.user == "premium") {
       axios
-        .post("http://localhost:4000/api/get-likes", { email: user.email })
+        .post("http://localhost:4000/api/get-likes", { email: user.email,token:user.token })
         .then((r) => {
 
 

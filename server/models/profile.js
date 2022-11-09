@@ -31,7 +31,8 @@ const profileSchema = new mongoose.Schema({
         type:[String],
     },
     preference:{
-        type:String
+        type:String,
+        default:"male"
     },
     location: {
         type: { type: String},

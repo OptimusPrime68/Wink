@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authCheck, profileCheck,loginCheck } = require("../middlewares/auth");
+const { authCheck, profileCheck,loginCheck,tokenVerifier } = require("../middlewares/auth");
 const {
   login,
   signup,
@@ -13,7 +13,7 @@ const {
 
 
 // Route to Login
-router.post("/login", loginCheck, login);
+router.post("/login",loginCheck, login);
 
 
 // Route to google login
@@ -26,11 +26,11 @@ router.post("/signup", authCheck, signup);
 
 
 // Route to make user premium
-router.post("/is-premium", getUserType);
+router.post("/is-premium", tokenVerifier, getUserType);
 
 
 // Route to delete account
-router.post("/delete-account", deleteAccount);
+router.post("/delete-account",tokenVerifier, deleteAccount);
 
 
 // Forgot Password API
