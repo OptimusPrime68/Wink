@@ -12,7 +12,6 @@ import './i18';
 
 const store = createStore(rootReducer,composeWithDevTools());
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 

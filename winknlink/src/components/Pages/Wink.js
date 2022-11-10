@@ -31,6 +31,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
+import Notification from "../Notification";
+import {db} from "../../firebase";
+import { getDatabase, onValue, set } from "firebase/database";
+
 
 const style = {
   position: "relative",
@@ -100,6 +104,7 @@ function Wink() {
                     email: x.email,
                     image: url,
                     dist: cpy,
+                    id:x._id,
                   };
 
                   if (email != x.email) setPeople((prev) => [...prev, local]);
@@ -115,16 +120,16 @@ function Wink() {
       });
   }, []);
 
-  const swiped = (direction, name, toemail) => {
+  const swiped = (direction, name, toemail,toid) => {
     console.log(toemail);
     if (direction == "down") {
       return;
     } else if (direction == "left") {
       toast.success(name + " Removed");
     } else if (direction == "right") {
-      handleRight(email, toemail);
+      handleRight(email, toemail,toid);
     } else if (direction == "up") {
-      handleUp(email, toemail);
+      handleUp(email, toemail,toid);
     }
   };
 
@@ -141,7 +146,11 @@ function Wink() {
   }
   const handleClose = () => setOpen(false);
 
-  const handleRight = async (email, toemail) => {
+  const handleRight = async (email, toemail,toid) => {
+   
+
+    console.log(toid);
+   
     axios
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
@@ -150,17 +159,21 @@ function Wink() {
       })
       .then(function (response) {
         toast.success("Like Sent");
+        Notification(toid,user.name + " Someone Like You");
+       
       })
       .catch(function (error) {
         console.log(error.message);
       });
   };
 
-  const handleUp = async (email, toemail) => {
+  const handleUp = async (email, toemail,toid) => {
     if (user.user == "free") {
       toast.warn("Purchase Subscription to Send Super Likes");
       return;
     }
+
+    console.log(toid);
 
     axios
       .post("http://localhost:4000/api/make-super-like", {
@@ -170,6 +183,7 @@ function Wink() {
       })
       .then(function (response) {
         toast.success("Super Like Sent");
+        Notification(toid,user.name + " Someone Super Like You");
       })
       .catch(function (error) {
         console.log(error.message);
@@ -186,12 +200,13 @@ function Wink() {
 
   const left = (e) => {
     setPeople(people.filter((a) => a !== e));
+    toast.success(e.name + " Removed");
     console.log("LEFT",e);
   }
 
 
   const right = async (e) => {
-    await handleRight(email,e.email);
+    await handleRight(email,e.email,e.id);
     setPeople(people.filter((a) => a !== e));
     console.log("RIGHT");
   }
@@ -201,7 +216,7 @@ function Wink() {
       toast.warn("Purchase Subscription to Send Super Likes");
       return;
     }
-    await handleUp(email,e.email)
+    await handleUp(email,e.email,e.id)
     setPeople(people.filter((a) => a !== e));
     console.log("UP");
   }
@@ -222,7 +237,7 @@ function Wink() {
               className="swipe"
               key={person.email}
               preventSwipe={swipe}
-              onSwipe={(dir) => swiped(dir, person.name, person.email)}
+              onSwipe={(dir) => swiped(dir, person.name, person.email,person.id)}
             >
               <div
                 style={{ backgroundImage: `url(${person.image})` }}

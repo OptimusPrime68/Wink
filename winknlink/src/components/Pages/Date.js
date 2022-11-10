@@ -42,6 +42,9 @@ import Like from "./Like";
 import SosIcon from "@mui/icons-material/Sos";
 import { useGeolocated } from "react-geolocated";
 import Modal from "react-bootstrap/Modal";
+import {db} from "../../firebase";
+import { onValue,ref, set } from "firebase/database";
+import Notification from "../Notification";
 
 export default function Date(props) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -55,6 +58,7 @@ export default function Date(props) {
 
   const [activeTab, setActiveTab] = useState("Profile");
   const [page, setPage] = useState("profile");
+  const [not,setNot] = useState([]);
 
   const switchToWink = () => {
     setSelectedIndex(7);
@@ -233,6 +237,17 @@ export default function Date(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
+  useEffect(()=>{
+    console.log("Retrieving Data",user.profile_id);
+    onValue(ref(db,user.profile_id),(snapshot)=>{
+      const data = snapshot.val();
+      console.log(data);
+    })
+  })
+
+
 
   return (
     <>

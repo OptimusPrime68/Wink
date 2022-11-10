@@ -75,7 +75,9 @@ export function LoginForm(props) {
         axios
         .post("http://localhost:4000/api/get-user-profile", { email ,token})
         .then(function (res) {
+          var profile_id = "";
           if (res.data && res.data.name) name = res.data.name;
+          if(res.data && res.data._id) profile_id = res.data._id;
           window.localStorage.setItem("name", name);
           dispatch({
             type: "LOGGED_IN_USER",
@@ -85,11 +87,13 @@ export function LoginForm(props) {
               id: id,
               user: userType,
               name: name,
+              profile_id,
             },
           });
           window.localStorage.setItem("email", email);
           window.localStorage.setItem("token", token);
           window.localStorage.setItem("id", id);
+          window.localStorage.setItem("profile_id", profile_id);
   
           navigate("/wink");
           toast.success("Welcome");

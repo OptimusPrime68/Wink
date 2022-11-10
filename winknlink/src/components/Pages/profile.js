@@ -80,6 +80,7 @@ export default function Profile() {
                         user: user.user,
                         name: user.name,
                         image: url,
+                        profile_id:user.profile_id,
                       },
                     });
                     setprofileImageList((prev) => [...prev, url]);
@@ -127,9 +128,10 @@ export default function Profile() {
         email,token:user.token,
       })
       .then(function (response) {
-        console.log("Response", response);
+      //  console.log("Response", response);
         if (response.data) {
           const data = response.data;
+          var profile_id = data._id;
           setName(data.name);
           setPhone(data.phone);
           setGender(data.gender);
@@ -140,13 +142,14 @@ export default function Profile() {
           if (data.distance) dist = data.distance;
           toast.success("Profile Loaded");
           window.localStorage.setItem("distance", dist);
+          window.localStorage.setItem("profile_id",data._id)
           listAll(imageListRef)
       .then((response) => {
         response.items.forEach((item) => {
           getDownloadURL(item).then((url) => {
             if (url.includes("profile")) {
               setprofileImageList((prev) => [...prev, url]);
-              console.log(user);
+            //  console.log(user);
               dispatch({
                 type: "LOGGED_IN_USER",
                 payload: {
@@ -157,6 +160,7 @@ export default function Profile() {
                   name: data.name,
                   image: url,
                   distance: dist,
+                  profile_id,
                 },
               });
             }
@@ -178,12 +182,12 @@ export default function Profile() {
   const update = (e) => {
     e.preventDefault();
 
-    console.log(name);
-    console.log(phone);
-    console.log(gender);
-    console.log(dob);
-    console.log(address);
-    console.log(hobbies);
+    // console.log(name);
+    // console.log(phone);
+    // console.log(gender);
+    // console.log(dob);
+    // console.log(address);
+    // console.log(hobbies);
 
     var coordinates = [];
     if (coords) coordinates = [coords.longitude, coords.latitude];
@@ -219,11 +223,13 @@ export default function Profile() {
             user: user.user,
             name:name,
             image: user.image,
+            profile_id:response.data._id,
           },
         });
+        window.localStorage.setItem("profile_id",response.data._id)
 
         toast.success("Updated");
-        console.log(response);
+       // console.log(response);
       })
       .catch(function (error) {
         toast.error("Some Error Occured");
@@ -280,7 +286,7 @@ export default function Profile() {
       },
       userDecisionTimeout: 5000,
     });
-  console.log(coords);
+ // console.log(coords);
 
   const handleDOB = (e) => {
     const max =

@@ -92,6 +92,8 @@ const Photo = () => {
     console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
     axios.post("http://localhost:4000/api/make-date", { newEvent,token:user.token });
+
+
   };
 
   const handleDeleteEvent = async (e, key) => {
@@ -108,6 +110,7 @@ const Photo = () => {
     alert(e.title);
   };
 
+  console.log(person);
   return (
     <>
       <div style={{ textAlign: "center" }}>

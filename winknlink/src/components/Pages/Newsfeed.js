@@ -36,7 +36,7 @@ import SwiperCore, {
   Pagination,
   Navigation,
 } from "swiper/core";
-
+import Notification from '../Notification'
 SwiperCore.use([Keyboard, Scrollbar, Pagination, Navigation]);
 
 const style = {
@@ -62,6 +62,7 @@ function Newsfeed() {
   const [nameOfLike,setNameOfLike] = useState([]);
   const [loading, setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
+  let userName  = user.name;
   const [profileD, setProfileD] = useState({});
   const [profile, setProfile] = useState(0);
   const [flag, setFlag] = useState(true);
@@ -167,7 +168,10 @@ function Newsfeed() {
           }
         }
       } else {
+
         e.likes.push(profileD);
+       
+        Notification(e.authorId._id,userName + " Liked Your Post");
       }
       setFlag(!flag);
     } catch (err) {

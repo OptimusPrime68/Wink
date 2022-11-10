@@ -27,7 +27,6 @@ function App() {
 
   
   
-  
   useEffect(()=>{
          const email = window.localStorage.getItem("email");
 
@@ -41,7 +40,7 @@ function App() {
 
          const image = window.localStorage.getItem("image");
 
-         const profileId  = window.localStorage.getItem("profileId");
+         const profile_id  = window.localStorage.getItem("profile_id");
 
 
          var dist = 10000000;
@@ -59,7 +58,7 @@ function App() {
             name,
             image,
             distance:dist,
-            profile:profileId
+            profile_id,
           },
         });
       }

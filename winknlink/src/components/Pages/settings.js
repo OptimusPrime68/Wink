@@ -180,6 +180,7 @@ export default function Settings() {
               name: user.name,
               image: user.image,
               distance: user.dist,
+              profile_id:user.profile_id,
             },
           });
           setSub("premium");
