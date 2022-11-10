@@ -97,6 +97,7 @@ export default function Date(props) {
   const [vdo, setVdo] = useState(false);
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
+  const [userDetail, setuserDetail] = useState([]);
 
   const contextValue = {
     switchToWink,
@@ -113,6 +114,8 @@ export default function Date(props) {
     setSelectedChat,
     chats,
     setChats,
+    userDetail,
+    setuserDetail
   };
 
   const navigate = useNavigate();

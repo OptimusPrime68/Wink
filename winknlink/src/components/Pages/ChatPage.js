@@ -4,17 +4,24 @@ import Header from "./Header";
 import Chat from "./Chat";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import { ChatState } from "./ChatProvider";
+import { useSelector } from "react-redux";
 import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
 
 const ChatPage = () => {
-  const { selectedChat, setSelectedChat, setChats, chats } =
+  const { selectedChat, setSelectedChat, setChats, chats,userDetail, setuserDetail } =
     useContext(DateContext);
+
+
   const email = localStorage.getItem("email");
 
   const senderHandler = (users) => {
-    return users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    // console.log(userDetail)
+    let v = userDetail.find((element)=>element[0]===senderEmail);
+    console.log(v);
+    if(v) return v[1];
+    else return "";
   };
 
   const latestmsgHandler = (msg) => {
@@ -27,6 +34,16 @@ const ChatPage = () => {
       return dt.getHours() + ":" + dt.getMinutes();
     } else return "";
   };
+  const profileHandler = (users)=>{
+    let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    // console.log(userDetail)
+    let v = userDetail.find((element)=>element[0]===senderEmail);
+    if(v && v[2]) return v[2];
+    return "";
+    
+  }
+
+ 
 
   const fetchChats = async () => {
     try {
@@ -39,6 +56,22 @@ const ChatPage = () => {
         .then((res) => {
           console.log(res);
           setChats(res.data);
+          
+          res.data.forEach(element => {
+            let email1=element.users.find((ele)=>ele.email!==email);
+            email1=email1.email;
+            console.log(email1)
+            axios.post("http://localhost:4000/api/get-user-profile", {
+              email:email1,
+            })
+            .then(function (response) {
+            console.log(email1,response.data)
+              let temp=[email1,response.data.name,response.data.image];
+              console.log(temp)
+                setuserDetail([...userDetail,temp]);
+          }).catch(err=>console.log(err.message))
+        })
+
         });
     } catch (error) {
       toast({
@@ -53,8 +86,8 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    console.log("imside");
     fetchChats();
+    // console.log(userDetail)
   },[]);
 
   return (
@@ -71,7 +104,7 @@ const ChatPage = () => {
               name={senderHandler(chat.users)}
               message={latestmsgHandler(chat)}
               timestamp={latestTimeHadler(chat)}
-              profilePic="/profile.jpg"
+              profilePic={profileHandler(chat.users)}
             />
           </div>
         ))}

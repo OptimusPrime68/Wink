@@ -147,36 +147,37 @@ export default function Profile() {
           if (data.distance) dist = data.distance;
           toast.success("Profile Loaded");
           window.localStorage.setItem("distance", dist);
+          listAll(imageListRef)
+          .then((response) => {
+            response.items.forEach((item) => {
+              getDownloadURL(item).then((url) => {
+                if (url.includes("profile")) {
+                  setprofileImageList((prev) => [...prev, url]);
+                  console.log(user);
+                  dispatch({
+                    type: "LOGGED_IN_USER",
+                    payload: {
+                      email: email,
+                      token: user.token,
+                      id: user.id,
+                      user: user.user,
+                      name: user.name,
+                      image: url,
+                      distance: dist,
+                    },
+                  });
+                }
+              });
+            });
+          })
+          .catch((error) => console.log(error));
         }
       })
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
 
-    listAll(imageListRef)
-      .then((response) => {
-        response.items.forEach((item) => {
-          getDownloadURL(item).then((url) => {
-            if (url.includes("profile")) {
-              setprofileImageList((prev) => [...prev, url]);
-              console.log(user);
-              dispatch({
-                type: "LOGGED_IN_USER",
-                payload: {
-                  email: email,
-                  token: user.token,
-                  id: user.id,
-                  user: user.user,
-                  name: user.name,
-                  image: url,
-                  distance: dist,
-                },
-              });
-            }
-          });
-        });
-      })
-      .catch((error) => console.log(error));
+   
 
     setLoading(false);
   }, []);

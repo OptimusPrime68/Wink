@@ -14,7 +14,7 @@ import Peer from "simple-peer";
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
 function ChatScreen() {
-  const { selectedChat, setSelectedChat, setChats, chats } =
+  const { selectedChat, setSelectedChat, setChats, chats,userDetail } =
     useContext(DateContext);
 
   const [messages, setMessages] = useState([]);
@@ -25,6 +25,7 @@ function ChatScreen() {
   const [istyping, setIsTyping] = useState(false);
   const [emojiObj, setEmojiObj] = useState(null);
   const [emojiBtn, setEmojiBtn] = useState(false);
+  const [msgsend, setmsgsend] = useState(false);
 
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
@@ -210,6 +211,7 @@ const [cameraBtn, setcameraBtn] = useState(false);
       }
     }
     scrollToBottom();
+    setmsgsend(true)
   };
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -231,6 +233,19 @@ const [cameraBtn, setcameraBtn] = useState(false);
     var dt = new Date(s);
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
+
+  // const profileHandler = (users)=>{
+  //   let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+  //   console.log(userDetail)
+  //   console.log(userDetail.find((element)=>element[0]===senderEmail))
+  //   return userDetail.find((element)=>element[0]===senderEmail)[2];
+  // }
+  // const senderHandler = (users) => {
+  //   let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+  //   console.log(userDetail)
+  //   console.log(userDetail.find((element)=>element[0]===senderEmail))
+  //   return userDetail.find((element)=>element[0]===senderEmail)[1];
+  // };
 
   const messagesEndRef = useRef(null);
 
