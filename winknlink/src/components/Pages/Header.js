@@ -139,11 +139,11 @@ function Header({ videoButton }) {
         alt="logo"
         className="headerLogo"
         onClick={switchToWink}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", marginLeft:'15px' }}
       />
 
       <div style={{ marginRight: "10px" }}>
-        <Badge badgeContent={4} color="primary">
+        <Badge  color="primary">
           <NotificationsActiveIcon
             style={{ color: "#f4c430" }}
             fontSize="large"

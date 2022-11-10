@@ -154,7 +154,7 @@ function ChatScreen() {
   if (receivingCall) {
     incomingCall = (
       <div style={{ textAlign: "center" }}>
-        <h4>{caller} is calling you</h4>
+        <h4>{selectedChat?.d[0]?.name} is calling you</h4>
         <EndButton variant="outline-success" onClick={acceptCall}>
           Accept
         </EndButton>
@@ -316,7 +316,7 @@ function ChatScreen() {
           <div>
             <div className="ChatMessageDiv">
               <p className="chatScreenTimeStamp">
-                You matched with {selectedChat.d[0].name} on
+                You matched with {selectedChat?.d[0]?.name} on
                 {getMatchedHandler(selectedChat.chat)}
               </p>
               {messages.map((message) =>
@@ -325,7 +325,7 @@ function ChatScreen() {
                     <Avatar
                       className="chatScreenImage"
                       alt={message.name}
-                      src={selectedChat.d[0].image}
+                      src={selectedChat?.d[0]?.image}
                     />
                     <p className="chatScreenText">
                       {message.content}

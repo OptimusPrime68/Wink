@@ -78,8 +78,8 @@ export function ForgetForm(props) {
     <BoxContainer>
       <FormContainer>
         <Input type="email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
-        <Input type="passwprd" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
-        <Input type="password" placeholder="Confirm Password" onChange={(e)=>setPasswordMatch(e.target.value)} />
+        <Input type="passwprd" placeholder="New Password" onChange={(e)=>setPassword(e.target.value)} />
+        <Input type="password" placeholder="Confirm New Password" onChange={(e)=>setPasswordMatch(e.target.value)} />
       </FormContainer>
       <Marginer direction="vertical" margin="1.6em" />
       <SubmitButton type="submit" onClick={forgotPassword}>Submit</SubmitButton>

@@ -44,7 +44,22 @@ function Like() {
   const [superLike, setSuperLike] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [likeState, setLikeState] = useState(true);
+  const [key, setKey] = useState('SuperLike');
+
+  const handleLike = (k) =>{
+    if(k == "Likes")
+    {
+      if(user.user == 'premium')
+        setKey(k)
+      else
+      {
+        toast.warn("Not a premium member");
+        setKey('SuperLike')
+      }
+    }
+    else
+      setKey(k)
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -93,7 +108,6 @@ function Like() {
                 });
               })
               .catch((error) => console.log(error));
-            setLikeState(false);
           });
         })
         .catch((e) => console.log(e));
@@ -135,8 +149,9 @@ function Like() {
       {loading ? <Loader /> : <></>}
       <div>
         <Tabs
-          defaultActiveKey="SuperLike"
-          id="uncontrolled-tab-example"
+          id="controlled-tab-example"
+          activeKey={key}
+          onSelect={(k) => handleLike(k)}
           className="mb-3"
           fill
         >
@@ -172,7 +187,7 @@ function Like() {
                 ))}
             </div>
           </Tab>
-          <Tab eventKey="Likes" title="Likes" disabled={likeState}>
+          <Tab eventKey="Likes" title="Likes">
             <div className="row">
               {like &&
                 like.map((e) => (
