@@ -15,7 +15,7 @@ import { default as EndButton } from "react-bootstrap/Button";
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
 function ChatScreen() {
-  const { selectedChat, setSelectedChat, setChats, chats,userDetail } =
+  const { selectedChat, setSelectedChat, setChats, chats } =
     useContext(DateContext);
 
   const [messages, setMessages] = useState([]);
@@ -181,11 +181,11 @@ function ChatScreen() {
   }, [messages]);
 
   const fetchMessages = async () => {
-    if (!selectedChat) return;
+    if (!selectedChat.chat) return;
     console.log("open messages2");
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/chat/message/${selectedChat._id}`
+        `http://localhost:4000/api/chat/message/${selectedChat.chat._id}`
       );
       console.log(data);
       var s = data[0].createdAt;
@@ -194,7 +194,7 @@ function ChatScreen() {
       setMessages(data);
       setLoading(false);
 
-      socket.emit("join chat", selectedChat._id);
+      socket.emit("join chat", selectedChat.chat._id);
     } catch (error) {
       console.log(error.message);
       // toast.error(error.message);
@@ -204,8 +204,9 @@ function ChatScreen() {
   useEffect(() => {
     fetchMessages();
     scrollToBottom();
-    selectedChatCompare = selectedChat;
-  }, [selectedChat]);
+    selectedChatCompare = selectedChat.chat;
+    console.log(selectedChat)
+  }, [selectedChat.chat]);
 
   const sendMessage = async (e) => {
     console.log(newMessage);
@@ -217,7 +218,7 @@ function ChatScreen() {
           "http://localhost:4000/api/chat/message",
           {
             content: newMessage,
-            chatId: selectedChat,
+            chatId: selectedChat.chat,
             currUser: id,
             email: email,
           }
@@ -246,7 +247,9 @@ function ChatScreen() {
   const getTimeHandler = (timestamp) => {
     var s = timestamp?.createdAt;
     var dt = new Date(s);
-    return dt.getHours() + ":" + dt.getMinutes();
+    var min=dt.getMinutes();
+    if(min<10) min="0"+min;
+    return dt.getHours() + ":" + min;
   };
 
   const getMatchedHandler = (timestamp) => {
@@ -254,19 +257,6 @@ function ChatScreen() {
     var dt = new Date(s);
     return " " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
   };
-
-  // const profileHandler = (users)=>{
-  //   let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
-  //   console.log(userDetail)
-  //   console.log(userDetail.find((element)=>element[0]===senderEmail))
-  //   return userDetail.find((element)=>element[0]===senderEmail)[2];
-  // }
-  // const senderHandler = (users) => {
-  //   let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
-  //   console.log(userDetail)
-  //   console.log(userDetail.find((element)=>element[0]===senderEmail))
-  //   return userDetail.find((element)=>element[0]===senderEmail)[1];
-  // };
 
   const messagesEndRef = useRef(null);
 
@@ -322,8 +312,8 @@ function ChatScreen() {
           <div>
             <div className="ChatMessageDiv">
               <p className="chatScreenTimeStamp">
-                You matched with Ellen on
-                {getMatchedHandler(selectedChat)}
+                You matched with {selectedChat.d[0].name} on
+                {getMatchedHandler(selectedChat.chat)}
               </p>
               {messages.map((message) =>
                 message.sender.email != email ? (
@@ -331,7 +321,7 @@ function ChatScreen() {
                     <Avatar
                       className="chatScreenImage"
                       alt={message.name}
-                      src={message.image}
+                      src={selectedChat.d[0].image}
                     />
                     <p className="chatScreenText">
                       {message.content}

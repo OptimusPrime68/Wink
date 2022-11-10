@@ -119,8 +119,6 @@ export default function Date(props) {
     setSelectedChat,
     chats,
     setChats,
-    userDetail,
-    setuserDetail
   };
 
   const navigate = useNavigate();

@@ -99,7 +99,7 @@ const ChatPage = () => {
       <div className="chats">
         {chats.map((chat, i) => (
           <div
-            onClick={() => setSelectedChat(chat.chat)}
+            onClick={() => setSelectedChat(chat)}
             style={{ cursor: "pointer" }}
             key={i}
           >
