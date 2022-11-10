@@ -4,17 +4,24 @@ import Header from "./Header";
 import Chat from "./Chat";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import { ChatState } from "./ChatProvider";
+import { useSelector } from "react-redux";
 import { DateContext } from "./DateContext";
 import "../styles/ChatPage.css";
 
 const ChatPage = () => {
-  const { selectedChat, setSelectedChat, setChats, chats } =
+  const { selectedChat, setSelectedChat, setChats, chats,userDetail, setuserDetail } =
     useContext(DateContext);
+
+
   const email = localStorage.getItem("email");
 
   const senderHandler = (users) => {
-    return users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    // console.log(userDetail)
+    let v = userDetail.find((element)=>element[0]===senderEmail);
+    console.log(v);
+    if(v) return v[1];
+    else return "";
   };
 
   const latestmsgHandler = (msg) => {
@@ -27,6 +34,16 @@ const ChatPage = () => {
       return dt.getHours() + ":" + dt.getMinutes();
     } else return "";
   };
+  const profileHandler = (users)=>{
+    let senderEmail= users[0]?.email === email ? users[1]?.email : users[0]?.email;
+    // console.log(userDetail)
+    let v = userDetail.find((element)=>element[0]===senderEmail);
+    if(v && v[2]) return v[2];
+    return "";
+    
+  }
+
+ 
 
   const fetchChats = async () => {
     try {
@@ -72,8 +89,8 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    console.log("imside");
     fetchChats();
+    // console.log(userDetail)
   },[]);
 
   return (
@@ -82,7 +99,7 @@ const ChatPage = () => {
       <div className="chats">
         {chats.map((chat, i) => (
           <div
-            onClick={() => setSelectedChat(chat.chat)}
+            onClick={() => setSelectedChat(chat)}
             style={{ cursor: "pointer" }}
             key={i}
           >

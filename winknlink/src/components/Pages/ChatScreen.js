@@ -26,6 +26,7 @@ function ChatScreen() {
   const [istyping, setIsTyping] = useState(false);
   const [emojiObj, setEmojiObj] = useState(null);
   const [emojiBtn, setEmojiBtn] = useState(false);
+  const [msgsend, setmsgsend] = useState(false);
 
   const id = localStorage.getItem("id");
   const email = localStorage.getItem("email");
@@ -180,11 +181,11 @@ function ChatScreen() {
   }, [messages]);
 
   const fetchMessages = async () => {
-    if (!selectedChat) return;
+    if (!selectedChat.chat) return;
     console.log("open messages2");
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/chat/message/${selectedChat._id}`
+        `http://localhost:4000/api/chat/message/${selectedChat.chat._id}`
       );
       console.log(data);
       var s = data[0].createdAt;
@@ -193,7 +194,7 @@ function ChatScreen() {
       setMessages(data);
       setLoading(false);
 
-      socket.emit("join chat", selectedChat._id);
+      socket.emit("join chat", selectedChat.chat._id);
     } catch (error) {
       console.log(error.message);
       // toast.error(error.message);
@@ -203,8 +204,9 @@ function ChatScreen() {
   useEffect(() => {
     fetchMessages();
     scrollToBottom();
-    selectedChatCompare = selectedChat;
-  }, [selectedChat]);
+    selectedChatCompare = selectedChat.chat;
+    console.log(selectedChat)
+  }, [selectedChat.chat]);
 
   const sendMessage = async (e) => {
     console.log(newMessage);
@@ -216,7 +218,7 @@ function ChatScreen() {
           "http://localhost:4000/api/chat/message",
           {
             content: newMessage,
-            chatId: selectedChat,
+            chatId: selectedChat.chat,
             currUser: id,
             email: email,
           }
@@ -231,6 +233,7 @@ function ChatScreen() {
       }
     }
     scrollToBottom();
+    setmsgsend(true)
   };
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -244,7 +247,9 @@ function ChatScreen() {
   const getTimeHandler = (timestamp) => {
     var s = timestamp?.createdAt;
     var dt = new Date(s);
-    return dt.getHours() + ":" + dt.getMinutes();
+    var min=dt.getMinutes();
+    if(min<10) min="0"+min;
+    return dt.getHours() + ":" + min;
   };
 
   const getMatchedHandler = (timestamp) => {
@@ -311,8 +316,8 @@ function ChatScreen() {
           <div>
             <div className="ChatMessageDiv">
               <p className="chatScreenTimeStamp">
-                You matched with {}
-                {getMatchedHandler(selectedChat)}
+                You matched with {selectedChat.d[0].name} on
+                {getMatchedHandler(selectedChat.chat)}
               </p>
               {messages.map((message) =>
                 message.sender.email != email ? (
@@ -320,7 +325,7 @@ function ChatScreen() {
                     <Avatar
                       className="chatScreenImage"
                       alt={message.name}
-                      src={message.image}
+                      src={selectedChat.d[0].image}
                     />
                     <p className="chatScreenText">
                       {message.content}

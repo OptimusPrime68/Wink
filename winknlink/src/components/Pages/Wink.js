@@ -89,6 +89,7 @@ function Wink() {
     axios
       .post("http://localhost:4000/api/all-profile", { email,token:user.token })
       .then(function (response) {
+        console.log(response.data)
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
           var imageListRef = ref(storage, `${x.email}`);
