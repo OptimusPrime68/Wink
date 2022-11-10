@@ -122,16 +122,22 @@ function Wink() {
       });
   }, []);
 
-  const swiped = (direction, name, toemail,toid) => {
+  const swiped = (direction, name, toemail,toid,e) => {
     console.log(toemail);
+    
     if (direction == "down") {
       return;
     } else if (direction == "left") {
       toast.success(name + " Removed");
+      setPeople(people.filter((a) => a !== e));
     } else if (direction == "right") {
       handleRight(email, toemail,toid);
+      setPeople(people.filter((a) => a !== e));
     } else if (direction == "up") {
+      if(user.user == "premium"){
       handleUp(email, toemail,toid);
+      setPeople(people.filter((a) => a !== e));
+      }
     }
   };
 
@@ -184,7 +190,7 @@ function Wink() {
       })
       .then(function (response) {
         toast.success("Super Like Sent");
-        Notification(toid,user.name + " Someone Super Like You");
+        Notification(toid,user.name + " Super Like You");
       })
       .catch(function (error) {
         console.log(error.message);
@@ -238,7 +244,7 @@ function Wink() {
               className="swipe"
               key={person.email}
               preventSwipe={swipe}
-              onSwipe={(dir) => swiped(dir, person.name, person.email,person.id)}
+              onSwipe={(dir) => swiped(dir, person.name, person.email,person.id,person)}
             >
               <div
                 style={{ backgroundImage: `url(${person.image})` }}

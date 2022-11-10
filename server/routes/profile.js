@@ -11,7 +11,7 @@ router.post("/all-profile",tokenVerifier,allProfile);
 router.post("/fetch-profile",fetchMultipleProfile);
 
 // Route to Update Profile
-router.post("/update-profile",tokenVerifier,updateProfile);
+router.post("/update-profile",updateProfile);
 
 // Route to fetch User Profile
 router.post("/get-user-profile",tokenVerifier,fetchProfile);

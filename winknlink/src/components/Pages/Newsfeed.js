@@ -85,7 +85,6 @@ function Newsfeed() {
        // console.log(id);
         setProfile(id);
         setProfileD(data.data.id);
-
         axios
           .post("http://localhost:4000/api/get-all-post", {
             authorid: id,
@@ -170,7 +169,11 @@ function Newsfeed() {
       } else {
 
         e.likes.push(profileD);
+
+        console.log(profileD,user);
        
+        
+        if(e.authorId._id != user)
         Notification(e.authorId._id,userName + " Liked Your Post");
       }
       setFlag(!flag);
