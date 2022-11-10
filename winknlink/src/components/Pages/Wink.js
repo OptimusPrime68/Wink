@@ -31,10 +31,14 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch } from "react-redux";
 import Loader from "../Pages/Loader";
+<<<<<<< HEAD
 import Notification from "../Notification";
 import {db} from "../../firebase";
 import { getDatabase, onValue, set } from "firebase/database";
 
+=======
+import BoltIcon from "@mui/icons-material/Bolt";
+>>>>>>> 59eef317504c9936a5236dc44e1350439b49e1fd
 
 const style = {
   position: "relative",
@@ -86,7 +90,10 @@ function Wink() {
     setLoading(true);
 
     axios
-      .post("http://localhost:4000/api/all-profile", { email,token:user.token })
+      .post("http://localhost:4000/api/all-profile", {
+        email,
+        token: user.token,
+      })
       .then(function (response) {
         response.data.forEach(function ({ x, cpy }) {
           [x, cpy] = [cpy, x];
@@ -155,7 +162,7 @@ function Wink() {
       .post("http://localhost:4000/api/make-match", {
         fromemail: email,
         toemail: toemail,
-        token:user.token,
+        token: user.token,
       })
       .then(function (response) {
         toast.success("Like Sent");
@@ -179,7 +186,7 @@ function Wink() {
       .post("http://localhost:4000/api/make-super-like", {
         from: email,
         to: toemail,
-        token:user.token,
+        token: user.token,
       })
       .then(function (response) {
         toast.success("Super Like Sent");
@@ -197,9 +204,9 @@ function Wink() {
     if (counter.current >= people.length) setLoading(false);
   };
 
-
   const left = (e) => {
     setPeople(people.filter((a) => a !== e));
+<<<<<<< HEAD
     toast.success(e.name + " Removed");
     console.log("LEFT",e);
   }
@@ -207,25 +214,32 @@ function Wink() {
 
   const right = async (e) => {
     await handleRight(email,e.email,e.id);
+=======
+    console.log("LEFT", e);
+  };
+
+  const right = async (e) => {
+    await handleRight(email, e.email);
+>>>>>>> 59eef317504c9936a5236dc44e1350439b49e1fd
     setPeople(people.filter((a) => a !== e));
     console.log("RIGHT");
-  }
+  };
 
   const up = async (e) => {
     if (user.user == "free") {
       toast.warn("Purchase Subscription to Send Super Likes");
       return;
     }
+<<<<<<< HEAD
     await handleUp(email,e.email,e.id)
+=======
+    await handleUp(email, e.email);
+>>>>>>> 59eef317504c9936a5236dc44e1350439b49e1fd
     setPeople(people.filter((a) => a !== e));
     console.log("UP");
-  }
+  };
 
-  const undo = async (e) =>{
-    
-  }
-
-
+  const undo = async (e) => {};
 
   return (
     <div className="DateMainDiv">
@@ -267,20 +281,21 @@ function Wink() {
               </div>
             </TinderCard>
             <div className="swipeButtons">
-              <IconButton className="swipeDislike" onClick={()=>left(person)}>
+              <IconButton className="swipeDislike" onClick={() => left(person)}>
                 <Dislike fontSize="large" />
               </IconButton>
-              <IconButton className="swipeUndo" onClick={()=>up(person)}>
+              <IconButton className="swipeUndo">
                 <Undo fontSize="large" />
               </IconButton>
-              <IconButton className="swipeLike" onClick={()=>right(person)}>
+              <IconButton className="swipeBolt" onClick={() => up(person)}>
+                <BoltIcon fontSize="large" />
+              </IconButton>
+              <IconButton className="swipeLike" onClick={() => right(person)}>
                 <Like fontSize="large" />
               </IconButton>
             </div>
           </>
         ))}
-
-      
       </div>
 
       <Modal
