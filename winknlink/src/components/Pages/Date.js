@@ -244,15 +244,14 @@ export default function Date(props) {
 
 
   useEffect(()=>{
-    console.log("Retrieving Data",user.profile_id);
-    
-    onValue(ref(db,user.profile_id),(snapshot)=>{
+    try{
+      console.log("Retrieving Data",user.profile_id);
+      onValue(ref(db,user.profile_id),(snapshot)=>{
       const data = snapshot.val();
       console.log(data);
       var cmn = [];
       for(const key in data)
       cmn.push({message:data[key].message,time:data[key].time});
-      
       if(cmn.length == notification.length)
       {
               
@@ -261,6 +260,9 @@ export default function Date(props) {
         setNotification(cmn);
       }
     })
+  }catch(err){
+    console.log(err);
+  }
 
   
 

@@ -258,11 +258,15 @@ function ChatScreen() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  
+  
   const callAllHandler = () => {
     Object.keys(users).map((key) => {
       if (key !== yourID) callPeer(key);
     });
   };
+
+
   const endCallHandler = () => {
     setReceivingCall(false);
     setIsCalling(false);
@@ -307,7 +311,7 @@ function ChatScreen() {
           <div>
             <div className="ChatMessageDiv">
               <p className="chatScreenTimeStamp">
-                You matched with Ellen on
+                You matched with {}
                 {getMatchedHandler(selectedChat)}
               </p>
               {messages.map((message) =>

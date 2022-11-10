@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef,useCallback} from "react";
 import axios from "axios";
 import "../styles/landingPage.css";
 
@@ -98,18 +98,45 @@ const Photo = () => {
 
   };
 
-  const handleDeleteEvent = async (e, key) => {
-    console.log(key);
-    if (key.key == "Delete") {
-      console.log(e, key);
-      axios.post("http://localhost:4000/api/remove-date", { e,token:user.token });
-      setAllEvents(allEvents.filter((a) => a !== e));
-    }
-  };
+  
 
-  const handlePopup = async (e) => {
-    alert(e.title);
-  };
+  const clickRef = useRef(null)
+
+  useEffect(() => {
+    /**
+     * What Is This?
+     * This is to prevent a memory leak, in the off chance that you
+     * teardown your interface prior to the timed method being called.
+     */
+    return () => {
+      window.clearTimeout(clickRef?.current)
+    }
+  }, [])
+
+  const onSelectEvent = useCallback((calEvent) => {
+   
+    window.clearTimeout(clickRef?.current)
+    clickRef.current = window.setTimeout(() => {
+      window.alert(calEvent.title + " at " + new Date(calEvent.start).getDate()  + "/"+ (Number(new Date(calEvent.start).getMonth())+Number(1)) +"/"+ new Date(calEvent.start).getFullYear())
+    }, 250)
+  }, [])
+
+  const onDoubleClickEvent = useCallback((calEvent) => {
+    /**
+     * Notice our use of the same ref as above.
+     */
+    window.clearTimeout(clickRef?.current)
+    clickRef.current = window.setTimeout(() => {
+     
+    }, 250)
+
+    axios.post("http://localhost:4000/api/remove-date", { calEvent,token:user.token });
+    setAllEvents(allEvents.filter((a) => a !== calEvent));
+
+
+  }, [])
+
+
 
   console.log(person);
   return (
@@ -219,9 +246,9 @@ const Photo = () => {
             }
           }
           events={allEvents}
-          onKeyPressEvent={handleDeleteEvent}
+          onSelectEvent={onSelectEvent}
+          onDoubleClickEvent={onDoubleClickEvent}
           startAccessor="start"
-          onSelectEvent={handlePopup}
           endAccessor="end"
           style={{ height: 500, margin: "50px" }}
         />

@@ -113,6 +113,7 @@ export function LoginForm(props) {
     auth
       .signInWithPopup(googleAuthProvider)
       .then(async (result) => {
+        console.log(result.user.getIdTokenResult())
         login(
           result.user._delegate.email,
           "Xcnjbw24fdac@#2",

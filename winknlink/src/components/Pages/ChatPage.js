@@ -86,6 +86,7 @@ const ChatPage = () => {
             style={{ cursor: "pointer" }}
             key={i}
           >
+            {console.log(chat.d)}
             <Chat
               name={(chat.d[0].name)}
               message={latestmsgHandler(chat.chat)}
