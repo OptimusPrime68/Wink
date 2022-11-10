@@ -431,7 +431,7 @@ export default function Date(props) {
               <ListItem key="Delete" disablePadding onClick={handleShowNotify}>
                 <ListItemButton>
                   <ListItemIcon>
-                    <Badge badgeContent={4} color="primary">
+                    <Badge badgeContent={notification.length} color="primary">
                       <NotificationsActiveIcon style={{ color: "#f4c430" }} />
                     </Badge>
                   </ListItemIcon>

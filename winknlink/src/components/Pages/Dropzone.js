@@ -70,7 +70,7 @@ const Dropzone = (props) => {
   const { user } = useSelector((state) => ({ ...state }));
   const navigate = useNavigate();
 
-  if (user == null) Navigate("/");
+  if (user == null) navigate("/");
 
   //console.log(user);
 
