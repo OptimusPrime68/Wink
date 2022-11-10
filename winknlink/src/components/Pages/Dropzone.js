@@ -70,9 +70,9 @@ const Dropzone = (props) => {
   const { user } = useSelector((state) => ({ ...state }));
   const navigate = useNavigate();
 
-  if (user == null) Navigate("/");
+  if (user == null) navigate("/");
 
-  console.log(user);
+  //console.log(user);
 
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
@@ -95,13 +95,13 @@ const Dropzone = (props) => {
       let r = (Math.random() + 1).toString(36).substring(7);
 
       const imageRef = ref(storage, `${user.email}/${r}`);
-      console.log(imageRef);
+  //    console.log(imageRef);
       uploadBytes(imageRef, e)
         .then(() => {
           toast.success("Image Uploaded");
           setLoading(false);
           setFiles([]);
-          console.log(e);
+     //     console.log(e);
         })
         .catch((err) => {
           toast.error(err.message);

@@ -9,16 +9,16 @@ var mongoose = require('mongoose');
 exports.makePost=(req,res)=>{
 
     const {content,authorid} = req.body;
-    console.log(content,authorid);
+    //console.log(content,authorid);
 
     const post = new Post({content,authorId:authorid});
     post.save((f,r)=>{
         if(f){
-        console.log(f);
+       // console.log(f);
         return res.status(400).json(f);
         }
         else{
-        console.log(r);
+       // console.log(r);
         return res.status(200).json(r);
         }
     })
@@ -30,24 +30,24 @@ exports.getAuthor = async (req,res)=>{
 
     Post.find({}).populate('authorId').populate('likes').then((e)=>{
 
-        console.log(e);
+      //  console.log(e);
         return res.status(200).json(e);
     }).catch((e)=>{
-        console.log(e);
+       // console.log(e);
     })
 }
 
 // FUNCTION TO GET ALL POST ALONG WITH PROFILE DETAILS
 exports.getAllPost = async (req,res)=>{
 
-    console.log(req.body);
+   // console.log(req.body);
 
     const email = req.body.email;
     var localEmail = [];
     var finalEmail = [];
 
-    localEmail = await Match.find({matchFrom:email});
-    console.log(localEmail);
+    localEmail = await Match.find({matchFrom:email},{},{sort:"-createdAt"});
+  //  console.log(localEmail);
     var ans=[];
 
 
@@ -64,7 +64,7 @@ exports.getAllPost = async (req,res)=>{
     var idx = mongoose.Types.ObjectId(req.body.authorid);
     const d = await  Post.find({authorId:idx},{},{sort:"-createdAt"}).populate("likes").populate("authorId");
     ans = ans.concat(d);
-    console.log(ans);
+   // console.log(ans);
     res.status(200).json(ans);
 }
 
@@ -72,7 +72,7 @@ exports.getAllPost = async (req,res)=>{
 exports.deletePost = async (req,res)=>{
     const id = req.body.postId;
 
-    console.log(id);
+   // console.log(id);
     try{
     const a =await Post.deleteOne({_id:mongoose.Types.ObjectId(id)});
     res.status(200).json({message:a});

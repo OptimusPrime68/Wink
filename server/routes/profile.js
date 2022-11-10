@@ -1,21 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const {profileCheck}  = require("../middlewares/auth");
-const {allProfile,updateProfile,fetchProfile,fetchProfileId} = require("../controller/profile");
+const {profileCheck,tokenVerifier}  = require("../middlewares/auth");
+const {allProfile,updateProfile,fetchProfile,fetchProfileId,fetchMultipleProfile} = require("../controller/profile");
 
 
 // Route to fetch all profile based on filters
-router.post("/all-profile",profileCheck,allProfile);
+router.post("/all-profile",tokenVerifier,allProfile);
+
+//Route to fetch profile of multiple user
+router.post("/fetch-profile",fetchMultipleProfile);
 
 // Route to Update Profile
-router.post("/update-profile",profileCheck,updateProfile);
+router.post("/update-profile",tokenVerifier,updateProfile);
 
 // Route to fetch User Profile
-router.post("/get-user-profile",profileCheck,fetchProfile);
+router.post("/get-user-profile",tokenVerifier,fetchProfile);
 
 
 //Route to get Profile Id from email
-router.post("/get-profile-id",fetchProfileId);
+router.post("/get-profile-id",tokenVerifier,fetchProfileId);
 
 
 

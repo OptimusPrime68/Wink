@@ -1,3 +1,4 @@
+const Profile = require('../models/profile')
 const Match= require('../models/match')
 
 
@@ -26,7 +27,7 @@ exports.makeMatch= async (req,res)=>{
         {$set:update},{upsert:true,new:true},
         function (err,success) {
             console.log(err);
-            console.log(success);
+           // console.log(success);
             if(err) return res.status(400).json({err});
            
             return res.status(201).json(success);
@@ -36,24 +37,53 @@ exports.makeMatch= async (req,res)=>{
 // FUNCTION TO GET MATCH
 exports.getMatch= async (req,res)=>{
 
-    console.log(req.headers);
-
+    // console.log(req.headers);
     const email = req.body.email;
     var localEmail = [];
     var finalEmail = [];
-
     localEmail = await Match.find({matchFrom:email});
-    console.log(localEmail);
+   // console.log(localEmail);
     for(var i = 0;i<localEmail.length;i++){
         var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
         if(count){
-
-            
-
-        console.log(localEmail[i].matchTo);
+        // console.log(localEmail[i].matchTo);
         finalEmail.push(localEmail[i].matchTo);
         }
    }
     res.status(201).json(finalEmail);
 
 }
+
+const matchEmails =  async (email)=>{
+    var localEmail = [];
+    var finalEmail = [];
+  
+    localEmail = await Match.find({matchFrom:email});
+    for(var i = 0;i<localEmail.length;i++){
+        var count = await  Match.count({matchFrom:localEmail[i].matchTo,matchTo:email})
+        if(count){
+     //   console.log(localEmail[i].matchTo);
+        finalEmail.push(localEmail[i].matchTo);
+        }
+   }
+   return finalEmail;
+  }
+  
+
+
+  exports.getMatchDetails = async (req,res)=>{
+      const finalEmail = await matchEmails(req.body.email);
+      var result = [];
+ 
+     // console.log(finalEmail)
+      for(var i = 0;i<finalEmail.length;i++){
+      const d = await Profile.findOne({email:finalEmail[i]})
+        result.push(d);
+  //    console.log(result);
+      }
+      res.status(200).json(result);
+
+
+
+  }
+  

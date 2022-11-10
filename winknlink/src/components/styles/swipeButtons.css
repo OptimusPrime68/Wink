@@ -13,16 +13,21 @@
 }
 
 .swipeLike {
-  padding: 3vw !important;
+  padding: 2vw !important;
   color: #76e2b3 !important;
 }
 
 .swipeUndo {
-  padding: 3vw !important;
+  padding: 2vw !important;
   color: #f5b748 !important;
 }
 
 .swipeDislike {
-  padding: 3vw !important;
+  padding: 2vw !important;
   color: #ec5e6f !important;
+}
+
+.swipeBolt {
+  padding: 2vw !important;
+  color: #e0b0ff !important;
 }

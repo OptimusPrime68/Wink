@@ -36,7 +36,7 @@ import SwiperCore, {
   Pagination,
   Navigation,
 } from "swiper/core";
-
+import Notification from '../Notification'
 SwiperCore.use([Keyboard, Scrollbar, Pagination, Navigation]);
 
 const style = {
@@ -62,6 +62,7 @@ function Newsfeed() {
   const [nameOfLike,setNameOfLike] = useState([]);
   const [loading, setLoading] = useState(false);
   let { user } = useSelector((state) => ({ ...state }));
+  let userName  = user.name;
   const [profileD, setProfileD] = useState({});
   const [profile, setProfile] = useState(0);
   const [flag, setFlag] = useState(true);
@@ -69,7 +70,7 @@ function Newsfeed() {
 
   const counter = useRef(0);
   const handleLoad = () => {
-    console.log("Image Loading");
+  //  console.log("Image Loading");
     counter.current += 1;
     if (counter.current >= post.length) setLoading(false);
   };
@@ -77,11 +78,11 @@ function Newsfeed() {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/get-profile-id", { email: user.email })
+      .post("http://localhost:4000/api/get-profile-id", { email: user.email,token:user.token })
       .then((data) => {
-        console.log(data.data);
+     //   console.log(data.data);
         const id = data.data.id._id;
-        console.log(id);
+       // console.log(id);
         setProfile(id);
         setProfileD(data.data.id);
 
@@ -89,9 +90,10 @@ function Newsfeed() {
           .post("http://localhost:4000/api/get-all-post", {
             authorid: id,
             email: user.email,
+            token:user.token,
           })
           .then((data) => {
-            console.log(data);
+         //   console.log(data);
 
             if (data.data.length == 0) setLoading(false);
 
@@ -102,7 +104,7 @@ function Newsfeed() {
               e["files"] = [];
               setPost((prev) => [...prev, e]);
               listAll(imageListRef).then((response) => {
-                console.log(e.content, response);
+                //console.log(e.content, response);
 
                 if (response.items.length == 0) setLoading(false);
 
@@ -166,7 +168,10 @@ function Newsfeed() {
           }
         }
       } else {
+
         e.likes.push(profileD);
+       
+        Notification(e.authorId._id,userName + " Liked Your Post");
       }
       setFlag(!flag);
     } catch (err) {
@@ -185,14 +190,15 @@ function Newsfeed() {
   const onAddPost = (newPost) =>{
     axios
     .post("http://localhost:4000/api/get-post-by-id", {
-      newPost
+      newPost,
+      token:user.token,
     })
     .then((data) => {
-      console.log(data);
+     // console.log(data);
 
       if (data.data.length == 0) setLoading(false);
 
-      console.log(data);
+     // console.log(data);
 
       data.data.map((e) => {
         const id = e._id;
@@ -201,7 +207,7 @@ function Newsfeed() {
         e["files"] = [];
         setPost((prev) => [e, ...prev]);
         listAll(imageListRef).then((response) => {
-          console.log(e.content, response);
+        //  console.log(e.content, response);
 
           if (response.items.length == 0) setLoading(false);
 

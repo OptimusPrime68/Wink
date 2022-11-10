@@ -30,6 +30,15 @@ exports.loginCheck = async (req, res, next) => {
  
 
   try {
+
+    const token = req.body.token;
+  
+  
+      const d = await admin.auth().verifyIdToken(token);
+
+      console.log(d);
+  
+  
     
       const email = req.body.email;
       const password = req.body.password;
@@ -51,3 +60,19 @@ exports.profileCheck = (req, res, next) => {
     next();
   
 };
+
+
+exports.tokenVerifier = async  (req,res,next) =>{
+
+  const token = req.body.token;
+  //console.log(token);
+  try{
+
+    await admin.auth().verifyIdToken(token);
+    next();
+
+  }catch(err){
+    res.status(400).json({message:"Token Expired"});
+  }
+
+}

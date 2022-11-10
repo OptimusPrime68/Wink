@@ -37,17 +37,19 @@ const Photo = () => {
   var email = user.email;
 
   const [person, setPerson] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
 
   useEffect(() => {
     axios
-      .post("http://localhost:4000/api/get-date", { email })
+      .post("http://localhost:4000/api/get-date", { email})
       .then((r) => {
+        console.log(r.data);
         setAllEvents(r.data.m);
       })
       .catch((c) => {});
 
     axios
-      .post("http://localhost:4000/api/all-match", { email })
+      .post("http://localhost:4000/api/all-match-details", { email,token:user.token })
       .then(function (response) {
         console.log(response.data);
         setPerson(response.data);
@@ -62,7 +64,7 @@ const Photo = () => {
     from: email,
     to: "",
   });
-  const [allEvents, setAllEvents] = useState(events);
+  
 
   const handleAddEvent = async (e) => {
 
@@ -91,15 +93,16 @@ const Photo = () => {
     
     console.log(newEvent);
     setAllEvents([...allEvents, newEvent]);
-    axios.post("http://localhost:4000/api/make-date", { newEvent });
+    axios.post("http://localhost:4000/api/make-date", { newEvent,token:user.token });
+
+
   };
 
   const handleDeleteEvent = async (e, key) => {
     console.log(key);
-
     if (key.key == "Delete") {
       console.log(e, key);
-      axios.post("http://localhost:4000/api/remove-date", { e });
+      axios.post("http://localhost:4000/api/remove-date", { e,token:user.token });
       setAllEvents(allEvents.filter((a) => a !== e));
     }
   };
@@ -108,6 +111,7 @@ const Photo = () => {
     alert(e.title);
   };
 
+  console.log(person);
   return (
     <>
       <div style={{ textAlign: "center" }}>
@@ -174,7 +178,7 @@ const Photo = () => {
                 <option>Select Person</option>
                 {person &&
                   person.map((a) => {
-                    return <option value={a}>{a}</option>;
+                    return <option value={a.email}>{a.name}</option>;
                   })}
               </Form.Select>
             </div>

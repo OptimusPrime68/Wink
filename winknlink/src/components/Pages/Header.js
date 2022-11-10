@@ -3,15 +3,15 @@ import { DateContext } from "./DateContext";
 import "../styles/Header.css";
 import PersonIcon from "@mui/icons-material/Person";
 import ChatIcon from "@mui/icons-material/Forum";
-import { IconButton } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import BookIcon from "@mui/icons-material/Book";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import Dropdown from "react-bootstrap/Dropdown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 function Header({ videoButton }) {
   const {
@@ -134,7 +134,6 @@ function Header({ videoButton }) {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-
       <img
         src="/logo.png"
         alt="logo"
@@ -143,13 +142,14 @@ function Header({ videoButton }) {
         style={{ cursor: "pointer" }}
       />
 
-      {videoButton ? (
-        <IconButton style={{ color: "#385E0F" }}>
-          <VideocamIcon fontSize="large" />
-        </IconButton>
-      ) : (
-        <div style={{ width: "55px" }}></div>
-      )}
+      <div style={{ marginRight: "10px" }}>
+        <Badge badgeContent={4} color="primary">
+          <NotificationsActiveIcon
+            style={{ color: "#f4c430" }}
+            fontSize="large"
+          />
+        </Badge>
+      </div>
     </div>
   );
 }

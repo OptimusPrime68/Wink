@@ -54,24 +54,27 @@ const ChatPage = () => {
           email: email,
         })
         .then((res) => {
-          console.log(res);
-          setChats(res.data);
-          
-          res.data.forEach(element => {
-            let email1=element.users.find((ele)=>ele.email!==email);
-            email1=email1.email;
-            console.log(email1)
-            axios.post("http://localhost:4000/api/get-user-profile", {
-              email:email1,
-            })
-            .then(function (response) {
-            console.log(email1,response.data)
-              let temp=[email1,response.data.name,response.data.image];
-              console.log(temp)
-                setuserDetail([...userDetail,temp]);
-          }).catch(err=>console.log(err.message))
-        })
 
+          console.log(res);
+         
+         
+         
+          axios.post("http://localhost:4000/api/fetch-profile",{
+            list:res.data,
+            email
+          }).then((response)=>{
+
+
+            console.log(response.data);
+            setChats(response.data);
+
+
+          }).
+
+
+
+          catch((err)=>{console.log(err)})
+          
         });
     } catch (error) {
       toast({
@@ -96,15 +99,15 @@ const ChatPage = () => {
       <div className="chats">
         {chats.map((chat, i) => (
           <div
-            onClick={() => setSelectedChat(chat)}
+            onClick={() => setSelectedChat(chat.chat)}
             style={{ cursor: "pointer" }}
             key={i}
           >
             <Chat
-              name={senderHandler(chat.users)}
-              message={latestmsgHandler(chat)}
-              timestamp={latestTimeHadler(chat)}
-              profilePic={profileHandler(chat.users)}
+              name={(chat.d[0].name)}
+              message={latestmsgHandler(chat.chat)}
+              timestamp={latestTimeHadler(chat.chat)}
+              profilePic={chat.d[0].image}
             />
           </div>
         ))}

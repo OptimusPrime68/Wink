@@ -30,8 +30,7 @@ const io = require('socket.io')(server,{
 const users = {};
 
 io.on("connection",(socket)=>{
-  console.log('connected to socket.io');
-  
+  console.log('connected to socket.io with ',socket.id);
   
   socket.on("setup", (id)=>{
     console.log("in setup")
@@ -81,10 +80,9 @@ io.on("connection",(socket)=>{
     })
 
   })
-
-
- 
 })
+
+
 
 
 

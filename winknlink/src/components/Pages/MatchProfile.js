@@ -18,9 +18,11 @@ import {
 } from "firebase/storage";
 import { storage } from "../../firebase";
 import ReactPlayer from "react-player";
+import {useSelector} from "react-redux"
 
 function MatchProfile({ id }) {
   console.log(id);
+  let { user } = useSelector((state) => ({ ...state }));
 
   const [data, setData] = useState();
   const [imageList, setImageList] = useState([]);
@@ -31,6 +33,7 @@ function MatchProfile({ id }) {
     axios
       .post("http://localhost:4000/api/get-user-profile", {
         email: id,
+        token:user.token
       })
       .then((response) => {
         console.log(response);
@@ -161,25 +164,6 @@ function MatchProfile({ id }) {
                             </div>
                           );
                         })}
-                    </div>
-                  </Tab>
-                  <Tab eventKey="feed" title="Newsfeed">
-                    <div className="row">
-                      <div className="matchDiv col mb-3">
-                        <Card id="matchProfileImageDiv">
-                          <CardMedia
-                            component="img"
-                            image="/person.svg"
-                            alt="Profile Image"
-                            className="profileDivImage"
-                            style={{
-                              height: "200px",
-                              width: "200px",
-                              margin: "auto",
-                            }}
-                          />
-                        </Card>
-                      </div>
                     </div>
                   </Tab>
                 </Tabs>

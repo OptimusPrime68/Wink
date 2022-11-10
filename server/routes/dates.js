@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const {tokenVerifier} = require("../middlewares/auth");
 const {makeDate,getDate,removeDate,getSuperLike,makeSuperLike} = require("../controller/date");
 
 

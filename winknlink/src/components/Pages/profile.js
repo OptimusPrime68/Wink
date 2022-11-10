@@ -9,14 +9,7 @@ import { useSelector } from "react-redux";
 import { storage } from "../../firebase";
 import { getStorage } from "firebase/storage";
 import { useTranslation } from "react-i18next";
-import {
-  ref,
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  list,
-  deleteObject,
-} from "firebase/storage";
+import { ref,uploadBytes,listAll,getDownloadURL,list,deleteObject} from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Header from "./Header";
@@ -73,7 +66,7 @@ export default function Profile() {
                     try{
                     axios
                     .post("http://localhost:4000/api/update-profile", {
-                      email,image:url});
+                      email,image:url, token:user.token});
                     }catch(err)
                     {
                       
@@ -87,6 +80,7 @@ export default function Profile() {
                         user: user.user,
                         name: user.name,
                         image: url,
+                        profile_id:user.profile_id,
                       },
                     });
                     setprofileImageList((prev) => [...prev, url]);
@@ -131,12 +125,13 @@ export default function Profile() {
     var dist = 1000000000;
     axios
       .post("http://localhost:4000/api/get-user-profile", {
-        email,
+        email,token:user.token,
       })
       .then(function (response) {
-        console.log("Response", response);
+      //  console.log("Response", response);
         if (response.data) {
           const data = response.data;
+          var profile_id = data._id;
           setName(data.name);
           setPhone(data.phone);
           setGender(data.gender);
@@ -147,37 +142,39 @@ export default function Profile() {
           if (data.distance) dist = data.distance;
           toast.success("Profile Loaded");
           window.localStorage.setItem("distance", dist);
+          window.localStorage.setItem("profile_id",data._id)
           listAll(imageListRef)
-          .then((response) => {
-            response.items.forEach((item) => {
-              getDownloadURL(item).then((url) => {
-                if (url.includes("profile")) {
-                  setprofileImageList((prev) => [...prev, url]);
-                  console.log(user);
-                  dispatch({
-                    type: "LOGGED_IN_USER",
-                    payload: {
-                      email: email,
-                      token: user.token,
-                      id: user.id,
-                      user: user.user,
-                      name: user.name,
-                      image: url,
-                      distance: dist,
-                    },
-                  });
-                }
+      .then((response) => {
+        response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            if (url.includes("profile")) {
+              setprofileImageList((prev) => [...prev, url]);
+            //  console.log(user);
+              dispatch({
+                type: "LOGGED_IN_USER",
+                payload: {
+                  email: email,
+                  token: user.token,
+                  id: user.id,
+                  user: user.user,
+                  name: data.name,
+                  image: url,
+                  distance: dist,
+                  profile_id,
+                },
               });
-            });
-          })
-          .catch((error) => console.log(error));
+            }
+          });
+        });
+      })
+      .catch((error) => console.log(error));
         }
       })
       .catch(function (error) {
         toast.warn("Update Your Profile");
       });
 
-   
+    
 
     setLoading(false);
   }, []);
@@ -185,12 +182,12 @@ export default function Profile() {
   const update = (e) => {
     e.preventDefault();
 
-    console.log(name);
-    console.log(phone);
-    console.log(gender);
-    console.log(dob);
-    console.log(address);
-    console.log(hobbies);
+    // console.log(name);
+    // console.log(phone);
+    // console.log(gender);
+    // console.log(dob);
+    // console.log(address);
+    // console.log(hobbies);
 
     var coordinates = [];
     if (coords) coordinates = [coords.longitude, coords.latitude];
@@ -213,8 +210,8 @@ export default function Profile() {
         address,
         hobbies,
         location: coordinates,
-        preference: "male",
         age,
+        token:user.token,
       })
       .then(function (response) {
         dispatch({
@@ -224,13 +221,15 @@ export default function Profile() {
             token: user.token,
             id: user.id,
             user: user.user,
-            name,
+            name:name,
             image: user.image,
+            profile_id:response.data._id,
           },
         });
+        window.localStorage.setItem("profile_id",response.data._id)
 
         toast.success("Updated");
-        console.log(response);
+       // console.log(response);
       })
       .catch(function (error) {
         toast.error("Some Error Occured");
@@ -287,7 +286,7 @@ export default function Profile() {
       },
       userDecisionTimeout: 5000,
     });
-  console.log(coords);
+ // console.log(coords);
 
   const handleDOB = (e) => {
     const max =

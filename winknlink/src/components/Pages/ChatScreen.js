@@ -1,15 +1,16 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import Header from "./Header";
 import "../styles/ChatScreen.css";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, IconButton } from "@mui/material";
 import HeaderDesktop from "./HeaderDesktop";
 import { DateContext } from "./DateContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
-//
+import VideocamIcon from "@mui/icons-material/Videocam";
 import Peer from "simple-peer";
+import { default as EndButton } from "react-bootstrap/Button";
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
@@ -38,8 +39,8 @@ function ChatScreen() {
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [callAccepted, setCallAccepted] = useState(false);
-  const [isCalling,setIsCalling] = useState(false);
-  const [makeReload, setmakeReload] = useState(false)
+  const [isCalling, setIsCalling] = useState(false);
+  const [makeReload, setmakeReload] = useState(false);
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -47,56 +48,60 @@ function ChatScreen() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socketNew.current = io.connect("ws://localhost:8000");//new
+    socketNew.current = io.connect("ws://localhost:8000"); //new
     // socketNew.current=socket;
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-      setStream(stream);
-      if (userVideo.current) {
-        userVideo.current.srcObject = stream;
-      }
-    })
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+        if (userVideo.current) {
+          userVideo.current.srcObject = stream;
+        }
+      });
     socket.emit("setup", id);
     socket.on("connection", () => setSocketConnected(true));
 
     // //new
     socketNew.current.on("yourID", (id) => {
       setYourID(id);
-    })
+    });
     socketNew.current.on("allUsers", (users) => {
       setUsers(users);
-    })
+    });
 
     socketNew.current.on("hey", (data) => {
       setReceivingCall(true);
       setCaller(data.from);
       setCallerSignal(data.signal);
-    })
-  }, [isCalling,makeReload]);
+    });
+  }, [isCalling, makeReload]);
   //new methods
   function callPeer(id) {
-    
     const peer = new Peer({
       initiator: true,
       trickle: false,
       stream: stream,
     });
 
-    peer.on("signal", data => {
-      socketNew.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
-    })
+    peer.on("signal", (data) => {
+      socketNew.current.emit("callUser", {
+        userToCall: id,
+        signalData: data,
+        from: yourID,
+      });
+    });
 
-    peer.on("stream", stream => {
+    peer.on("stream", (stream) => {
       if (partnerVideo.current) {
         partnerVideo.current.srcObject = stream;
       }
     });
 
-    socketNew.current.on("callAccepted", signal => {
+    socketNew.current.on("callAccepted", (signal) => {
       setCallAccepted(true);
       peer.signal(signal);
-    })
+    });
     setIsCalling(true);
-
   }
   function acceptCall() {
     setCallAccepted(true);
@@ -105,11 +110,11 @@ function ChatScreen() {
       trickle: false,
       stream: stream,
     });
-    peer.on("signal", data => {
-      socketNew.current.emit("acceptCall", { signal: data, to: caller })
-    })
+    peer.on("signal", (data) => {
+      socketNew.current.emit("acceptCall", { signal: data, to: caller });
+    });
 
-    peer.on("stream", stream => {
+    peer.on("stream", (stream) => {
       partnerVideo.current.srcObject = stream;
     });
 
@@ -119,30 +124,46 @@ function ChatScreen() {
   let UserVideo;
   if (stream) {
     UserVideo = (
-      <video playsInline muted ref={userVideo} autoPlay />
+      <div className="UserVideoDiv col mb-3">
+        <video
+          className="UserVideo"
+          playsInline
+          muted
+          ref={userVideo}
+          autoPlay
+        />
+      </div>
     );
   }
 
   let PartnerVideo;
   if (callAccepted) {
     PartnerVideo = (
-      <video playsInline ref={partnerVideo} autoPlay />
+      <div className="PartnerVideoDiv col mb-3">
+        <video
+          className="PartnerVideo"
+          playsInline
+          ref={partnerVideo}
+          autoPlay
+        />
+      </div>
     );
   }
 
   let incomingCall;
   if (receivingCall) {
     incomingCall = (
-      <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
-       
+      <div style={{ textAlign: "center" }}>
+        <h4>{caller} is calling you</h4>
+        <EndButton variant="outline-success" onClick={acceptCall}>
+          Accept
+        </EndButton>
       </div>
-    )
+    );
   }
-//end of new
+  //end of new
 
-const [cameraBtn, setcameraBtn] = useState(false);
+  const [cameraBtn, setcameraBtn] = useState(false);
 
   useEffect(() => {
     socket.on("message recieved", (newMessageR) => {
@@ -157,7 +178,7 @@ const [cameraBtn, setcameraBtn] = useState(false);
       }
     });
     scrollToBottom();
-  },[messages]);
+  }, [messages]);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -171,11 +192,11 @@ const [cameraBtn, setcameraBtn] = useState(false);
       var dt = new Date(s);
       console.log(dt.getHours(), dt.getMinutes());
       setMessages(data);
-      setLoading(false)
+      setLoading(false);
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       // toast.error(error.message);
     }
   };
@@ -252,12 +273,12 @@ const [cameraBtn, setcameraBtn] = useState(false);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  const callAllHandler = ()=>{
-    Object.keys(users).map(key => {
-      if(key!==yourID) callPeer(key)
-    })
-  }
-  const endCallHandler = ()=>{
+  const callAllHandler = () => {
+    Object.keys(users).map((key) => {
+      if (key !== yourID) callPeer(key);
+    });
+  };
+  const endCallHandler = () => {
     setReceivingCall(false);
     setIsCalling(false);
     stream.getTracks().forEach((track) => {
@@ -265,107 +286,119 @@ const [cameraBtn, setcameraBtn] = useState(false);
     });
     setCallAccepted(false);
     setStream(null);
-    setmakeReload((prev)=>!prev);
-    console.log("inside end call")
-  }
+    setmakeReload((prev) => !prev);
+    console.log("inside end call");
+  };
 
   return (
     <div>
       <Header videoButton="/" />
-      <HeaderDesktop btn={cameraBtn}/>
+      <HeaderDesktop btn={cameraBtn} />
       <div className="chatScreen">
-        {receivingCall || isCalling  ? (<div>
-          {UserVideo}
-        {PartnerVideo}
-      
-        <div>
-      {!callAccepted &&  incomingCall 
-      // && ( <button onClick={()=>endCallHandler}>Reject</button>)
-      }
-      {/* {partnerVideo.current?  */}
-      <Button onClick={endCallHandler} >End Call</Button>
-       {/* :null} */}
-       </div>
-        </div>):
-        <div>
-        <div className="ChatMessageDiv">
-          <p className="chatScreenTimeStamp">
-            You matched with Ellen on
-            {getMatchedHandler(selectedChat)}
-          </p>
-          {messages.map((message) =>
-            message.sender.email != email ? (
-              <div className="chatScreenMessage">
-                <Avatar
-                  className="chatScreenImage"
-                  alt={message.name}
-                  src={message.image}
-                />
-                <p className="chatScreenText">
-                  {message.content}
-                  <br></br>
-                  <span style={{ color: "grey", fontSize: "12px" }}>
-                    {getTimeHandler(message)}
-                  </span>
-                </p>
-              </div>
-            ) : (
-              <div className="chatScreenMessage">
-                <p className="chatScreenTextUser">
-                  {message.content}
-                  <br></br>
-                  <span style={{ color: "white", fontSize: "12px" }}>
-                    {getTimeHandler(message)}
-                  </span>
-                </p>
-              </div>
-            )
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+        {receivingCall || isCalling ? (
+          <div style={{ textAlign: "center" }}>
+            <div className="row">
+              {UserVideo}
+              {PartnerVideo}
+            </div>
 
-        <div className="row MessageDiv">
-          <div className="col-auto">
-            <div className="emoji">
-              <h2
-                onClick={() => setEmojiBtn(!emojiBtn)}
-                style={{ cursor: "pointer" }}
+            <div>
+              {
+                !callAccepted && incomingCall
+                // && ( <button onClick={()=>endCallHandler}>Reject</button>)
+              }
+              {/* {partnerVideo.current?  */}
+              <EndButton
+                style={{ marginTop: "20px" }}
+                variant="outline-danger"
+                onClick={endCallHandler}
               >
-                &#128512;
-              </h2>
-              {emojiBtn ? (
-                <EmojiPicker
-                  onEmojiClick={emojiClickHandler}
-                  searchDisabled={true}
-                />
-              ) : null}
+                End Call
+              </EndButton>
+              {/* :null} */}
             </div>
           </div>
-          <div className="col">
-            <form
-              className="ChatScreenInput"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                className="ChatScreenInputField"
-                placeholder="Type a message..."
-                type="text"
-                onChange={typingHandler}
-                value={newMessage}
-                onKeyDown={(e)=>{
-                  if(e.key=='Enter') sendMessage();
-                }}
-              />
-              <Button className="ChatScreenButton" onClick={sendMessage}>
-                SEND
-              </Button>
-              <Button className="ChatScreenButton" onClick={callAllHandler}>
-                video
-              </Button>
-            </form>
+        ) : (
+          <div>
+            <div className="ChatMessageDiv">
+              <p className="chatScreenTimeStamp">
+                You matched with Ellen on
+                {getMatchedHandler(selectedChat)}
+              </p>
+              {messages.map((message) =>
+                message.sender.email != email ? (
+                  <div className="chatScreenMessage">
+                    <Avatar
+                      className="chatScreenImage"
+                      alt={message.name}
+                      src={message.image}
+                    />
+                    <p className="chatScreenText">
+                      {message.content}
+                      <br></br>
+                      <span style={{ color: "grey", fontSize: "12px" }}>
+                        {getTimeHandler(message)}
+                      </span>
+                    </p>
+                  </div>
+                ) : (
+                  <div className="chatScreenMessage">
+                    <p className="chatScreenTextUser">
+                      {message.content}
+                      <br></br>
+                      <span style={{ color: "white", fontSize: "12px" }}>
+                        {getTimeHandler(message)}
+                      </span>
+                    </p>
+                  </div>
+                )
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="row MessageDiv">
+              <div className="col-auto">
+                <div className="emoji">
+                  <h2
+                    onClick={() => setEmojiBtn(!emojiBtn)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    &#128512;
+                  </h2>
+                  {emojiBtn ? (
+                    <EmojiPicker
+                      onEmojiClick={emojiClickHandler}
+                      searchDisabled={true}
+                    />
+                  ) : null}
+                </div>
+              </div>
+              <div className="col">
+                <form
+                  className="ChatScreenInput"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <input
+                    className="ChatScreenInputField"
+                    placeholder="Type a message..."
+                    type="text"
+                    onChange={typingHandler}
+                    value={newMessage}
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter") sendMessage();
+                    }}
+                  />
+                  <Button className="ChatScreenButton" onClick={sendMessage}>
+                    SEND
+                  </Button>
+                  <IconButton onClick={callAllHandler}>
+                    <VideocamIcon fontSize="large" />
+                  </IconButton>
+                </form>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>}
+        )}
       </div>
     </div>
   );

@@ -56,19 +56,8 @@ export function LoginForm(props) {
     let userType = "free";
 
     let name = "";
-    axios
-      .post("http://localhost:4000/api/is-premium", { email })
-      .then(function (res) {
-        userType = res.data.user;
-        window.localStorage.setItem("user", userType);
-      });
-
-    axios
-      .post("http://localhost:4000/api/get-user-profile", { email })
-      .then(function (res) {
-        if (res.data && res.data.name) name = res.data.name;
-        window.localStorage.setItem("name", name);
-      });
+    
+   
 
     axios
       .post(`http://localhost:4000/api/${login}`, {
@@ -78,25 +67,42 @@ export function LoginForm(props) {
       })
       .then(function (response) {
         var id = response.data.id;
-       
+        axios
+      .post("http://localhost:4000/api/is-premium", { email,token })
+      .then(function (res) {
+        userType = res.data.user;
+        window.localStorage.setItem("user", userType);
+        axios
+        .post("http://localhost:4000/api/get-user-profile", { email ,token})
+        .then(function (res) {
+          var profile_id = "";
+          if (res.data && res.data.name) name = res.data.name;
+          if(res.data && res.data._id) profile_id = res.data._id;
+          window.localStorage.setItem("name", name);
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              email: email,
+              token: token,
+              id: id,
+              user: userType,
+              name: name,
+              profile_id,
+            },
+          });
+          window.localStorage.setItem("email", email);
+          window.localStorage.setItem("token", token);
+          window.localStorage.setItem("id", id);
+          window.localStorage.setItem("profile_id", profile_id);
+  
+          navigate("/wink");
+          toast.success("Welcome");
+       });
+      });
 
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: {
-            email: email,
-            token: token,
-            id: id,
-            user: userType,
-            name: name,
-          },
-        });
+        
 
-        window.localStorage.setItem("email", email);
-        window.localStorage.setItem("token", token);
-        window.localStorage.setItem("id", id);
-
-        navigate("/wink");
-        toast.success("Welcome");
+      
       })
       .catch(function (error) {
         toast.error(error.response.data.Error);
@@ -110,7 +116,7 @@ export function LoginForm(props) {
         login(
           result.user._delegate.email,
           "Xcnjbw24fdac@#2",
-          result,
+          result.user._delegate.accessToken,
           "google-login"
         );
       })
