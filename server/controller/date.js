@@ -27,9 +27,11 @@ exports.getDate= async (req,res)=>{
 // FUNCTIONS TO REMOVE DATE
 exports.removeDate = async (req,res)=>{
 
-    var r = req.body
+    var r = req.body.e
     console.log('R',r);
-    const data = await Date.findOneAndRemove(r);
-    console.log("Data",data);
+    Date.findOneAndRemove(r,function(err,result){
+        console.log(result);
+        res.status(200).json(result);
+    });
 }
 

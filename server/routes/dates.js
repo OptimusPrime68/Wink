@@ -5,16 +5,16 @@ const {makeDate,getDate,removeDate,getSuperLike,makeSuperLike} = require("../con
 
 
 // Route to create Date
-router.post("/make-date",tokenVerifier,makeDate);
+router.post("/make-date",makeDate);
 
 
 // Route to fetch Date
-router.post("/get-date",tokenVerifier,getDate);
+router.post("/get-date",getDate);
 
 
 
 // Route to delete Date
-router.post("/remove-date",tokenVerifier,removeDate);
+router.post("/remove-date",removeDate);
 
 
 

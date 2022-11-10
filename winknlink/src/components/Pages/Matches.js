@@ -160,7 +160,7 @@ function Matches() {
                 className="profileDivImage"
               />
               <CardContent>
-                <h6>{person.email}</h6>
+              
               </CardContent>
               <CardActions>
                 <Button

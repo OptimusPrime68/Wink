@@ -65,7 +65,7 @@ exports.profileCheck = (req, res, next) => {
 exports.tokenVerifier = async  (req,res,next) =>{
 
   const token = req.body.token;
-  console.log(token);
+  //console.log(token);
   try{
 
     await admin.auth().verifyIdToken(token);
