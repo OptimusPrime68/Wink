@@ -102,6 +102,7 @@ export default function Date(props) {
   const [vdo, setVdo] = useState(false);
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
+  
 
   const contextValue = {
     switchToWink,
@@ -124,6 +125,7 @@ export default function Date(props) {
   const dispatch = useDispatch();
 
   let { user } = useSelector((state) => ({ ...state }));
+  let {matchh} = useSelector((state)=>({...state}));
   let image = user ? user.image : "";
   let name = user ? user.name : "";
 
@@ -243,15 +245,41 @@ export default function Date(props) {
 
   useEffect(()=>{
     console.log("Retrieving Data",user.profile_id);
+    
     onValue(ref(db,user.profile_id),(snapshot)=>{
       const data = snapshot.val();
       console.log(data);
+      var cmn = [];
+      for(const key in data)
+      cmn.push(data[key].message);
+      
+      if(cmn.length == notification.length)
+      {
+              
+      }
+      else{
+        setNotification(cmn);
+      }
     })
-  })
+
+  
+
+  });
 
 
-  const handleCloseNotify = () => setShowNotify(false);
+
+  const handleCloseNotify = () => {
+    
+    
+    set((ref(db,user.profile_id)), null)
+    
+    setShowNotify(false); 
+
+  
+  
+  }
   const handleShowNotify = () => setShowNotify(true);
+  console.log(notification);
 
   return (
     <>
@@ -454,23 +482,19 @@ export default function Date(props) {
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <List>
-            <ListItem>
-              <ListItemButton>
-                <ListItemText primary="First Notification" />
-              </ListItemButton>
-            </ListItem>
+            {notification && notification.map((e)=>(
+              <>
+               <ListItem>
+               <ListItemButton>
+                 <ListItemText primary={e} />
+               </ListItemButton>
+             </ListItem>
+
+           
             <Divider />
-            <ListItem>
-              <ListItemButton>
-                <ListItemText primary="Seond Notification" />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemButton>
-                <ListItemText primary="Third Notification" />
-              </ListItemButton>
-            </ListItem>
+            </>
+            ))
+            }
           </List>
         </Modal.Body>
         <Modal.Footer style={{ justifyContent: "center" }}>
