@@ -12,7 +12,7 @@ function Chat({ name, message, profilePic, timestamp }) {
       <div className="chat" onClick={switchToChatTab}>
         <Avatar className="chat_image" alt={name} src={profilePic} />
         <div className="chatDetails">
-          <h2>{name}</h2>
+          <h3>{name}</h3>
           <p>{message}</p>
         </div>
         <p className="chatTimestamp">{timestamp}</p>

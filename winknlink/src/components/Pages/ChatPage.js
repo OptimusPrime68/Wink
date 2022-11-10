@@ -103,12 +103,12 @@ const ChatPage = () => {
             style={{ cursor: "pointer" }}
             key={i}
           >
-            {console.log(chat.d)}
+            {console.log(chat.d[0])}
             <Chat
-              name={(chat.d[0].name)}
-              message={latestmsgHandler(chat.chat)}
-              timestamp={latestTimeHadler(chat.chat)}
-              profilePic={chat.d[0].image}
+              name={(chat?.d[0]?.name)}
+              message={latestmsgHandler(chat?.chat)}
+              timestamp={latestTimeHadler(chat?.chat)}
+              profilePic={chat?.d[0]?.image}
             />
           </div>
         ))}

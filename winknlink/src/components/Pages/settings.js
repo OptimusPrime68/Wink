@@ -355,7 +355,7 @@ export default function Settings() {
                   </div>
                   <div className="col-md-6 mb-1" style={{ margin: "auto" }}>
                     <Button variant="outlined" onClick={handleShow}>
-                      {user.user == "free"
+                      {(user.user == "free" || user.user===null)
                         ? "Upgrade"
                         : "Already a Prime Member"}
                     </Button>
