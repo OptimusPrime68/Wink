@@ -251,7 +251,7 @@ export default function Date(props) {
       console.log(data);
       var cmn = [];
       for(const key in data)
-      cmn.push(data[key].message);
+      cmn.push({message:data[key].message,time:data[key].time});
       
       if(cmn.length == notification.length)
       {
@@ -270,13 +270,10 @@ export default function Date(props) {
 
   const handleCloseNotify = () => {
     
-    
     set((ref(db,user.profile_id)), null)
     
     setShowNotify(false); 
 
-  
-  
   }
   const handleShowNotify = () => setShowNotify(true);
   console.log(notification);
@@ -486,7 +483,7 @@ export default function Date(props) {
               <>
                <ListItem>
                <ListItemButton>
-                 <ListItemText primary={e} />
+                 <ListItemText primary={e.message} />
                </ListItemButton>
              </ListItem>
 

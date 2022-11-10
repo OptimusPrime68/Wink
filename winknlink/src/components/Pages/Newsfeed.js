@@ -70,7 +70,7 @@ function Newsfeed() {
 
   const counter = useRef(0);
   const handleLoad = () => {
-    console.log("Image Loading");
+  //  console.log("Image Loading");
     counter.current += 1;
     if (counter.current >= post.length) setLoading(false);
   };
@@ -80,9 +80,9 @@ function Newsfeed() {
     axios
       .post("http://localhost:4000/api/get-profile-id", { email: user.email,token:user.token })
       .then((data) => {
-        console.log(data.data);
+     //   console.log(data.data);
         const id = data.data.id._id;
-        console.log(id);
+       // console.log(id);
         setProfile(id);
         setProfileD(data.data.id);
 
@@ -93,7 +93,7 @@ function Newsfeed() {
             token:user.token,
           })
           .then((data) => {
-            console.log(data);
+         //   console.log(data);
 
             if (data.data.length == 0) setLoading(false);
 
@@ -104,7 +104,7 @@ function Newsfeed() {
               e["files"] = [];
               setPost((prev) => [...prev, e]);
               listAll(imageListRef).then((response) => {
-                console.log(e.content, response);
+                //console.log(e.content, response);
 
                 if (response.items.length == 0) setLoading(false);
 
@@ -194,11 +194,11 @@ function Newsfeed() {
       token:user.token,
     })
     .then((data) => {
-      console.log(data);
+     // console.log(data);
 
       if (data.data.length == 0) setLoading(false);
 
-      console.log(data);
+     // console.log(data);
 
       data.data.map((e) => {
         const id = e._id;
@@ -207,7 +207,7 @@ function Newsfeed() {
         e["files"] = [];
         setPost((prev) => [e, ...prev]);
         listAll(imageListRef).then((response) => {
-          console.log(e.content, response);
+        //  console.log(e.content, response);
 
           if (response.items.length == 0) setLoading(false);
 
