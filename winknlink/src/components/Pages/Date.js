@@ -25,7 +25,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, Badge, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -42,6 +42,7 @@ import Like from "./Like";
 import SosIcon from "@mui/icons-material/Sos";
 import { useGeolocated } from "react-geolocated";
 import Modal from "react-bootstrap/Modal";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 export default function Date(props) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -166,7 +167,7 @@ export default function Date(props) {
         axios
           .post("http://localhost:4000/api/delete-account", {
             email: user.email,
-            token:user.token,
+            token: user.token,
           })
           .then((e) => {
             dispatch({
@@ -230,9 +231,13 @@ export default function Date(props) {
   };
 
   const [show, setShow] = useState(false);
+  const [showNotify, setShowNotify] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleCloseNotify = () => setShowNotify(false);
+  const handleShowNotify = () => setShowNotify(true);
 
   return (
     <>
@@ -377,6 +382,25 @@ export default function Date(props) {
                 </ListItemButton>
               </ListItem>
             </List>
+            <Divider />
+            <List>
+              <ListItem></ListItem>
+              <ListItem></ListItem>
+              <ListItem></ListItem>
+              <ListItem></ListItem>
+              <Divider />
+              <ListItem key="Delete" disablePadding onClick={handleShowNotify}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Badge badgeContent={4} color="primary">
+                      <NotificationsActiveIcon style={{ color: "#f4c430" }} />
+                    </Badge>
+                  </ListItemIcon>
+                  <ListItemText primary="Notification" />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </List>
           </Drawer>
         </div>
         <DateContext.Provider value={contextValue}>
@@ -404,6 +428,40 @@ export default function Date(props) {
           </Button>
           <Button variant="outline-success" onClick={handleAccountDelete}>
             {t("Yes")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showNotify}
+        onHide={handleCloseNotify}
+        centered
+        backdrop="static"
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <List>
+            <ListItem>
+              <ListItemButton>
+                <ListItemText primary="First Notification" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemButton>
+                <ListItemText primary="Seond Notification" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemButton>
+                <ListItemText primary="Third Notification" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center" }}>
+          <Button variant="outline-danger" onClick={handleCloseNotify}>
+            {t("Close")}
           </Button>
         </Modal.Footer>
       </Modal>
