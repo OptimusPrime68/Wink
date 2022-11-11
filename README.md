@@ -6,6 +6,7 @@ Wink&Link is an online dating and geosocial networking application. In Wink&Link
 # Features
 * Login/ Signup
 * Social Login/Signups
+* Forget Password
 * Create Posts
 * View posts of friends (Like Post)
 * Recommendations based on preference, location, and age group
