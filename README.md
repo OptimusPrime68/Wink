@@ -16,6 +16,8 @@ Wink&Link is an online dating and geosocial networking application. In Wink&Link
 * Video Call
 * Plan and schedule a Date
 * View Profile
+* Subsciption feature
+* Payment using Razorpay
 * Super Like
 * Real time notification
 * SOS
