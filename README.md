@@ -1,1 +1,4 @@
-Project for Webster (Avishkar) created using MERN. Theme used is Cupit
+# MNNIT Avishkar 2021
+## Event Webster
+## Theme: Cupit
+## App Name: Wink&Link
